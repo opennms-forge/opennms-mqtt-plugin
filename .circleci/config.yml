@@ -1,0 +1,69 @@
+---
+version: 2.1
+
+executors:
+  build-executor:
+    docker:
+      - image: opennms/build-env:jdk8_1.2
+
+commands:
+  cached-checkout:
+    description: "Checkout with caching"
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+  restore-maven-cache:
+    description: "Maven: Calculate cache key and restore cache"
+    steps:
+      - run: 
+          name: Calculate cache key from pom files
+          command: |
+            find . -type f -name "pom.xml" -exec sha256sum "{}" \; | sort -nr >> maven-dependency-cache.key
+      - restore_cache:
+          keys:
+            - maven-dependencies-v2-{{ checksum "maven-dependency-cache.key" }}
+            - maven-dependencies-v2-
+      - run:
+          name: Remove OpenNMS and MQTT Plugin artifacts from cache
+          command: |
+            rm -rf ~/.m2/repository/org/opennms
+
+  save-maven-cache:
+    description: "Maven: Save cache"
+    steps:
+      - save_cache:
+          key: maven-dependencies-v2-{{ checksum "maven-dependency-cache.key" }}
+          paths:
+            - ~/.m2
+
+workflows:
+  build-deploy:
+    jobs:
+      - compile
+
+jobs:
+  compile:
+    executor: build-executor
+    steps:
+      - cached-checkout
+      - restore-maven-cache
+      - run:
+          name: Validate the project
+          command: |
+            mvn validate -DupdatePolicy=never
+      - run:
+          name: Compile with tests and create KAR file
+          command: |
+            mvn install
+      - save-maven-cache
+      - store_artifacts:
+          path: ./mqtt-docker-compose/opennms-deploy/MqttClient.kar-package-0.0.4-SNAPSHOT.kar

@@ -25,12 +25,7 @@
 		<licencemanagerVersion>1.0.6</licencemanagerVersion>
 		<!-- <licencemanagerVersion>1.1.0-SNAPSHOT</licencemanagerVersion> -->
 
-		<org.opennms.version>22.0.1</org.opennms.version>
-		<!-- <org.opennms.version>21.0.5</org.opennms.version> -->
-		<!-- <org.opennms.version>21.0.4</org.opennms.version> -->
-		<!-- <org.opennms.version>21.0.1</org.opennms.version> -->
-		<!-- <org.opennms.version>20.1.0</org.opennms.version> -->
-		<!-- <org.opennms.version>20.0.2</org.opennms.version> -->
+		<org.opennms.version>24.1.1</org.opennms.version>
 
 		<slf4jVersion>1.7.21</slf4jVersion>
 		<log4j2Version>2.8.2</log4j2Version>
