@@ -56,6 +56,11 @@ workflows:
       - publish-github:
           requires:
             - compile
+          filters:
+            branches:
+              only:
+                - master
+                - develop
 
 jobs:
   compile:
@@ -96,4 +101,4 @@ jobs:
       - run:
           name: Publish KAR file to GitHub
           command: |
-            ghr -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} $(cat version.info) github-release
+            ghr -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -replace $(cat version.info) github-release
