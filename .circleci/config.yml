@@ -6,6 +6,10 @@ executors:
     docker:
       - image: opennms/build-env:jdk8_1.2
 
+  ghr-executor:
+    docker:
+      - image: opennms/ghr:0.12.0-b1
+
 commands:
   cached-checkout:
     description: "Checkout with caching"
@@ -49,6 +53,9 @@ workflows:
   build-deploy:
     jobs:
       - compile
+      - publish-github:
+          requires:
+            - compile
 
 jobs:
   compile:
@@ -64,6 +71,29 @@ jobs:
           name: Compile with tests and create KAR file
           command: |
             mvn install
+      - run:
+          name: Persist version number
+          command: |
+            .circleci/scripts/pom2version.py pom.xml > version.info
       - save-maven-cache
       - store_artifacts:
           path: ./mqtt-docker-compose/opennms-deploy/MqttClient.kar-package-0.0.4-SNAPSHOT.kar
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - ./project
+
+  publish-github:
+    executor: ghr-executor
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: 
+          name: Collect artefacts to release
+          command: |
+            mkdir -p github-release
+            cp ./mqtt-docker-compose/opennms-deploy/MqttClient.kar-package-0.0.4-SNAPSHOT.kar github-release
+      - run:
+          name: Publish KAR file to GitHub
+          command: |
+            ghr -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} $(cat version.info) github-release
