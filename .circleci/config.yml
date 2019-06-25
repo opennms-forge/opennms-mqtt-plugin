@@ -1,0 +1,108 @@
+---
+version: 2.1
+
+executors:
+  build-executor:
+    docker:
+      - image: opennms/build-env:jdk8_1.2
+
+  ghr-executor:
+    docker:
+      - image: opennms/ghr:0.12.0-b1
+
+commands:
+  cached-checkout:
+    description: "Checkout with caching"
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+  restore-maven-cache:
+    description: "Maven: Calculate cache key and restore cache"
+    steps:
+      - run: 
+          name: Calculate cache key from pom files
+          command: |
+            find . -type f -name "pom.xml" -exec sha256sum "{}" \; | sort -nr >> maven-dependency-cache.key
+      - restore_cache:
+          keys:
+            - maven-dependencies-v2-{{ checksum "maven-dependency-cache.key" }}
+            - maven-dependencies-v2-
+      - run:
+          name: Remove OpenNMS and MQTT Plugin artifacts from cache
+          command: |
+            rm -rf ~/.m2/repository/org/opennms
+
+  save-maven-cache:
+    description: "Maven: Save cache"
+    steps:
+      - save_cache:
+          key: maven-dependencies-v2-{{ checksum "maven-dependency-cache.key" }}
+          paths:
+            - ~/.m2
+
+workflows:
+  build-deploy:
+    jobs:
+      - compile
+      - publish-github:
+          requires:
+            - compile
+          filters:
+            branches:
+              only:
+                - master
+
+jobs:
+  compile:
+    executor: build-executor
+    steps:
+      - cached-checkout
+      - restore-maven-cache
+      - run:
+          name: Validate the project
+          command: |
+            mvn validate -DupdatePolicy=never
+      - run:
+          name: Compile with tests and create KAR file
+          command: |
+            mvn install
+      - run:
+          name: Fetch KAR package file
+          command: |
+            cp ./kar-package/target/MqttClient.kar-package-*.kar ./kar-package/target/MqttClient.kar
+      - run:
+          name: Persist version number
+          command: |
+            .circleci/scripts/pom2version.py pom.xml > version.info
+
+      - save-maven-cache
+      - store_artifacts:
+          path: ./kar-package/target/MqttClient.kar
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - ./project
+
+  publish-github:
+    executor: ghr-executor
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: 
+          name: Collect artefacts to release
+          command: |
+            mkdir -p github-release
+            cp ./kar-package/target/MqttClient.kar github-release
+      - run:
+          name: Publish KAR file to GitHub
+          command: |
+            ghr -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -replace $(cat version.info) github-release
