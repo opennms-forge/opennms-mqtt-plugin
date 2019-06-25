@@ -38,7 +38,7 @@ services:
 
   opennms:
     container_name: opennms.hzn.core.web
-    image: opennms/horizon-core-web:23.0.0-1
+    image: opennms/horizon-core-web:24.1.0-1
     env_file:
       - .opennms.env
       - .postgres.env
@@ -106,7 +106,7 @@ services:
     volumes:
       - helm.data:/var/lib/grafana
       - helm.data:/var/log/grafana
-      - helm.data:/etc/grafana
+      #- helm.data:/etc/grafana
     healthcheck:
       test: ["CMD", "curl", "-f", "-I", "http://localhost:3000/login"]
       interval: 30s

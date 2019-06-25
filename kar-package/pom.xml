@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.opennms.plugins</groupId>
     <artifactId>MqttClient.parent</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>0.0.5-SNAPSHOT</version>
   </parent>
 
   <artifactId>MqttClient.kar-package</artifactId>
@@ -57,14 +57,14 @@
               <repositories>
                 <!-- Plugin Manager Feature -->
                 <repository>mvn:${project.groupId}/${productName}/${project.version}/xml/features</repository>
-                <repository>mvn:${project.groupId}/${productName}.kar-descriptor/${project.version}/xml/features</repository>
+<!--                 <repository>mvn:${project.groupId}/${productName}.kar-descriptor/${project.version}/xml/features</repository> -->
                </repositories>
 
-              <features>
-                <!-- features defined as internal opennms plugins -->
-                <feature>${productName}</feature>
-                <feature>${productName}.kar-descriptor</feature>
-              </features>
+<!--               <features> -->
+<!--                 features defined as internal opennms plugins -->
+<!--                 <feature>${productName}</feature> -->
+<!--                 <feature>${productName}.kar-descriptor</feature> -->
+<!--               </features> -->
             </configuration>
           </execution>
         </executions>

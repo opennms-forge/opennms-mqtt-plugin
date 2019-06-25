@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opennms.plugins</groupId>
   <artifactId>MqttClient.parent</artifactId>
-  <version>0.0.4-SNAPSHOT</version>
+  <version>0.0.5-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>MqttClient.parent</name>
   <description>MqttClient Parent Project</description>
@@ -22,7 +22,8 @@
     <licencemanagerVersion>1.0.6</licencemanagerVersion>
     <!-- <licencemanagerVersion>1.1.0-SNAPSHOT</licencemanagerVersion> -->
 
-    <org.opennms.version>23.0.0</org.opennms.version>
+    <org.opennms.version>24.1.1</org.opennms.version>
+    <!-- <org.opennms.version>23.0.0</org.opennms.version> -->
     <!-- <org.opennms.version>22.0.1</org.opennms.version> -->
     <!-- <org.opennms.version>21.0.5</org.opennms.version> -->
     <!-- <org.opennms.version>21.0.4</org.opennms.version> -->
@@ -51,9 +52,9 @@
     <module>client-utils</module>
     <module>main-module</module>
     <module>data-tests</module>
-    <module>product-descriptor</module>
+<!--     <module>product-descriptor</module> -->
     <module>feature</module>
-    <module>kar-descriptor</module>
+<!--     <module>kar-descriptor</module> -->
     <module>kar-package</module>
     <module>test-onejar</module>
     <module>mqtt-docker-compose</module>
@@ -245,11 +246,11 @@
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>org.opennms.plugins</groupId>
-        <artifactId>org.opennms.plugin.licencemanager</artifactId>
-        <version>${licencemanagerVersion}</version>
-      </dependency>
+<!--       <dependency> -->
+<!--         <groupId>org.opennms.plugins</groupId> -->
+<!--         <artifactId>org.opennms.plugin.licencemanager</artifactId> -->
+<!--         <version>${licencemanagerVersion}</version> -->
+<!--       </dependency> -->
       <dependency>
         <groupId>org.apache.karaf.shell</groupId>
         <artifactId>org.apache.karaf.shell.console</artifactId>

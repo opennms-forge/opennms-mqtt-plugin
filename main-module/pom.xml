@@ -2,7 +2,7 @@
   <parent>
     <groupId>org.opennms.plugins</groupId>
     <artifactId>MqttClient.parent</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>0.0.5-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -109,11 +109,11 @@
       <scope>compile</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.opennms.plugins</groupId>
-      <artifactId>org.opennms.plugin.licencemanager</artifactId>
-      <scope>provided</scope>
-    </dependency>
+<!--     <dependency> -->
+<!--       <groupId>org.opennms.plugins</groupId> -->
+<!--       <artifactId>org.opennms.plugin.licencemanager</artifactId> -->
+<!--       <scope>provided</scope> -->
+<!--     </dependency> -->
     <dependency>
       <groupId>org.apache.karaf.shell</groupId>
       <artifactId>org.apache.karaf.shell.console</artifactId>
@@ -243,32 +243,39 @@
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-server</artifactId>
-      <scope>provided</scope>
+      <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-servlet</artifactId>
-      <scope>provided</scope>
+      <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-core</artifactId>
-      <scope>provided</scope>
+      <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-json</artifactId>
-      <scope>provided</scope>
+      <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>commons-jxpath</groupId>
       <artifactId>commons-jxpath</artifactId>
-      <scope>provided</scope>
+      <scope>compile</scope>
     </dependency>
+    
+        <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version> <!-- ${servletApiVersion} -->
+      <scope>compile</scope>
+     </dependency>
 
   </dependencies>
 

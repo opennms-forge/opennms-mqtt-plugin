@@ -1,95 +1,145 @@
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <groupId>org.opennms.plugins</groupId>
-    <artifactId>MqttClient.parent</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
-  </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>org.opennms.plugins</groupId>
+		<artifactId>MqttClient.parent</artifactId>
+		<version>0.0.5-SNAPSHOT</version>
+	</parent>
 
-  <!-- Feature Definition -->
-  <modelVersion>4.0.0</modelVersion>
-  <artifactId>MqttClient</artifactId>
-  <name>MqttClient</name>
-  <description>Feature definition for MqttClient</description>
-  <packaging>pom</packaging>
+	<!-- Feature Definition -->
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>MqttClient</artifactId>
+	<name>MqttClient</name>
+	<description>Feature definition for MqttClient</description>
+	<packaging>pom</packaging>
 
-  <build>
+	<build>
 
-    <plugins>
-      <plugin>
-        <groupId>org.opennms.maven.plugins</groupId>
-        <artifactId>features-maven-plugin</artifactId>
-        <version>1.2.0</version>
-        <executions>
-          <execution>
-            <id>features.xml</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>generate-features-xml</goal>
-            </goals>
-            <configuration>
-              <bundles>
-                <!-- needed for jxpath to load in osgi -->
-                <bundle>wrap:mvn:org.jdom/jdom/${jdomVersion}</bundle>
-              </bundles>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
+		<plugins>
+			<plugin>
+				<groupId>org.opennms.maven.plugins</groupId>
+				<artifactId>features-maven-plugin</artifactId>
+				<version>1.2.0</version>
+				<executions>
+					<execution>
+						<id>features.xml</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>generate-features-xml</goal>
+						</goals>
+						<configuration>
+							<bundles>
+								<!-- needed for jxpath to load in osgi -->
+								<bundle>wrap:mvn:org.jdom/jdom/${jdomVersion}</bundle>
+								<bundle>wrap:mvn:javax.servlet.jsp/jsp-api/2.2</bundle>
+							</bundles>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 
-  </build>
+	</build>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.opennms.plugins</groupId>
-      <artifactId>${productName}.product-descriptor</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opennms.plugins</groupId>
-      <artifactId>${productName}.client-utils</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opennms.plugins</groupId>
-      <artifactId>${productName}.main-module</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.googlecode.json-simple</groupId>
-      <artifactId>json-simple</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.paho</groupId>
-      <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>commons-jxpath</groupId>
-      <artifactId>commons-jxpath</artifactId>
-      <scope>compile</scope>
-    </dependency>
-<!--     <dependency> -->
-<!--       <groupId>org.opennms.protocols</groupId> -->
-<!--       <artifactId>org.opennms.protocols.xml</artifactId> -->
-<!--       <scope>compile</scope> -->
-<!--     </dependency> -->
-  </dependencies>
+	<dependencies>
+		<!-- <dependency> -->
+		<!-- <groupId>org.opennms.plugins</groupId> -->
+		<!-- <artifactId>${productName}.product-descriptor</artifactId> -->
+		<!-- <version>${project.version}</version> -->
+		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.opennms.plugins</groupId>
+			<artifactId>${productName}.client-utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.opennms.plugins</groupId>
+			<artifactId>${productName}.main-module</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.paho</groupId>
+			<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-jxpath</groupId>
+			<artifactId>commons-jxpath</artifactId>
+			<scope>compile</scope>
+		</dependency>
 
-  <pluginRepositories>
-    <pluginRepository>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <id>opennms-repo</id>
-      <name>OpenNMS Repository</name>
-      <url>http://maven.opennms.org/content/groups/opennms.org-release</url>
-    </pluginRepository>
-  </pluginRepositories>
+		<!-- Jersey Dependencies -->
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-servlet</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-core</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-json</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>jsr311-api</artifactId>
+			<version>1.1.1</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-jaxrs</artifactId>
+			<version>1.9.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.jettison</groupId>
+			<artifactId>jettison</artifactId>
+			<version>1.1</version>
+		</dependency>
+
+
+
+		<!-- <dependency> -->
+		<!-- <groupId>org.opennms.protocols</groupId> -->
+		<!-- <artifactId>org.opennms.protocols.xml</artifactId> -->
+		<!-- <scope>compile</scope> -->
+		<!-- </dependency> -->
+	</dependencies>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<id>opennms-repo</id>
+			<name>OpenNMS Repository</name>
+			<url>http://maven.opennms.org/content/groups/opennms.org-release</url>
+		</pluginRepository>
+	</pluginRepositories>
 
 </project>
