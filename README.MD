@@ -1,5 +1,8 @@
 # Description
 This OpenNMS plugin adds the ability for OpenNMS to received streaming measurements and events from an IoT infrastructure. 
+
+This version is designed for OpenNMS versions 24 or greater. (Use version 0.0.4 with previous versions of opennms)
+
 The plugin supports MQTT messages and also asynchronous messages sent into OpenNMS from a ReST API.
 OpenNMS can register with an MQTT broker to receive MQTT messages.
 Several brokers can be subscribed to at the same time and multiple topic subscriptions can be defined on each broker. 
@@ -42,7 +45,7 @@ You need to target the build against the correct major version of OpenNMS.
 To do this, edit the parent pom.xml and change the property
 
 ''''
-    <org.opennms.version>21.0.5</org.opennms.version>
+    <org.opennms.version>24.1.1</org.opennms.version>
 ''''
     
 To match the version you are targeting. 
@@ -55,19 +58,6 @@ mvn build install
 Io install in OpenNMS, 
 
 
-1. - edit the opennms/etc/custom.properties  file (this step is depricated)
-(post opennms 21.0.5, this is included in the standard custom.properties  file
-
-add the following org.opennms.protocols.xml.config package to the property
-```
-org.osgi.framework.system.packages.extra=org.apache.karaf.branding,\
-        sun.misc,\
-        ...
-        org.opennms.protocols.xml.config;version=20.0.2, \
-        ...
-     
-     ( matching your opennms version)
-```
 
 2. Edit and place the sample mqtt-interface-config.xml in the opennms/etc directory
 (the sample is in the main-module here: https://github.com/gallenc/opennms-mqtt-plugin/blob/master/main-module/mqtt-interface-config.xml)
