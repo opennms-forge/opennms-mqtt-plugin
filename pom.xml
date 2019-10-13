@@ -22,7 +22,7 @@
     <licencemanagerVersion>1.0.6</licencemanagerVersion>
     <!-- <licencemanagerVersion>1.1.0-SNAPSHOT</licencemanagerVersion> -->
 
-    <org.opennms.version>24.1.1</org.opennms.version>
+    <org.opennms.version>25.0.0</org.opennms.version>
 
 
     <slf4jVersion>1.7.21</slf4jVersion>
@@ -217,6 +217,29 @@
           <groupId>org.opennms.maven.plugins</groupId>
           <artifactId>features-maven-plugin</artifactId>
           <version>1.2.0</version>
+	  <dependencies>
+	    <!-- Because jdk 11 no longer includes jaxb   javax.xml.bind -->
+            <dependency>
+          	<groupId>javax.xml.bind</groupId>
+          	<artifactId>jaxb-api</artifactId>
+          	<version>2.3.0</version>
+            </dependency>
+            <dependency>
+          	<groupId>com.sun.xml.bind</groupId>
+          	<artifactId>jaxb-core</artifactId>
+          	<version>2.3.0</version>
+            </dependency>
+            <dependency>
+          	<groupId>com.sun.xml.bind</groupId>
+          	<artifactId>jaxb-impl</artifactId>
+                <version>2.3.0</version>
+            </dependency>
+	    <dependency>
+          	<groupId>com.sun.activation</groupId>
+          	<artifactId>javax.activation</artifactId>
+          	<version>1.2.0</version>
+            </dependency>
+	  </dependencies>
         </plugin>
 
         <plugin>
@@ -230,6 +253,29 @@
           <artifactId>karaf-maven-plugin</artifactId>
           <version>${karafVersion}</version>
           <extensions>true</extensions>
+	  <dependencies>
+	    <!-- Because jdk 11 no longer includes jaxb   javax.xml.bind -->
+            <dependency>
+          	<groupId>javax.xml.bind</groupId>
+          	<artifactId>jaxb-api</artifactId>
+          	<version>2.3.0</version>
+            </dependency>
+            <dependency>
+          	<groupId>com.sun.xml.bind</groupId>
+          	<artifactId>jaxb-core</artifactId>
+          	<version>2.3.0</version>
+            </dependency>
+            <dependency>
+          	<groupId>com.sun.xml.bind</groupId>
+          	<artifactId>jaxb-impl</artifactId>
+                <version>2.3.0</version>
+            </dependency>
+	    <dependency>
+          	<groupId>com.sun.activation</groupId>
+          	<artifactId>javax.activation</artifactId>
+          	<version>1.2.0</version>
+            </dependency>
+	  </dependencies>
         </plugin>
 
       </plugins>
@@ -393,6 +439,30 @@
         <version>${commonsJxpathVersion}</version>
       </dependency>
 
+      <!-- Because jdk 11 no longer includes jaxb   javax.xml.bind -->
+      <!--
+      <dependency>
+        <groupId>org.opennms.dependencies</groupId>
+        <artifactId>jaxb-dependencies</artifactId>
+        <version>${org.opennms.version}</version>
+	<type>pom</type>     
+      </dependency>
+      -->
+      <dependency>
+	<groupId>javax.xml.bind</groupId>
+	<artifactId>jaxb-api</artifactId>
+	<version>2.3.0</version>
+      </dependency>
+      <dependency>
+	<groupId>com.sun.xml.bind</groupId>
+	<artifactId>jaxb-core</artifactId>
+	<version>2.3.0</version>
+      </dependency>
+      <dependency>
+	<groupId>com.sun.xml.bind</groupId>
+	<artifactId>jaxb-impl</artifactId>
+        <version>2.3.0</version>
+      </dependency>
 
     </dependencies>
   </dependencyManagement>
