@@ -22,7 +22,7 @@
     <licencemanagerVersion>1.0.6</licencemanagerVersion>
     <!-- <licencemanagerVersion>1.1.0-SNAPSHOT</licencemanagerVersion> -->
 
-    <org.opennms.version>25.0.0</org.opennms.version>
+    <org.opennms.version>25.1.1</org.opennms.version>
 
 
     <slf4jVersion>1.7.21</slf4jVersion>
