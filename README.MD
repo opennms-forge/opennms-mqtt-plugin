@@ -1,7 +1,9 @@
 # Description
 This OpenNMS plugin adds the ability for OpenNMS to received streaming measurements and events from an IoT infrastructure. 
 
-This version is designed for OpenNMS versions 24 or greater. (Use version 0.0.4 with previous versions of opennms)
+This version (0.0.7) is designed for OpenNMS versions 27 or greater. 
+0.0.6 tested with OpenNMS 25.1.1
+(Use version 0.0.4 with versions before 25)
 
 The plugin supports MQTT messages and also asynchronous messages sent into OpenNMS from a ReST API.
 OpenNMS can register with an MQTT broker to receive MQTT messages.

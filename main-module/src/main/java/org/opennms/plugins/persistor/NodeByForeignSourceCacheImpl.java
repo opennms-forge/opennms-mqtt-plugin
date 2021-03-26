@@ -28,6 +28,8 @@
 
 package org.opennms.plugins.persistor;
 
+import org.opennms.plugins.persistor.NodeByForeignSourceCache;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Iterator;
@@ -47,6 +49,7 @@ import org.opennms.netmgt.events.api.EventIpcManager;
 import org.opennms.netmgt.events.api.EventListener;
 import org.opennms.netmgt.events.api.EventProxy;
 import org.opennms.netmgt.events.api.EventProxyException;
+import org.opennms.netmgt.events.api.model.IEvent;
 import org.opennms.netmgt.model.OnmsAssetRecord;
 import org.opennms.netmgt.model.OnmsCategory;
 import org.opennms.netmgt.model.OnmsGeolocation;
@@ -519,7 +522,7 @@ public class NodeByForeignSourceCacheImpl implements NodeByForeignSourceCache, E
 	}
 
 	@Override
-	public void onEvent(Event event) {
+	public void onEvent(IEvent event) {
 		// check for node change events
 		String uei=event.getUei();
 		if(uei!=null && uei.startsWith("uei.opennms.org/nodes/")) {
