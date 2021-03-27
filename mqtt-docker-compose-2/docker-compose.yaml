@@ -63,8 +63,8 @@ services:
       - ./container-fs/opt/opennms/deploy:/opt/opennms/deploy:ro
       - ./container-fs/opt/opennms-overlay:/opt/opennms-overlay:ro
       - ./container-fs/opt/opennms-etc-overlay:/opt/opennms-etc-overlay:ro
-      - ./container-fs/etc/conf.d/confd.toml:/etc/confd/confd.toml:r0
-     command: ["-s"]
+      - ./container-fs/etc/conf.d/confd.toml:/etc/confd/confd.toml:ro
+    command: ["-s"]
     ports:
       - "8101:8101/tcp"
       - "8980:8980/tcp"
@@ -76,7 +76,7 @@ services:
       retries: 3
 
   grafana:
-    image: ${DOCKER_REGISTRY:-docker.io}/grafana/grafana:${GRAFANA_VERSION:-7.3.2}
+    image: ${DOCKER_REGISTRY:-docker.io}/grafana/grafana:${GRAFANA_VERSION:-7.5.0}
     container_name: grafana
     hostname: grafana
     environment:
