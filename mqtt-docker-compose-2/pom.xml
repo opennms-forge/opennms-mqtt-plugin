@@ -35,7 +35,7 @@
                   <type>kar</type>
                   <!-- <classifier> [classifier - optional] </classifier> -->
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.basedir}/container-fs/opennms-deploy/</outputDirectory>
+                  <outputDirectory>${project.basedir}/container-fs/opt/opennms/deploy/</outputDirectory>
                   <!-- <destFileName>[ filename ]</destFileName> -->
                 </artifactItem>
               </artifactItems>
@@ -66,10 +66,11 @@
             <configuration>
               <filesets>
                 <fileset>
-                  <directory>${project.basedir}/container-fs/opennms-deploy/</directory>
+                  <directory>${project.basedir}/container-fs/opt/opennms/deploy/</directory>
                   <followSymlinks>false</followSymlinks>
                   <excludes>
                     <exclude>**/README.md</exclude>
+                    <exclude>.gitkeep</exclude>
                   </excludes>
                 </fileset>
               </filesets>
