@@ -46,6 +46,7 @@
     <module>kar-package</module>
     <module>test-onejar</module>
     <module>mqtt-docker-compose</module>
+    <module>mqtt-docker-compose-2</module>
   </modules>
 
   <build>
