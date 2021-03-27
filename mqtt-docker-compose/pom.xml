@@ -10,7 +10,6 @@
 
   <artifactId>MqttClient.mqtt-docker-compose</artifactId>
   <packaging>pom</packaging>
-  <name>MqttClient.mqtt-docker-compose</name>
 
   <!-- copies built kar file to opennms docker deploy directory -->
   <build>

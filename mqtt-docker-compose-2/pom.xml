@@ -10,7 +10,7 @@
 
   <artifactId>MqttClient.mqtt-docker-compose-2</artifactId>
   <packaging>pom</packaging>
-  <name>MqttClient.mqtt-docker-compose</name>
+
 
   <!-- copies built kar file to opennms docker deploy directory -->
   <build>
@@ -35,7 +35,7 @@
                   <type>kar</type>
                   <!-- <classifier> [classifier - optional] </classifier> -->
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.basedir}/opennms-deploy/</outputDirectory>
+                  <outputDirectory>${project.basedir}/container-fs/opennms-deploy/</outputDirectory>
                   <!-- <destFileName>[ filename ]</destFileName> -->
                 </artifactItem>
               </artifactItems>
@@ -66,7 +66,7 @@
             <configuration>
               <filesets>
                 <fileset>
-                  <directory>${project.basedir}/opennms-deploy</directory>
+                  <directory>${project.basedir}/container-fs/opennms-deploy/</directory>
                   <followSymlinks>false</followSymlinks>
                   <excludes>
                     <exclude>**/README.md</exclude>
