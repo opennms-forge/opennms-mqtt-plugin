@@ -18,6 +18,8 @@
 
       If your log messages are showing up in uncategorized.log, it indicates that the subsystem making calls
       to your code is not properly setting a prefix when being called.
+
+      CG - modified for contaner
   -->
 
   <properties>
