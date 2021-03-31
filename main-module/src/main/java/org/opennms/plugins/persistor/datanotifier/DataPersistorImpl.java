@@ -125,9 +125,8 @@ public class DataPersistorImpl implements DataPersistor {
 
 					NodeLevelResource nodelevelResource = new NodeLevelResource(nodeId);
 
-					// Build the interface resource
-					//TODO INTERFACE LEVEL RESOURCE
-					InterfaceLevelResource interfaceLevelResource = new InterfaceLevelResource(nodelevelResource, "mqtt");
+					// Build the interface resource using resourceName
+					InterfaceLevelResource interfaceLevelResource = new InterfaceLevelResource(nodelevelResource, resourceName);
 
 					// Generate the collection set
 					CollectionAgent agent = new MockCollectionAgent(foreignSource, foreignId, nodeId);

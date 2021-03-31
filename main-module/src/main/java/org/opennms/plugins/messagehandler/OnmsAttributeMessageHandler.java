@@ -243,8 +243,8 @@ public class OnmsAttributeMessageHandler {
 	 */
 	private String getResourceName(JXPathContext context, XmlGroup group) {
 		// Processing multiple-key resource name.
-		// If XpathList doesn't exist or not found, a node resource will be assumed.
-		String resourceName="node";
+		// If XpathList doesn't exist or not found, an mqtt resource will be assumed.
+		String resourceName="mqtt";
 		if (group.hasMultipleResourceKey()) {
 			List<String> keys = new ArrayList<String>();
 			for (String key : group.getXmlResourceKey().getKeyXpathList()) {

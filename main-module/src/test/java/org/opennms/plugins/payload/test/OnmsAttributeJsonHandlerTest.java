@@ -86,13 +86,13 @@ public class OnmsAttributeJsonHandlerTest {
 		assertTrue(attributeMapList.size()==2);
 
 		// message 1
-		assertTrue("node".equals(attributeMapList.get(0).getResourceName()));
+		assertTrue("mqtt".equals(attributeMapList.get(0).getResourceName()));
 		assertTrue("global".equals(attributeMapList.get(0).getForeignId()));
 		assertTrue(new Long(1299258888).equals(new Long(attributeMapList.get(0).getTimestamp().getTime()))); 
 		assertEquals("245",attributeMapList.get(0).getAttributeMap().get("nproc").getValue() );
 		
 		// message 2
-		assertTrue("node".equals(attributeMapList.get(0).getResourceName()));
+		assertTrue("mqtt".equals(attributeMapList.get(0).getResourceName()));
 		assertTrue("zone1".equals(attributeMapList.get(1).getForeignId()));
 		assertTrue(new Long(1299259999).equals(new Long(attributeMapList.get(1).getTimestamp().getTime()))); 
 		assertEquals("24",attributeMapList.get(1).getAttributeMap().get("nproc").getValue() );
