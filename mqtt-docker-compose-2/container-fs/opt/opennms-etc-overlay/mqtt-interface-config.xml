@@ -74,7 +74,11 @@
 
          <!-- using the following configuration -->
          <ns2:xml-groups xmlns="http://xmlns.opennms.org/xsd/config/xml-datacollection">
-            <ns2:xml-group name="Transmitter" resource-type="pi" resource-xpath="/" key-xpath="$topicLevels[3]">
+            <ns2:xml-group name="Transmitter" resource-type="pi" resource-xpath="/" key-xpath="$topicLevels[2]">
+               <ns2:resource-key>
+                  <ns2:key-xpath>$topicLevels[2]</ns2:key-xpath>
+                  <ns2:key-xpath>$topicLevels[3]</ns2:key-xpath>
+               </ns2:resource-key>
                <ns2:xml-object name="tempIn" type="GAUGE" xpath="@tempIn" />
                <ns2:xml-object name="tempOut" type="GAUGE" xpath="@tempOut" />
                <ns2:xml-object name="flowRate" type="GAUGE" xpath="@flowRate" />

@@ -32,6 +32,7 @@
       <maven.surefire.plugin.version>2.18</maven.surefire.plugin.version>
       <pahoVersion>1.1.1</pahoVersion>
       <jerseyVersion>1.19.3</jerseyVersion>
+      <jacksonVersion>1.9.13</jacksonVersion>
       <jsr311Version>1.1.1</jsr311Version>
       <servletApiVersion>3.1.0</servletApiVersion>
       <commonsJxpathVersion>1.3</commonsJxpathVersion>

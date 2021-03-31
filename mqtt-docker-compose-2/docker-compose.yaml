@@ -82,7 +82,7 @@ services:
     environment:
       TZ: ${TIMEZONE:-America/New_York}
       GF_SECURITY_ADMIN_PASSWORD: mypass
-      GF_INSTALL_PLUGINS: https://github.com/OpenNMS/opennms-helm/archive/v6.0.1.zip;grafana-piechart-panel;neocat-cal-heatmap-panel
+      GF_INSTALL_PLUGINS: https://github.com/OpenNMS/opennms-helm/archive/v6.0.0.zip;grafana-piechart-panel;neocat-cal-heatmap-panel
     volumes:
       - data-grafana:/var/lib/grafana
     ports:
