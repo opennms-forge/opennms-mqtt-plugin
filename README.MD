@@ -1,7 +1,8 @@
 # Description
 This OpenNMS plugin adds the ability for OpenNMS to received streaming measurements and events from an IoT infrastructure. 
 
-This version (0.0.7) is designed for OpenNMS versions 27 or greater. 
+This version (0.0.8) is designed for OpenNMS versions 30 or greater. 
+0.0.7 tested with OpenNMS 27
 0.0.6 tested with OpenNMS 25.1.1
 (Use version 0.0.4 with versions before 25)
 
