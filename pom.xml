@@ -20,7 +20,7 @@
       <productName>MqttClient</productName>
       <productFeatureRepository>mvn:${project.groupId}/${productName}/${project.version}/xml/features</productFeatureRepository>
 
-      <org.opennms.version>30.0.1</org.opennms.version>
+      <org.opennms.version>32.0.1</org.opennms.version>
 
       <slf4jVersion>1.7.21</slf4jVersion>
       <log4j2Version>2.8.2</log4j2Version>
@@ -484,6 +484,21 @@
    </pluginRepositories>
 
    <repositories>
+      <!-- uncomment to pick up local OpenNMS build artifacts from local repo -->
+<!--       <repository> -->
+<!--          <id>importm2</id> -->
+<!--          <name>virtual machine importm2</name> -->
+<!--          <url>http://192.168.80.130:8181/repository/importm2</url> -->
+<!--          <releases> -->
+<!--             <enabled>true</enabled> -->
+<!--             <updatePolicy>never</updatePolicy> -->
+<!--          </releases> -->
+<!--          <snapshots> -->
+<!--             <enabled>true</enabled> -->
+<!--             <updatePolicy>${updatePolicy}</updatePolicy> -->
+<!--          </snapshots> -->
+<!--       </repository> -->
+      
       <repository>
          <id>vaadin-snapshots</id>
          <releases>
