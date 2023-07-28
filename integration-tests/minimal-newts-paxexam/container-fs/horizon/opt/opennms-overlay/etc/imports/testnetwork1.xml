@@ -1,0 +1,16 @@
+<model-import xmlns="http://xmlns.opennms.org/xsd/config/model-import" date-stamp="2023-07-28T07:54:37.785-04:00" foreign-source="testnetwork1" last-import="2023-07-28T07:54:45.464-04:00">
+   <node location="minion-location" foreign-id="cameranetsnmp2" node-label="cameranetsnmp2">
+      <interface ip-addr="172.20.0.31" status="1" snmp-primary="P">
+         <monitored-service service-name="ICMP"/>
+         <monitored-service service-name="SNMP"/>
+      </interface>
+      <category name="cameras"/>
+   </node>
+   <node foreign-id="cameranetsnmp1" node-label="cameranetsnmp1">
+      <interface ip-addr="172.20.0.30" status="1" snmp-primary="P">
+         <monitored-service service-name="ICMP"/>
+         <monitored-service service-name="SNMP"/>
+      </interface>
+      <category name="cameras"/>
+   </node>
+</model-import>
