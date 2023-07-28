@@ -3,9 +3,13 @@
    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
    <modelVersion>4.0.0</modelVersion>
 
-   <groupId>org.opennms.integration.paxexam</groupId>
-   <artifactId>opennms-example</artifactId>
-   <version>0.0.1-SNAPSHOT</version>
+   <parent>
+      <groupId>org.opennms.plugins.iot</groupId>
+      <artifactId>integration-tests</artifactId>
+      <version>0.0.8-SNAPSHOT</version>
+   </parent>
+
+   <artifactId>opennms-paxexam-docker-compose</artifactId>
 
    <packaging>pom</packaging>
 
@@ -181,9 +185,9 @@
          <url>https://maven.pkg.github.com/gallenc/opennms-paxexam</url>
          <snapshots>
             <!-- we only publish release versions of opennms-paxexam to github packages -->
-            <enabled>false</enabled> 
+            <enabled>false</enabled>
          </snapshots>
       </repository>
    </repositories>
-   
+
 </project>
