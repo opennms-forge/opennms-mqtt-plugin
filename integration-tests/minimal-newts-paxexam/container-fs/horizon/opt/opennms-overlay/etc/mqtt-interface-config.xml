@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mqtt-receiver xmlns="http://xmlns.opennms.org/xsd/config/mqtt-datacollection" xmlns:ns2="http://xmlns.opennms.org/xsd/config/xml-datacollection">
+  <!-- optional tuning parameters -->
+  <nodeCacheMaxSize>1000</nodeCacheMaxSize>
+  <nodeCacheMaxTtl>0</nodeCacheMaxTtl>
+  <maxMessageQueueLength>1000</maxMessageQueueLength>
+  <maxMessageQueueThreads>2</maxMessageQueueThreads>
+
+  <!-- if true new nodes will be created for messages referencing an unknown node -->
+  <createMissingNodes>true</createMissingNodes>
+  <!-- if true a dummy interface will also be created when the node is created -->
+  <createDummyInterfaces>true</createDummyInterfaces>
+  <!-- if true asset information will be copied to the node asset table when the node is created -->
+  <!-- this particularly applies to latitude and longitude if defined in the message -->
+  <createNodeAssetData>true</createNodeAssetData>
+
+  <!-- message data parsers define how data messages are converted into metrics to be stored in RRD's or Cassandra by OpenNMS -->
+  <!-- subscriptionTopics defines which topic messages will be passed to this parser. -->
+  <!-- many messageDataParsers can be defined but only one per topic although events can also be driven off the same topic) -->
+  <messageDataParsers>
+    <!-- payloadType determines how the payload is parsed; JSON, XML, PROTOBUF ot TEXT. Note only JSON is supported in present release -->
+    <!-- foreignSource defines the foreign source to be used when referencing or creating a new node -->
+    <!-- compression determines the processing of compressed messages GZIP, UNCOMPRESSED, AUTOMATIC_GZIP -->
+    <!-- (tries to guess if gzip compressed - small chance of false positives) -->
+    <messageDataParser foreignSource="mqtt" payloadType="XML" compression="UNCOMPRESSED">
+      <subscriptionTopics>
+        <topic>mqtt-data</topic>
+      </subscriptionTopics>
+      <!-- xmlgroups configuration is very similar to XMLData collection configuration for JSON in OpenNMS -->
+      <!-- however multiple readings with different timestamps can be received. The timestamp-xpath is relative to the start of the message -->
+      <!-- the key-xpath defines the key which will give the node its foreignId. Thus the foreignSource defined above is combined with -->
+      <!-- the foreignId retrieved by the key-xpath to give a reference to the node for which the data is persisted. -->
+      <xml-groups>
+      
+<!--         <ns2:xml-group name="xmlfile1" resource-type="node" resource-xpath="/logToFileResponse/equipment.SystemCpuStatsLogRecord"  -->
+<!--                            key-xpath="@id" timestamp-xpath="@time" timestamp-format="yyyy-MM-dd HH:mm:ss.SSSSSS"> -->
+<!--           <ns2:xml-object name="systemCpuUsage" type="GAUGE" xpath="systemCpuUsage"/> -->
+<!--           <ns2:xml-object name="timeCaptured" type="GAUGE" xpath="timeCaptured"/> -->
+<!--           <ns2:xml-object name="periodicTime" type="GAUGE" xpath="periodicTime"/> -->
+<!--           <ns2:xml-object name="monitoredObjectClass" type="STRING" xpath="monitoredObjectClass"/> -->
+<!--           <ns2:xml-object name="monitoredObjectPointer" type="STRING" xpath="monitoredObjectPointer"/> -->
+<!--           <ns2:xml-object name="displayedName" type="STRING" xpath="displayedName"/> -->
+<!--           <ns2:xml-object name="monitoredObjectSiteId" type="STRING" xpath="monitoredObjectSiteId"/> -->
+<!--           <ns2:xml-object name="monitoredObjectSiteName" type="STRING" xpath="monitoredObjectSiteName"/> -->
+<!--           <ns2:xml-object name="suspect" type="STRING" xpath="suspect"/> -->
+<!--         </ns2:xml-group> -->
+
+        <ns2:xml-group name="sniffy" resource-type="sniffy" resource-xpath="/" key-xpath="@id" timestamp-xpath="@time" timestamp-format="yyyy-MM-dd HH:mm:ss.SSSSSS">
+          <ns2:xml-object name="time" type="string" xpath="@time" />
+          <ns2:xml-object name="id" type="string" xpath="@id" />
+          <ns2:xml-object name="cityName" type="string" xpath="@cityName" />
+          <ns2:xml-object name="stationName" type="string" xpath="@stationName" />
+          <ns2:xml-object name="latitude" type="GAUGE" xpath="@latitude" />
+          <ns2:xml-object name="longitude" type="GAUGE" xpath="@longitude" />
+          <ns2:xml-object name="averaging" type="GAUGE" xpath="@averaging" />
+          <ns2:xml-object name="PM1" type="GAUGE" xpath="@PM1" />
+          <ns2:xml-object name="PM25" type="GAUGE" xpath="@PM25" />
+          <ns2:xml-object name="PM10" type="GAUGE" xpath="@PM10" />
+        </ns2:xml-group>
+      </xml-groups>
+      <!-- xmlRRD us set up exactly as it is for xml data collection. step (in seconds ) is the interval expected between data received from the same node -->
+      <xmlRrd step="300">
+        <ns2:rra>RRA:AVERAGE:0.5:1:2016</ns2:rra>
+        <ns2:rra>RRA:AVERAGE:0.5:12:1488</ns2:rra>
+        <ns2:rra>RRA:AVERAGE:0.5:288:366</ns2:rra>
+        <ns2:rra>RRA:MAX:0.5:288:366</ns2:rra>
+        <ns2:rra>RRA:MIN:0.5:288:366</ns2:rra>
+      </xmlRrd>
+    </messageDataParser>
+
+    <!-- *********************************** -->
+    <!-- message data parser for laurawan probes -->
+    <!-- *********************************** -->
+  </messageDataParsers>
+
+  <!-- message event parsers follow the same pattern as message data parsers. -->
+  <!-- however the Xpath defines which name value pairs are saved as params in the resulting opennms events -->
+
+  <messageEventParsers>
+<!--     <messageEventParser foreignSource="mqtt" payloadType="JSON" compression="UNCOMPRESSED"> -->
+<!--       <subscriptionTopics> -->
+<!--         <topic>mqtt-events/json</topic> -->
+<!--       </subscriptionTopics> -->
+<!--       <xml-groups> -->
+<!--         <ns2:xml-group name="sniffy" resource-type="sniffy" resource-xpath="/" key-xpath="@id" timestamp-xpath="@time" timestamp-format="yyyy-MM-dd HH:mm:ss.SSSSSS"> -->
+<!--           <ns2:xml-object name="time" type="string" xpath="@time" /> -->
+<!--           <ns2:xml-object name="id" type="string" xpath="@id" /> -->
+<!--           <ns2:xml-object name="cityName" type="string" xpath="@cityName" /> -->
+<!--           <ns2:xml-object name="stationName" type="string" xpath="@stationName" /> -->
+<!--           <ns2:xml-object name="latitude" type="GAUGE" xpath="@latitude" /> -->
+<!--           <ns2:xml-object name="longitude" type="GAUGE" xpath="@longitude" /> -->
+<!--           <ns2:xml-object name="averaging" type="GAUGE" xpath="@averaging" /> -->
+<!--           <ns2:xml-object name="PM1" type="GAUGE" xpath="@PM1" /> -->
+<!--           <ns2:xml-object name="PM25" type="GAUGE" xpath="@PM25" /> -->
+<!--           <ns2:xml-object name="PM10" type="GAUGE" xpath="@PM10" /> -->
+<!--         </ns2:xml-group> -->
+<!--       </xml-groups> -->
+<!--     </messageEventParser> -->
+
+<!--     <messageEventParser foreignSource="mqtt" payloadType="TEXT_CSV" compression="UNCOMPRESSED"> -->
+<!--       Site,Species,ReadingDateTime,Value,Units,Provisional or Ratified -->
+<!--       1, 2 3 4 5 6 Note jxpath numbers indexes from 1 -->
+<!--       SH0,NO,01/01/2018 00:00,5.0,ug m-3,P -->
+<!--       <subscriptionTopics> -->
+<!--         <topic>mqtt-events/txt</topic> -->
+<!--       </subscriptionTopics> -->
+<!--       <xml-groups> -->
+<!--         <ns2:xml-group name="textMeasure" resource-type="testMeasure" resource-xpath="." key-xpath=".[1]" timestamp-xpath=".[3]" timestamp-format="dd/mm/yyyy HH:mm"> empty string indicates simple timestamp from epoch (Date.toString()) -->
+<!--           <ns2:xml-object name="name" type="string" xpath=".[1]" /> -->
+<!--           <ns2:xml-object name="timestamp" type="string" xpath=".[3]" /> -->
+<!--           <ns2:xml-object name="value" type="GAUGE" xpath=".[4]" /> -->
+<!--         </ns2:xml-group> -->
+<!--       </xml-groups> -->
+<!--     </messageEventParser> -->
+
+
+  </messageEventParsers>
+
+  <!-- mqttClients define connections to mqtt brokers. (This follows the paho client model). -->
+  <!-- each client must have a unique instanceId - this is used in OpenNMS logging. -->
+  <!-- the clienid must be unique for a given mqtt broker -->
+  <!-- the clientConnectionMaxWait tetermins the time the client will wait for the broker to respond before abandoning a connection attempt -->
+  <!-- the connectionRetryInterval is the interval before the client will try again to connect after failing to connect previously -->
+  <!-- the topic list determines which topics the client will subscribe to once it has established a connection -->
+  <!-- Note that the subscribed topic can also be a filter e.g. topic="/+/foo/# -->
+  <mqttClients>
+<!--     <client clientInstanceId="client1"> -->
+<!--       <brokerUrl>tcp://localhost:1883</brokerUrl> -->
+<!--       <clientId>opennms</clientId> -->
+<!--       <connectionRetryInterval>3000</connectionRetryInterval> -->
+<!--       <clientConnectionMaxWait>20000</clientConnectionMaxWait> -->
+<!--       <topicList> -->
+<!--         <topic qos="0" topic="mqtt-events/#" /> -->
+<!--         <topic qos="0" topic="mqtt-data" /> -->
+<!--       </topicList> -->
+<!--       <userName>mqtt-user</userName> -->
+<!--       <password>mqtt-password</password> -->
+
+      <!-- USING TLS -->
+      <!-- If you are using TLS you must provide both certificate and key files -->
+      <!-- If both are omitted from the configuration TLS will not be used -->
+
+      <!-- with AMAZON IoT, the certificate and key files can be generated for you -->
+      <!-- These are tied to a specific client id and IoT end point -->
+      <!-- <clientId>client id matching certificate</clientId> -->
+      
+      <!-- <certificateFile>put absolute path to certificate.pem file here</certificateFile> -->
+      <!-- <privateKeyFile>put absolute path to private.key file here</privateKeyFile> -->
+      <!-- <brokerUrl>ssl://{iot end point}:8883</brokerUrl> -->
+<!--     </client> -->
+  </mqttClients>
+
+  <!-- messageClients are alternative message sources defined within OpenNMS -->
+  <!-- In this case, the opennms-rest-client is an in built rest client which can receive messages on a particular topic and qos -->
+  <!-- determined by the url. The topicList determines which topics will be accepted by the ReST api and passed to the message queue for processing -->
+  <!-- the ReST url pattern is <opennms base url>/plugin/mqtt/v1-0/postmessage/<QOS>/TOPIC... -->
+  <!-- where the resource identifier is /postmessage/<QOS>/TOPIC... and TOPIC is a topic path e.g. /postmessage/0/foo/barr -->
+  <!-- Note that the subscribed topic can also be a filter e.g. topic="/+/foo/# -->
+  <!-- e.g. the following configuration allows json data to be POSTed to the mqtt-events topic with qos 0 at -->
+  <!-- http://localhost:8980/opennms/plugin/mqtt/v1-0/postmessage/0/mqtt-events -->
+  <messageClients>
+    <message-client clientInstanceId="opennms-rest-client" clientType="opennms-rest-client">
+      <configuration>
+        <client-configuration name="TBD" value="TBD" />
+      </configuration>
+      <topicList>
+<!--         <topic qos="0" topic="mqtt-events" /> -->
+<!--         <topic qos="0" topic="mqtt-events/#" /> -->
+        <topic qos="0" topic="mqtt-data" />
+      </topicList>
+    </message-client>
+  </messageClients>
+</mqtt-receiver>

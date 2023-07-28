@@ -169,6 +169,10 @@
       <appender-ref ref="RoutingAppender" />
     </logger>
     
+    <logger name="org.opennms.plugins" additivity="false" level="DEBUG">
+      <appender-ref ref="RoutingAppender" />
+    </logger>
+    
     <logger name="org.opennms.integrate.paxexam" additivity="false" level="DEBUG">
       <appender-ref ref="RoutingAppender" />
     </logger>
