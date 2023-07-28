@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <groupId>org.opennms.integration.paxexam</groupId>
+   <artifactId>opennms-example</artifactId>
+   <version>0.0.1-SNAPSHOT</version>
+
+   <packaging>pom</packaging>
+
+   <properties>
+      <paxexam.version>4.13.5</paxexam.version>
+      <opennms-paxexam.version>0.0.1</opennms-paxexam.version>
+      <osgi.version>6.0.0</osgi.version>
+   </properties>
+
+   <!-- copies built dependency files to deploy directory -->
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>3.0.1</version>
+            <executions>
+               <execution>
+                  <id>copy</id>
+                  <phase>package</phase>
+                  <goals>
+                     <goal>copy</goal>
+                  </goals>
+                  <configuration>
+                     <artifactItems>
+                        <!-- deploy directory -->
+                        <artifactItem>
+                           <groupId>org.opennms.integration.paxexam</groupId>
+                           <artifactId>pax-exam-features-opennms</artifactId>
+                           <version>${opennms-paxexam.version}</version>
+                           <type>xml</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.basedir}/container-fs/opt/opennms/deploy</outputDirectory>
+                        </artifactItem>
+
+                        <!-- Boot directory -->
+                        <artifactItem>
+                           <groupId>org.ops4j.pax.exam</groupId>
+                           <artifactId>pax-exam</artifactId>
+                           <version>${paxexam.version}</version>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.basedir}/container-fs/opt/opennms-overlay/lib</outputDirectory>
+                        </artifactItem>
+                        <artifactItem>
+                           <groupId>org.opennms.integration.paxexam</groupId>
+                           <artifactId>pax-exam-container-rbc-onms</artifactId>
+                           <version>${opennms-paxexam.version}</version>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.basedir}/container-fs/opt/opennms-overlay/lib</outputDirectory>
+                        </artifactItem>
+                        <artifactItem>
+                           <groupId>org.opennms.integration.paxexam</groupId>
+                           <artifactId>opennms-paxexam-rmi-server</artifactId>
+                           <version>${opennms-paxexam.version}</version>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.basedir}/container-fs/opt/opennms-overlay/lib</outputDirectory>
+                        </artifactItem>
+
+                        <!-- misc directory - only for in-container tests -->
+                        <artifactItem>
+                           <groupId>org.opennms.integration.paxexam</groupId>
+                           <artifactId>opennms-paxexam-container-remote</artifactId>
+                           <version>${opennms-paxexam.version}</version>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.basedir}/container-fs/misc</outputDirectory>
+                        </artifactItem>
+                        <artifactItem>
+                           <groupId>org.opennms.integration.paxexam</groupId>
+                           <artifactId>pax-exam-container-rbc-onms</artifactId>
+                           <version>${opennms-paxexam.version}</version>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.basedir}/container-fs/misc</outputDirectory>
+                        </artifactItem>
+                        <artifactItem>
+                           <groupId>org.ops4j.pax.exam</groupId>
+                           <artifactId>pax-exam</artifactId>
+                           <version>${paxexam.version}</version>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.basedir}/container-fs/misc</outputDirectory>
+                        </artifactItem>
+                        <artifactItem>
+                           <groupId>org.opennms.integration.paxexam</groupId>
+                           <artifactId>opennms-paxexam-rmi-server</artifactId>
+                           <version>${opennms-paxexam.version}</version>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.basedir}/container-fs/misc</outputDirectory>
+                        </artifactItem>
+                        <artifactItem>
+                           <groupId>org.osgi</groupId>
+                           <artifactId>org.osgi.core</artifactId>
+                           <version>${osgi.version}</version>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.basedir}/container-fs/misc</outputDirectory>
+                        </artifactItem>
+                     </artifactItems>
+                     <!-- other configurations here -->
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+
+         <plugin>
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>3.1.0</version>
+            <executions>
+               <execution>
+                  <id>default-clean</id>
+                  <phase>clean</phase>
+                  <goals>
+                     <goal>clean</goal>
+                  </goals>
+               </execution>
+               <!-- cleans deployed files from karaf deploy directories -->
+               <execution>
+                  <id>dependency-clean</id>
+                  <phase>clean</phase>
+                  <goals>
+                     <goal>clean</goal>
+                  </goals>
+                  <configuration>
+                     <filesets>
+                        <fileset>
+                           <directory>${project.basedir}/container-fs/opt/opennms-overlay/lib/</directory>
+                           <followSymlinks>false</followSymlinks>
+                           <excludes>
+                              <exclude>**/README.md</exclude>
+                              <exclude>**/.gitignore</exclude>
+                              <exclude>**/.gitkeep</exclude>
+                           </excludes>
+                        </fileset>
+                        <fileset>
+                           <directory>${project.basedir}/container-fs/opt/opennms/deploy/</directory>
+                           <followSymlinks>false</followSymlinks>
+                           <excludes>
+                              <exclude>**/README.md</exclude>
+                              <exclude>**/.gitignore</exclude>
+                              <exclude>**/.gitkeep</exclude>
+                           </excludes>
+                        </fileset>
+                        <fileset>
+                           <directory>${project.basedir}/container-fs/misc</directory>
+                           <followSymlinks>false</followSymlinks>
+                           <excludes>
+                              <exclude>**/README.md</exclude>
+                              <exclude>**/.gitignore</exclude>
+                              <exclude>**/.gitkeep</exclude>
+                           </excludes>
+                        </fileset>
+                     </filesets>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+
+      </plugins>
+   </build>
+
+   <repositories>
+      <repository>
+         <id>central</id>
+         <url>https://repo1.maven.org/maven2</url>
+      </repository>
+      <repository>
+         <id>github</id>
+         <url>https://maven.pkg.github.com/gallenc/opennms-paxexam</url>
+         <snapshots>
+            <!-- we only publish release versions of opennms-paxexam to github packages -->
+            <enabled>false</enabled> 
+         </snapshots>
+      </repository>
+   </repositories>
+   
+</project>
