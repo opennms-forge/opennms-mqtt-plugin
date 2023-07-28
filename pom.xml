@@ -485,19 +485,19 @@
 
    <repositories>
       <!-- uncomment to pick up local OpenNMS build artifacts from local repo -->
-<!--       <repository> -->
-<!--          <id>importm2</id> -->
-<!--          <name>virtual machine importm2</name> -->
-<!--          <url>http://192.168.80.130:8181/repository/importm2</url> -->
-<!--          <releases> -->
-<!--             <enabled>true</enabled> -->
-<!--             <updatePolicy>never</updatePolicy> -->
-<!--          </releases> -->
-<!--          <snapshots> -->
-<!--             <enabled>true</enabled> -->
-<!--             <updatePolicy>${updatePolicy}</updatePolicy> -->
-<!--          </snapshots> -->
-<!--       </repository> -->
+      <repository>
+         <id>importm2</id>
+         <name>virtual machine importm2</name>
+         <url>http://192.168.80.130:8181/repository/importm2</url>
+         <releases>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+         </releases>
+         <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>${updatePolicy}</updatePolicy>
+         </snapshots>
+      </repository>
       
       <repository>
          <id>vaadin-snapshots</id>
