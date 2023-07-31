@@ -121,7 +121,7 @@
     <service-properties>
       <!-- Property 'alias' is no longer supported. Please use 'osgi.http.whiteboard.servlet.pattern' instead." -->
       <!-- <entry key="alias" value="/plugin/mqtt/v1-0" /> -->
-      <entry key="osgi.http.whiteboard.servlet.pattern" value="/rest/plugin/mqtt/v1-0" />
+      <entry key="osgi.http.whiteboard.servlet.pattern" value="/rest/plugin/mqtt/v1-0/*" />
 
     </service-properties>
     <bean class="com.sun.jersey.spi.container.servlet.ServletContainer">

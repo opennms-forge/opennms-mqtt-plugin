@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xml-groups xmlns="http://xmlns.opennms.org/xsd/config/xml-datacollection">
+    <xml-group name="xmlfile1" resource-type="node" resource-xpath="/logToFileResponse/equipment.SystemCpuStatsLogRecord"
+    key-xpath="monitoredObjectClass" 
+    timestamp-xpath="timeCaptured" timestamp-format="">
+        <xml-object name="systemCpuUsage" type="GAUGE" xpath="systemCpuUsage"/>
+        <xml-object name="timeCaptured" type="GAUGE" xpath="timeCaptured"/>
+        <xml-object name="periodicTime" type="GAUGE" xpath="periodicTime"/>
+        <xml-object name="monitoredObjectClass" type="STRING" xpath="monitoredObjectClass"/>
+        <xml-object name="monitoredObjectPointer" type="STRING" xpath="monitoredObjectPointer"/>
+        <xml-object name="displayedName" type="STRING" xpath="displayedName"/>
+        <xml-object name="monitoredObjectSiteId" type="STRING" xpath="monitoredObjectSiteId"/>
+        <xml-object name="monitoredObjectSiteName" type="STRING" xpath="monitoredObjectSiteName"/>
+        <xml-object name="suspect" type="STRING" xpath="suspect"/>
+    </xml-group>
+</xml-groups>
+
+<!-- Message to decode -->
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+<!-- <logToFileResponse xmlns="xmlapi_1.0"> removed !!! -->
+<!-- <logToFileResponse> -->
+<!--    <equipment.SystemCpuStatsLogRecord> -->
+<!--       <systemCpuUsage>9</systemCpuUsage> -->
+<!--       <timeCaptured>1689362117555</timeCaptured> -->
+<!--       <periodicTime>70597</periodicTime> -->
+<!--       <monitoredObjectClass>equipment.SystemStatsHolder</monitoredObjectClass> -->
+<!--       <monitoredObjectPointer>network:64.184.178.239:shelf-1:systemStatsHolder</monitoredObjectPointer> -->
+<!--       <displayedName>systemStatsHolder</displayedName> -->
+<!--       <monitoredObjectSiteId>64.184.178.239</monitoredObjectSiteId> -->
+<!--       <monitoredObjectSiteName>oly-mpls0</monitoredObjectSiteName> -->
+<!--       <suspect>false</suspect> -->
+<!--    </equipment.SystemCpuStatsLogRecord> -->
+<!--    <equipment.SystemCpuStatsLogRecord> -->
+<!--       <systemCpuUsage>10</systemCpuUsage> -->
+<!--       <timeCaptured>1689362169510</timeCaptured> -->
+<!--       <periodicTime>50962</periodicTime> -->
+<!--       <monitoredObjectClass>equipment.SystemStatsHolder</monitoredObjectClass> -->
+<!--       <monitoredObjectPointer>network:64.184.178.239:shelf-1:systemStatsHolder</monitoredObjectPointer> -->
+<!--       <displayedName>systemStatsHolder</displayedName> -->
+<!--       <monitoredObjectSiteId>64.184.178.239</monitoredObjectSiteId> -->
+<!--       <monitoredObjectSiteName>oly-mpls0</monitoredObjectSiteName> -->
+<!--       <suspect>false</suspect> -->
+<!--    </equipment.SystemCpuStatsLogRecord> -->
+<!--    <equipment.SystemCpuStatsLogRecord> -->
+<!--       <systemCpuUsage>8</systemCpuUsage> -->
+<!--       <timeCaptured>1689362224318</timeCaptured> -->
+<!--       <periodicTime>58671</periodicTime> -->
+<!--       <monitoredObjectClass>equipment.SystemStatsHolder</monitoredObjectClass> -->
+<!--       <monitoredObjectPointer>network:64.184.178.239:shelf-1:systemStatsHolder</monitoredObjectPointer> -->
+<!--       <displayedName>systemStatsHolder</displayedName> -->
+<!--       <monitoredObjectSiteId>64.184.178.239</monitoredObjectSiteId> -->
+<!--       <monitoredObjectSiteName>oly-mpls0</monitoredObjectSiteName> -->
+<!--       <suspect>false</suspect> -->
+<!--    </equipment.SystemCpuStatsLogRecord> -->
+<!--    <equipment.SystemCpuStatsLogRecord> -->
+<!--       <systemCpuUsage>7</systemCpuUsage> -->
+<!--       <timeCaptured>1689362281274</timeCaptured> -->
+<!--       <periodicTime>59889</periodicTime> -->
+<!--       <monitoredObjectClass>equipment.SystemStatsHolder</monitoredObjectClass> -->
+<!--       <monitoredObjectPointer>network:64.184.178.239:shelf-1:systemStatsHolder</monitoredObjectPointer> -->
+<!--       <displayedName>systemStatsHolder</displayedName> -->
+<!--       <monitoredObjectSiteId>64.184.178.239</monitoredObjectSiteId> -->
+<!--       <monitoredObjectSiteName>oly-mpls0</monitoredObjectSiteName> -->
+<!--       <suspect>false</suspect> -->
+<!--    </equipment.SystemCpuStatsLogRecord> -->
+<!--    <equipment.SystemCpuStatsLogRecord> -->
+<!--       <systemCpuUsage>8</systemCpuUsage> -->
+<!--       <timeCaptured>1689362342302</timeCaptured> -->
+<!--       <periodicTime>59874</periodicTime> -->
+<!--       <monitoredObjectClass>equipment.SystemStatsHolder</monitoredObjectClass> -->
+<!--       <monitoredObjectPointer>network:64.184.178.239:shelf-1:systemStatsHolder</monitoredObjectPointer> -->
+<!--       <displayedName>systemStatsHolder</displayedName> -->
+<!--       <monitoredObjectSiteId>64.184.178.239</monitoredObjectSiteId> -->
+<!--       <monitoredObjectSiteName>oly-mpls0</monitoredObjectSiteName> -->
+<!--       <suspect>false</suspect> -->
+<!--    </equipment.SystemCpuStatsLogRecord> -->
+<!-- </logToFileResponse> -->

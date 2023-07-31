@@ -1,0 +1,162 @@
+package org.opennms.plugins.payload.test;
+
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.json.simple.JSONObject;
+import org.junit.Test;
+import org.opennms.plugins.messagehandler.CompressionMethods;
+import org.opennms.plugins.messagehandler.MessagePayloadTypeHandler;
+import org.opennms.plugins.messagehandler.OnmsAttributeMessageHandler;
+import org.opennms.plugins.messagehandler.OnmsCollectionAttributeMap;
+import org.opennms.protocols.xml.config.XmlGroup;
+import org.opennms.protocols.xml.config.XmlGroups;
+import org.opennms.protocols.xml.config.XmlRrd;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+
+public class OnmsAttributeXMLHandlerNokiaTest {
+	private static final Logger LOG = LoggerFactory.getLogger(OnmsAttributeXMLHandlerNokiaTest.class);
+
+	// complex parsing - based upon opennms xml collector example 
+	// https://wiki.opennms.org/wiki/XML_Collector
+	private static final String TEST_XML_1 = "src/test/resources/XmlParserTests/nokia_oly-mpls0-cpeData.xml";
+	private static final String TEST_XMLGROUP_XML_1 = "src/test/resources/XmlParserTests/testNokiaXmlGroup_Xml.xml";
+
+
+	@Test
+	public void test1() {
+		LOG.debug("start OnmsAttributeXMLHandlerNokiaTest test1");
+
+		// tests that file can be parsed into xml
+		String xmlFile = TEST_XML_1;
+
+		String xmlString = readFile(xmlFile);
+		LOG.debug("xmlString:"+xmlString);
+
+		// convert xml string as byte array to attributeMapList
+		byte[] payload;
+		try {
+			payload = xmlString.getBytes(StandardCharsets.UTF_8.name());
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+		
+		LOG.debug("payload length="+payload.length);
+
+		String compression=CompressionMethods.UNCOMPRESSED;
+		Document receivedObject = (Document) MessagePayloadTypeHandler.parsePayload(payload , MessagePayloadTypeHandler.XML,compression);
+		assertNotNull(receivedObject);
+		
+
+		LOG.debug("receivedObject(Document) Root element :"+receivedObject.getDocumentElement().getNodeName());
+
+		LOG.debug("end OnmsAttributeXMLHandlerNokiaTest test1");
+	}
+
+	   @Test
+		public void test2() {
+			LOG.debug("start OnmsAttributeXMLHandlerNokiaTest test2");
+
+			String xmlGroupFile = TEST_XMLGROUP_XML_1;
+			String xmlFile = TEST_XML_1;
+			String topic=null;  // not used but needed by class declaration
+
+			List<OnmsCollectionAttributeMap> attributeMapList = testMethod(xmlGroupFile, xmlFile, topic);
+
+			
+//			assertTrue(attributeMapList.size()==1); 
+//			
+//			// message 1
+//			assertTrue("A23D44567Q".equals(attributeMapList.get(0).getForeignId()));
+//
+//			long time = 1491298822;
+//			assertTrue(new Long(time).equals(new Long(attributeMapList.get(0).getTimestamp().getTime()))); 
+//
+//			assertEquals("45.234",attributeMapList.get(0).getAttributeMap().get("latitude").getValue() );
+//			assertEquals("-7.3456",attributeMapList.get(0).getAttributeMap().get("longitude").getValue() );
+//			Double d1 = Double.parseDouble("0.26456E+4");
+//			Double d2 = Double.parseDouble(attributeMapList.get(0).getAttributeMap().get("distance").getValue());
+//			assertEquals(d1, d2);
+
+			LOG.debug("end OnmsAttributeXMLHandlerNokiaTest test2");
+		}
+
+
+
+	public List<OnmsCollectionAttributeMap> testMethod(String xmlGroupFile, String xmlFile, String topic){
+		// read xpath configuration
+		XmlGroups xmlGroups = unmarshalXmlGroups(xmlGroupFile);
+		// read xml string
+		String xmlString = readFile(xmlFile);
+		//LOG.debug("xmlString"+xmlString);
+
+		// convert csv string as byte array to attributeMapList
+		byte[] payload;
+		try {
+			payload = xmlString.getBytes(StandardCharsets.UTF_8.name());
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+		
+		String compression=CompressionMethods.UNCOMPRESSED;
+		Object payloadObj = MessagePayloadTypeHandler.parsePayload(payload , MessagePayloadTypeHandler.XML,compression);
+
+		XmlRrd xmlRrd = null; // not used but needed by class declaration
+		String defaultForeignSource=null;
+		int qos=0;
+		OnmsAttributeMessageHandler onmsAttributeMessageHandler = new OnmsAttributeMessageHandler(xmlGroups, xmlRrd, topic, defaultForeignSource, qos );
+		List<OnmsCollectionAttributeMap> attributeMapList = onmsAttributeMessageHandler.payloadObjectToAttributeMap(payloadObj);
+
+		LOG.debug("attributeMap: \n    attributeMap.size: "+attributeMapList.size()+"\n    attributeMap.toString: "+attributeMapList.toString().replaceAll("],", "],\n    "));
+
+		return attributeMapList;
+	}
+
+
+	public XmlGroups unmarshalXmlGroups(String fileUrl){
+		try {
+			File xmlGroupsFile = new File(fileUrl);
+			LOG.debug("loading test xmlgroups from file="+xmlGroupsFile.getAbsolutePath());
+			JAXBContext jaxbContext = JAXBContext.newInstance(XmlGroups.class);
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+			XmlGroups xmlGroups = (XmlGroups) jaxbUnmarshaller.unmarshal(xmlGroupsFile);
+			return xmlGroups;
+		} catch (JAXBException e) {
+			throw new RuntimeException("Problem loading xmlgroups file",e);
+		}
+	}
+
+	public String readFile(String fileUrl) {
+		String fileString=null;
+		try {
+			File file = new File(fileUrl);
+			LOG.debug("loading test data from file="+file.getAbsolutePath());
+			fileString = new String(Files.readAllBytes(Paths.get(file.getPath())), StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			throw new RuntimeException("Problem loading file "+fileUrl,e);
+		}
+		return fileString;
+	}
+
+}

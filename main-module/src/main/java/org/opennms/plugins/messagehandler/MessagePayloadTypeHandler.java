@@ -127,7 +127,7 @@ public class MessagePayloadTypeHandler {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			factory.setIgnoringComments(true);
 			factory.setNamespaceAware(true);
-			DocumentBuilder builder;
+			DocumentBuilder builder; 
 
 			builder = factory.newDocumentBuilder();
 
@@ -136,6 +136,7 @@ public class MessagePayloadTypeHandler {
 
 			// Ugly hack to deal with DOM & XPath 1.0's battle royale 
 			// over handling namespaces without a prefix. 
+
 			if(doc.getNamespaceURI() != null && doc.getPrefix() == null){
 				factory.setNamespaceAware(false);
 				builder = factory.newDocumentBuilder();
