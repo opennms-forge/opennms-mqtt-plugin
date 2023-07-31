@@ -14,7 +14,7 @@
    </properties>
 
    <modules>
-      <module>minimal-newts-paxexam</module>
+      <module>opennms-paxexam-docker-compose</module>
       <module>iot-integration-tests</module>
    </modules>
 

@@ -131,6 +131,14 @@
 
   <!-- used for testing only -->
   <!-- <bean id="verySimpleClient" class="org.opennms.plugins.dbnotifier.VerySimpleNotificationClient" /> -->
+  
+  <!-- sequential service collector configured from  -->
+  <bean id="ioTCollector" class="org.opennms.plugins.iot.collector.IoTCollector" />
+  <service ref="iotCollector" interface="org.opennms.netmgt.collection.api.ServiceCollector">
+    <service-properties>
+      <entry key="type" value="org.opennms.plugins.iot.collector.IoTCollector" />
+    </service-properties>
+  </service>
 
 
 </blueprint>
