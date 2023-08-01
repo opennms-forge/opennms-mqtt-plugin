@@ -8,5 +8,9 @@ kar:uninstall MqttClient.kar-package
 kar:list
 
 kar:install mvn:org.opennms.plugins/MqttClient.kar-package/0.0.8-SNAPSHOT/kar
+
+
+opennms:list-collectors
+
 ```
 

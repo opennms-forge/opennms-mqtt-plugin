@@ -20,6 +20,7 @@
       <productName>MqttClient</productName>
       <productFeatureRepository>mvn:${project.groupId}/${productName}/${project.version}/xml/features</productFeatureRepository>
 
+      <opennmsApiVersion>1.6.0</opennmsApiVersion>
       <org.opennms.version>32.0.1</org.opennms.version>
 
       <slf4jVersion>1.7.21</slf4jVersion>
@@ -466,6 +467,23 @@
             <version>2.3.0</version>
          </dependency>
 
+         <!-- opennms integration api -->
+         <dependency>
+            <groupId>org.opennms.integration.api</groupId>
+            <artifactId>api</artifactId>
+            <version>${opennmsApiVersion}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.opennms.integration.api</groupId>
+            <artifactId>common</artifactId>
+            <version>${opennmsApiVersion}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.opennms.integration.api</groupId>
+            <artifactId>config</artifactId>
+            <version>${opennmsApiVersion}</version>
+         </dependency>
+
       </dependencies>
    </dependencyManagement>
 
@@ -498,7 +516,7 @@
             <updatePolicy>${updatePolicy}</updatePolicy>
          </snapshots>
       </repository>
-      
+
       <repository>
          <id>vaadin-snapshots</id>
          <releases>

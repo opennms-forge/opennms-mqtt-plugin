@@ -291,6 +291,23 @@
          <scope>provided</scope>
       </dependency>
 
+      <!-- opennms integration api -->
+      <dependency>
+         <groupId>org.opennms.integration.api</groupId>
+         <artifactId>api</artifactId>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.opennms.integration.api</groupId>
+         <artifactId>common</artifactId>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.opennms.integration.api</groupId>
+         <artifactId>config</artifactId>
+         <scope>provided</scope>
+      </dependency>
+
    </dependencies>
 
 </project>

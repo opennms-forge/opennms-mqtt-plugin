@@ -5,9 +5,13 @@
         <include-range begin="1.1.1.1" end="254.254.254.254"/>
         <include-range begin="::1" end="ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"/>
 
-        <service name="xmlfile1" interval="300000" user-defined="false" status="on">
-            <parameter key="collection" value="xmlfile1" />
-            <parameter key="handler-class" value="org.opennms.protocols.xml.collector.DefaultXmlCollectionHandler"/>
+<!--         <service name="xmlfile1" interval="300000" user-defined="false" status="on"> -->
+<!--             <parameter key="collection" value="xmlfile1" /> -->
+<!--             <parameter key="handler-class" value="org.opennms.protocols.xml.collector.DefaultXmlCollectionHandler"/> -->
+<!--         </service> -->
+        
+         <service name="xmlfileinternal" interval="300000" user-defined="false" status="on">
+            <parameter key="A" value="AAA" />
         </service>
     </package>
 
@@ -193,21 +197,25 @@
 <!--       </service> -->
 <!--    </package> -->
    
-   <collector service="xmlfile1" class-name="org.opennms.protocols.xml.collector.XmlCollector"/>
+
    
-   <collector service="Windows-Exporter" class-name="org.opennms.netmgt.collectd.prometheus.PrometheusCollector"/>
-   <collector service="Node-Exporter" class-name="org.opennms.netmgt.collectd.prometheus.PrometheusCollector"/>
-   <collector service="Elasticsearch" class-name="org.opennms.protocols.xml.collector.XmlCollector"/>
-   <collector service="PostgreSQL" class-name="org.opennms.netmgt.collectd.JdbcCollector"/>
-   <collector service="SNMP" class-name="org.opennms.netmgt.collectd.SnmpCollector"/>
-   <collector service="WMI" class-name="org.opennms.netmgt.collectd.WmiCollector"/>
-   <collector service="WS-Man" class-name="org.opennms.netmgt.collectd.WsManCollector"/>
-   <collector service="VMware-VirtualMachine" class-name="org.opennms.netmgt.collectd.VmwareCollector"/>
-   <collector service="VMware-HostSystem" class-name="org.opennms.netmgt.collectd.VmwareCollector"/>
-   <collector service="VMwareCim-HostSystem" class-name="org.opennms.netmgt.collectd.VmwareCimCollector"/>
-   <collector service="OpenNMS-JVM" class-name="org.opennms.netmgt.collectd.Jsr160Collector"/>
-   <collector service="JMX-Minion" class-name="org.opennms.netmgt.collectd.Jsr160Collector"/>
-   <collector service="JMX-Cassandra" class-name="org.opennms.netmgt.collectd.Jsr160Collector"/>
-   <collector service="JMX-Cassandra-Newts" class-name="org.opennms.netmgt.collectd.Jsr160Collector"/>
-   <collector service="JMX-Kafka" class-name="org.opennms.netmgt.collectd.Jsr160Collector"/>
+   <collector service="xmlfileinternal" class-name="org.opennms.plugins.iot.collector.IoTCollector"/>
+   
+<!--    <collector service="xmlfile1" class-name="org.opennms.protocols.xml.collector.XmlCollector"/> -->
+   
+<!--    <collector service="Windows-Exporter" class-name="org.opennms.netmgt.collectd.prometheus.PrometheusCollector"/> -->
+<!--    <collector service="Node-Exporter" class-name="org.opennms.netmgt.collectd.prometheus.PrometheusCollector"/> -->
+<!--    <collector service="Elasticsearch" class-name="org.opennms.protocols.xml.collector.XmlCollector"/> -->
+<!--    <collector service="PostgreSQL" class-name="org.opennms.netmgt.collectd.JdbcCollector"/> -->
+<!--    <collector service="SNMP" class-name="org.opennms.netmgt.collectd.SnmpCollector"/> -->
+<!--    <collector service="WMI" class-name="org.opennms.netmgt.collectd.WmiCollector"/> -->
+<!--    <collector service="WS-Man" class-name="org.opennms.netmgt.collectd.WsManCollector"/> -->
+<!--    <collector service="VMware-VirtualMachine" class-name="org.opennms.netmgt.collectd.VmwareCollector"/> -->
+<!--    <collector service="VMware-HostSystem" class-name="org.opennms.netmgt.collectd.VmwareCollector"/> -->
+<!--    <collector service="VMwareCim-HostSystem" class-name="org.opennms.netmgt.collectd.VmwareCimCollector"/> -->
+<!--    <collector service="OpenNMS-JVM" class-name="org.opennms.netmgt.collectd.Jsr160Collector"/> -->
+<!--    <collector service="JMX-Minion" class-name="org.opennms.netmgt.collectd.Jsr160Collector"/> -->
+<!--    <collector service="JMX-Cassandra" class-name="org.opennms.netmgt.collectd.Jsr160Collector"/> -->
+<!--    <collector service="JMX-Cassandra-Newts" class-name="org.opennms.netmgt.collectd.Jsr160Collector"/> -->
+<!--    <collector service="JMX-Kafka" class-name="org.opennms.netmgt.collectd.Jsr160Collector"/> -->
 </collectd-configuration>

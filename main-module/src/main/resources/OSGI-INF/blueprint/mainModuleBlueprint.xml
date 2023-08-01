@@ -133,12 +133,20 @@
   <!-- <bean id="verySimpleClient" class="org.opennms.plugins.dbnotifier.VerySimpleNotificationClient" /> -->
   
   <!-- sequential service collector configured from  -->
-  <bean id="ioTCollector" class="org.opennms.plugins.iot.collector.IoTCollector" />
-  <service ref="iotCollector" interface="org.opennms.netmgt.collection.api.ServiceCollector">
-    <service-properties>
-      <entry key="type" value="org.opennms.plugins.iot.collector.IoTCollector" />
-    </service-properties>
-  </service>
+<!--   <bean id="iotCollector" class="org.opennms.plugins.iot.collector.IoTCollector" /> -->
+<!--   <service ref="iotCollector" interface="org.opennms.netmgt.collection.api.ServiceCollector"> -->
+<!--     <service-properties> -->
+<!--       <entry key="type" value="org.opennms.plugins.iot.collector.IoTCollector" /> -->
+<!--     </service-properties> -->
+<!--   </service> -->
+
+    <reference id="runtimeInfo" interface="org.opennms.integration.api.v1.runtime.RuntimeInfo" />
+
+    <service interface="org.opennms.integration.api.v1.collectors.ServiceCollectorFactory">
+        <bean class="org.opennms.plugins.iot.collector.IoTCollectorFactory">
+            <argument ref="runtimeInfo"/>
+        </bean>
+    </service>
 
 
 </blueprint>

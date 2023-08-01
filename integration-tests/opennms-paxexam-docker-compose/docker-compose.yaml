@@ -45,7 +45,8 @@ services:
     container_name: cassandra-01
     hostname: cassandra-01
     environment:
-      TZ: ${TIMEZONE:-America/New_York}
+  # note healthcheck fails if time zone not UTC - need to install pytz see https://murukeshm.github.io/cassandra/trunk/tools/cqlsh.html
+  #    TZ: ${TIMEZONE:-America/New_York}
       CASSANDRA_CLUSTER_NAME: opennms-newts
       CASSANDRA_DC: opennms-lab
       CASSANDRA_RACK: opennms-lab-rack
@@ -57,6 +58,13 @@ services:
     networks:
       frontend:
         ipv4_address: 172.20.0.4
+    healthcheck:
+# #    test: [ "CMD", "/opt/cassandra/bin/cqlsh", "-u cassandra", "-p cassandra" ,"-e \"describe keyspaces\"" ]
+# #    test: [ "CMD", "/opt/cassandra/bin/cqlsh", "--username", "cassandra", "--password", "cassandra", "--keyspace", "system" ]
+      test: [ "CMD", "/opt/cassandra/bin/cqlsh", "--username", "cassandra", "--password", "cassandra", "--execute", "describe keyspaces" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   zookeeper:
     image: ${DOCKER_REGISTRY:-docker.io}/confluentinc/cp-zookeeper:${ZOOKEEPER_VERSION:-5.5.0}
