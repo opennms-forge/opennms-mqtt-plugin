@@ -27,6 +27,12 @@ import static org.junit.Assert.assertThat;
 import static org.opennms.paxexam.container.OpenNMSRBCRemoteTargetOptions.location;
 import static org.opennms.paxexam.container.OpenNMSRBCRemoteTargetOptions.waitForRBCFor;
 
+import java.net.URLConnection;
+import java.net.URL;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
+
 import javax.inject.Inject;
 
 import org.apache.karaf.features.FeaturesService;
@@ -55,32 +61,45 @@ public class OsgiMessageTest {
 
 	@Inject
 	private BundleContext bc;
-	
-    @Inject
-    protected OsgiIotMessageHandler osgiIotMessageHandlerservice;
-	
-    @Configuration
-    public Option[] config() {
-        return new Option[] {
-        		location("localhost", 55555),
-        		waitForRBCFor(10000)
-       };
-    }
 
-	
+	@Inject
+	protected OsgiIotMessageHandler osgiIotMessageHandlerservice;
+
+	@Configuration
+	public Option[] config() {
+		return new Option[] { location("localhost", 55555), waitForRBCFor(10000) };
+	}
+
 	@Test
-	public void osgiMessageTest() {
+	public void osgiMessageTest() throws IOException {
 		LOG.info("**** checking we have bundle context and iotMessageHandler ");
 		assertThat(bc, is(notNullValue()));
 		assertThat(osgiIotMessageHandlerservice, is(notNullValue()));
-		
-		String topic="testTopic";
-		int qos=1;
-		byte[] messagebytes = "test Message".getBytes();
-		MessageNotification messageNotification = new MessageNotification(topic, qos, messagebytes );
-		osgiIotMessageHandlerservice.messageArrived(messageNotification );
-		
+
+		String topic = "testTopic";
+		int qos = 1;
+		String urlStr = "file:///usr/share/opennms/share/misc/xmlFiles/nokia_oly-mpls0-cpeData.xml";
+		byte[] messagebytes = copyURLToByteArray(urlStr, 100, 100);
+		MessageNotification messageNotification = new MessageNotification(topic, qos, messagebytes);
+		osgiIotMessageHandlerservice.messageArrived(messageNotification);
+
 		LOG.info("**** finished test ");
+	}
+
+	public byte[] copyURLToByteArray(final String urlStr, final int connectionTimeout, final int readTimeout)
+			throws IOException {
+		final URL url = new URL(urlStr);
+		final URLConnection connection = url.openConnection();
+		connection.setConnectTimeout(connectionTimeout);
+		connection.setReadTimeout(readTimeout);
+		try (InputStream input = connection.getInputStream();
+				ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+			final byte[] buffer = new byte[8192];
+			for (int count; (count = input.read(buffer)) > 0;) {
+				output.write(buffer, 0, count);
+			}
+			return output.toByteArray();
+		}
 	}
 
 }
