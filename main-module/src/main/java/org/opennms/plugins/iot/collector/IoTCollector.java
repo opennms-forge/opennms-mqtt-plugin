@@ -79,6 +79,19 @@ public class IoTCollector implements ServiceCollector {
         final CompletableFuture<CollectionSet> future = new CompletableFuture<>();
         double magicNumber = getKeyAsDouble(MAGIC_NUMBER_PARM, parameters, Double.NaN);
         future.complete(buildCollectionSet(agent.getNodeId(), magicNumber));
+        
+        // actual monitoring is done through the Mqtt plugin using the topics specified
+
+        String address = agent.getAddress().getHostAddress();
+        int id = agent.getNodeId();
+        StringBuffer sb = new StringBuffer("agent node address: "+address + " node id="+id + " parameters:\n");
+        for(String key: parameters.keySet()) {
+        	Object o = parameters.get(key);
+        	sb.append("  key: "+key+" value: "+o.toString()+"\n");
+        }
+        LOG.info("collection parameters: "+sb.toString());
+        
+        
         LOG.info("Sample Collector collection Succeeded");
         return future;
     }

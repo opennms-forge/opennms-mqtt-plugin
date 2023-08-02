@@ -99,6 +99,13 @@
          <version>${opennms.version}</version>
       </dependency>
 
+      <!-- mqtt plugin dependencies dependencies -->
+      <dependency>
+         <groupId>org.opennms.plugins</groupId>
+         <artifactId>MqttClient.main-module</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+
       <dependency>
          <groupId>org.opennms.core.test-api</groupId>
          <artifactId>org.opennms.core.test-api.collection</artifactId>

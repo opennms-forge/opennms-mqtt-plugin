@@ -45,6 +45,7 @@ services:
     container_name: cassandra-01
     hostname: cassandra-01
     environment:
+    # https://teckjournal.wordpress.com/2020/05/14/run-cassandra-as-docker-container/ - setting memory size
   # note healthcheck fails if time zone not UTC - need to install pytz see https://murukeshm.github.io/cassandra/trunk/tools/cqlsh.html
   #    TZ: ${TIMEZONE:-America/New_York}
       CASSANDRA_CLUSTER_NAME: opennms-newts
@@ -53,6 +54,10 @@ services:
       CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
       LOCAL_JMX: 'false'
       JMX_HOST: 127.0.0.1
+      MAX_HEAP_SIZE: 1G
+      HEAP_NEWSIZE: 475M
+      JVM_OPTS: "-Xms475M -Xmx1G -XX:InitialHeapSize=475M"
+
     volumes:
       - data-cassandra-01:/var/lib/cassandra
     networks:
