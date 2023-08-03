@@ -125,10 +125,12 @@ public class MqttRxServiceImpl implements  MqttRxService {
 
 		if (! topicFound) {
 			String time = new Timestamp(System.currentTimeMillis()).toString();
-			String msg ="Message received from unknown topic. Time:\t" +time +
-					"  Topic:\t" + messageNotification.getTopic() +
-					"  Message:\t" + new String(messageNotification.getPayload()) +
-					"  QoS:\t" + messageNotification.getQos();
+			String msg ="Message received from unknown topic."+
+					"\n Time:\t" +time +
+					"\n Topic:\t" + messageNotification.getTopic() +
+					"\n QoS:\t" + messageNotification.getQos()+
+					"\n Payload length "+ ( (messageNotification.getPayload()==null) ? null : messageNotification.getPayload().length )  +
+					"\n Message:\t" + new String(messageNotification.getPayload());
 			LOG.warn(msg);
 
 		} else {
@@ -136,11 +138,13 @@ public class MqttRxServiceImpl implements  MqttRxService {
 			
 			if(LOG.isDebugEnabled()) {
 				String time = new Timestamp(System.currentTimeMillis()).toString();
-				LOG.debug("Message received. Forwarding to "+messageNotificationClientList.size()+ " clients."
-						+ " Time:\t" +time +
-						"  Topic:\t" + messageNotification.getTopic() +
-						"  Message:\t" + new String(messageNotification.getPayload()) +
-						"  QoS:\t" + messageNotification.getQos());
+				LOG.debug("Message received. Forwarding to "+messageNotificationClientList.size()+ " clients."+
+						"\n Time:\t" +time +
+						"\n Topic:\t" + messageNotification.getTopic() +
+						"\n QoS:\t" + messageNotification.getQos()+
+						"\n Payload length "+ ( (messageNotification.getPayload()==null) ? null : messageNotification.getPayload().length )  +
+						"\n Message:\t" + new String(messageNotification.getPayload()) 
+						);
 			}
 
 			// send notifications to registered clients - note each m_client must return quickly

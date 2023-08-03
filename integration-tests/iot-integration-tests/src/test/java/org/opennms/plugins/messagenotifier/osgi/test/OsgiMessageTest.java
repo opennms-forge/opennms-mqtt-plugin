@@ -71,13 +71,13 @@ public class OsgiMessageTest {
 	}
 
 	@Test
-	public void osgiMessageTest() throws IOException {
+	public void osgiMessageTest() throws Exception {
 		LOG.info("**** checking we have bundle context and iotMessageHandler ");
 		assertThat(bc, is(notNullValue()));
 		assertThat(osgiIotMessageHandlerservice, is(notNullValue()));
 
-		String topic = "testTopic";
-		int qos = 1;
+		String topic = "nokia-data";
+		int qos = 0;
 		String urlStr = "file:///usr/share/opennms/share/misc/xmlFiles/nokia_oly-mpls0-cpeData.xml";
 		byte[] messagebytes = copyURLToByteArray(urlStr, 100, 100);
 		MessageNotification messageNotification = new MessageNotification(topic, qos, messagebytes);
