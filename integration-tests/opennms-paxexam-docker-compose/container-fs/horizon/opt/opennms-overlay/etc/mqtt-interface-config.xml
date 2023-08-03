@@ -98,7 +98,8 @@
 
 
          <!-- xmlRRD us set up exactly as it is for xml data collection. step (in seconds ) is the interval expected between data received from the same node -->
-         <xmlRrd step="300">
+         <!-- rrd step matching the time interval in retrieved data -->
+         <xmlRrd step="60">
             <ns2:rra>RRA:AVERAGE:0.5:1:2016</ns2:rra>
             <ns2:rra>RRA:AVERAGE:0.5:12:1488</ns2:rra>
             <ns2:rra>RRA:AVERAGE:0.5:288:366</ns2:rra>
