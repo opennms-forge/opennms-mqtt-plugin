@@ -206,9 +206,18 @@ services:
       frontend:
         ipv4_address: 172.20.0.16
 
-
-
-
+#  http://restsimulator:8080/nokia/data
+  restsimulator :
+    image: jetty:9.4-jre11
+    container_name: restsimulator
+    hostname: restsimulator
+    ports: 
+      - "8090:8080"
+    volumes:
+      - ./container-fs/simulator/deploy/collection-simulator-0.0.1-SNAPSHOT.war:/var/lib/jetty/webapps/root.war
+    networks:
+      frontend:
+        ipv4_address: 172.20.0.20
 
 # first snmp container
   cameranetsnmp1:

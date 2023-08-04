@@ -12,18 +12,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
-@RequestMapping("/nokia")
+@RequestMapping("/nokia" )
 public class RestApplication {
 
 	@Autowired
 	CollectionSimService collectionSimService;
 
-	@GetMapping("/data")
+	@GetMapping(value="/data", produces=MediaType.APPLICATION_XML_VALUE)
 	public LogToFileResponse getResponse(@RequestParam(required = false, name="count") Integer n) {
 
 		LogToFileResponse logToFileResponse = collectionSimService.getResponse(n);

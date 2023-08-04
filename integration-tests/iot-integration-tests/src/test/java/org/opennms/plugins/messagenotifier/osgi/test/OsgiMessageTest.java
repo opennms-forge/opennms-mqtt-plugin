@@ -78,7 +78,8 @@ public class OsgiMessageTest {
 
 		String topic = "nokia-data";
 		int qos = 0;
-		String urlStr = "file:///usr/share/opennms/share/misc/xmlFiles/nokia_oly-mpls0-cpeData.xml";
+		//String urlStr = "file:///usr/share/opennms/share/misc/xmlFiles/nokia_oly-mpls0-cpeData.xml";
+		String urlStr = "http://restsimulator:8080/nokia/data";
 		byte[] messagebytes = copyURLToByteArray(urlStr, 100, 100);
 		MessageNotification messageNotification = new MessageNotification(topic, qos, messagebytes);
 		osgiIotMessageHandlerservice.messageArrived(messageNotification);
