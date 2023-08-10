@@ -112,6 +112,16 @@
                            <overWrite>true</overWrite>
                            <outputDirectory>${project.basedir}/container-fs/horizon/misc</outputDirectory>
                         </artifactItem>
+
+                        <!-- deploy war to simulator -->
+                        <artifactItem>
+                           <groupId>org.opennms.plugins.iot</groupId>
+                           <artifactId>collection-simulator</artifactId>
+                           <version>0.0.1-SNAPSHOT</version>
+                           <type>war</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.basedir}/container-fs/simulator/deploy</outputDirectory>
+                        </artifactItem>
                      </artifactItems>
                      <!-- other configurations here -->
                   </configuration>
@@ -159,6 +169,17 @@
                         </fileset>
                         <fileset>
                            <directory>${project.basedir}/container-fs/horizon/misc</directory>
+                           <followSymlinks>false</followSymlinks>
+                           <excludes>
+                              <exclude>**/README.md</exclude>
+                              <exclude>**/.gitignore</exclude>
+                              <exclude>**/.gitkeep</exclude>
+                           </excludes>
+                        </fileset>
+                        
+                        <!-- simulator -->
+                        <fileset>
+                           <directory>${project.basedir}/container-fs/simulator/deploy</directory>
                            <followSymlinks>false</followSymlinks>
                            <excludes>
                               <exclude>**/README.md</exclude>

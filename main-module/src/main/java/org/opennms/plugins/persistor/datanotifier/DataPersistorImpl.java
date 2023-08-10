@@ -142,7 +142,7 @@ public class DataPersistorImpl implements DataPersistor {
 						String group="sniffy"; //TODO CHANGE TO DYNAMIC
 
 
-						if(LOG.isDebugEnabled()) LOG.debug("DataPersistor "
+						if(LOG.isDebugEnabled()) LOG.debug("DataPersistor adding attribute "
 								+" timeStamp:"+timestamp.getTime()+"  ("+timestamp.toString()
 								+") adding attribute:"+attributeName
 								+" attributeValue:"+attributeValue
@@ -158,6 +158,7 @@ public class DataPersistorImpl implements DataPersistor {
 					CollectionSet collectionSet =  builder.build();
 
 					// Persist
+					if(LOG.isDebugEnabled()) LOG.debug("DataPersistor visiting collection set: timeStamp:"+timestamp.getTime()+"  ("+timestamp.toString()+")");
 					collectionSet.visit(m_persister);
 
 				}

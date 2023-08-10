@@ -18,3 +18,18 @@ log:tail
 ```
 
  http://restsimulator:8080/nokia/data
+ 
+ cassandra-01
+ 
+ ```
+ cqlsh
+
+##Verify keyspace initialization:
+
+use newts;
+describe table terms;
+describe table samples;
+
+
+ select * from samples where resource = 'snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy' ALLOW FILTERING;
+ ```

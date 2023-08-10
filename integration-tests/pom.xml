@@ -14,6 +14,7 @@
    </properties>
 
    <modules>
+      <module>collection-simulator</module>
       <module>opennms-paxexam-docker-compose</module>
       <module>iot-integration-tests</module>
    </modules>

@@ -23,9 +23,9 @@ public class RestApplication {
 	CollectionSimService collectionSimService;
 
 	@GetMapping(value="/data", produces=MediaType.APPLICATION_XML_VALUE)
-	public LogToFileResponse getResponse(@RequestParam(required = false, name="count") Integer n) {
+	public LogToFileResponse getResponse(@RequestParam(required = false, name="count") Integer count, @RequestParam(required = false, name="interval") Integer interval) {
 
-		LogToFileResponse logToFileResponse = collectionSimService.getResponse(n);
+		LogToFileResponse logToFileResponse = collectionSimService.getResponse(count, interval);
 
 		return logToFileResponse;
 	}
