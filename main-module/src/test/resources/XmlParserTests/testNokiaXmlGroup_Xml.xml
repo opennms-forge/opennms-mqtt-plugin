@@ -5,7 +5,7 @@
     key-xpath="monitoredObjectClass" 
     timestamp-xpath="timeCaptured" timestamp-format="">
         <xml-object name="systemCpuUsage" type="GAUGE" xpath="systemCpuUsage"/>
-        <xml-object name="timeCaptured" type="GAUGE" xpath="timeCaptured"/>
+        <xml-object name="timeCaptured" type="STRING" xpath="timeCaptured"/>
         <xml-object name="periodicTime" type="GAUGE" xpath="periodicTime"/>
         <xml-object name="monitoredObjectClass" type="STRING" xpath="monitoredObjectClass"/>
         <xml-object name="monitoredObjectPointer" type="STRING" xpath="monitoredObjectPointer"/>

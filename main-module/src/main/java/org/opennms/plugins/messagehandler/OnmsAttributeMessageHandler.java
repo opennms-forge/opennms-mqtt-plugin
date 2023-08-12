@@ -185,7 +185,7 @@ public class OnmsAttributeMessageHandler {
 				JXPathContext relativeContext = context.getRelativeContext(itr.next());
 
 				Date timestamp = getTimeStamp(relativeContext, group);
-				LOG.debug("fillAttributeMap: timestamp {}", timestamp);
+				LOG.debug("fillAttributeMap: timestamp {} ({})", timestamp.getTime(), timestamp);
 
 				String resourceName = getResourceName(relativeContext, group);
 				String foreignId= getForeignId(relativeContext, group);
@@ -203,14 +203,16 @@ public class OnmsAttributeMessageHandler {
 				onmsCollectionAttributeMap.setForeignId(foreignId);
 				onmsCollectionAttributeMap.setResourceName(resourceName);
 				onmsCollectionAttributeMap.setTimestamp(timestamp);
-				for (XmlObject object : group.getXmlObjects()) {
-					LOG.debug("fillAttributeMap: XmlObject object.getXpath():"+ object.getXpath());
+				for (XmlObject xmlObj : group.getXmlObjects()) {
+					LOG.debug("fillAttributeMap: XmlObject xmlObj.getXpath():"+ xmlObj.getXpath());
 					try {
-						Object valueObj = relativeContext.getValue(object.getXpath());
-						if (valueObj != null) {
-							String name=object.getName();
+						Object valueObj = relativeContext.getValue(xmlObj.getXpath());
+						if (valueObj == null) {
+							LOG.debug("fillAttributeMap: valueObj = null for xpath "+xmlObj.getXpath());
+						} else {
+							String name=xmlObj.getName();
 							OnmsCollectionAttribute attr = new OnmsCollectionAttribute();
-							String type=object.getDataType().toString();
+							String type=xmlObj.getDataType().toString();
 							attr.setOnmsType(type);
 							String value=valueObj.toString();
 							attr.setValue(value);
@@ -224,7 +226,7 @@ public class OnmsAttributeMessageHandler {
 							//builder.withAttribute(collectionResource, group.getName(), object.getName(), obj.toString(), object.getDataType());
 						}
 					} catch (Exception ex) {
-						LOG.warn("fillAttributeMap Unable to get value for {}: {}", object.getXpath(), ex.getMessage());
+						LOG.warn("fillAttributeMap Unable to get value for {}: {}", xmlObj.getXpath(), ex.getMessage());
 					}
 				}
 				attributeMapList.add(onmsCollectionAttributeMap);
@@ -285,12 +287,12 @@ public class OnmsAttributeMessageHandler {
 	protected Date getTimeStamp(JXPathContext context, XmlGroup group) {
 		
 		// use current date if cannot parse from another source
-		Date date = new Date(); 
+		Date timestamp = new Date(); 
 		
 		if (group.getTimestampXpath() == null) {
 			// if no timestampXpath defined use current date
-			LOG.debug("getTimeStamp: getTimestampXpath() = null. Using current Date :"+date.getTime()+" ("+date+")");
-			return date ; 
+			LOG.debug("getTimeStamp: getTimestampXpath() = null. Using current Date :"+timestamp.getTime()+" ("+timestamp+")");
+			return timestamp ; 
 		}
 		
 		String pattern = group.getTimestampFormat() == null ? "yyyy-MM-dd HH:mm:ss" : group.getTimestampFormat();
@@ -304,18 +306,19 @@ public class OnmsAttributeMessageHandler {
 		if("".equals(pattern)){
 			try {
 				long datems = Long.parseLong(value);
-				date = new Date(datems);
+				timestamp = new Date(datems);
 			} catch (Exception e) {
 				LOG.warn("getTimeStamp: (Empty Pattern). Can't convert custom timestamp {} as long to new Date(long)", value);
 			}
 		}else try {
 			DateTimeFormatter dtf = DateTimeFormat.forPattern(pattern);
 			DateTime dateTime = dtf.parseDateTime(value);
-			date = dateTime.toDate();
+			timestamp = dateTime.toDate();
 		} catch (Exception e) {
 			LOG.warn("getTimeStamp: can't convert custom timestamp {} using pattern {}", value, pattern);
 		}
-		return date;
+		LOG.debug("getTimeStamp: returning timestamp time="+timestamp.getTime());
+		return timestamp;
 	}
 
 }
