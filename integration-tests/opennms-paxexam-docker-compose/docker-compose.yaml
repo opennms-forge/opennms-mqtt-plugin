@@ -60,6 +60,8 @@ services:
 
     volumes:
       - data-cassandra-01:/var/lib/cassandra
+      # overlay configuration file - note container still overlay edits this on startup with properties defined above
+      - ./container-fs/cassandra/etc/cassandra/cassandra.yaml:/etc/cassandra/cassandra.yaml
     networks:
       frontend:
         ipv4_address: 172.20.0.4

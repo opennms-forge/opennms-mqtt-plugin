@@ -85,7 +85,7 @@
             <ns2:xml-group name="xmlfile1" resource-type="node" resource-xpath="/logToFileResponse/equipment.SystemCpuStatsLogRecord"
                key-xpath="monitoredObjectClass" timestamp-xpath="timeCaptured" timestamp-format="">
                <ns2:xml-object name="systemCpuUsage" type="GAUGE" xpath="systemCpuUsage" />
-               <ns2:xml-object name="timeCaptured" type="STRING" xpath="timeCaptured" />
+               <ns2:xml-object name="timeCaptured" type="COUNTER" xpath="timeCaptured" />
                <ns2:xml-object name="periodicTime" type="GAUGE" xpath="periodicTime" />
                <ns2:xml-object name="monitoredObjectClass" type="STRING" xpath="monitoredObjectClass" />
                <ns2:xml-object name="monitoredObjectPointer" type="STRING" xpath="monitoredObjectPointer" />

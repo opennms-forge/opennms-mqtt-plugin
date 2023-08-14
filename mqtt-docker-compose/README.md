@@ -12,6 +12,8 @@ And docker configuration source at https://github.com/opennms-forge/docker-horiz
 
 ## Cassandra data extraction
 to extract data directly from cassandra, install the following user defined procedures
+( note you also need to enable user defined functions in cassandra.yaml)
+
 ```
 CREATE OR REPLACE FUNCTION newts.type (value blob)  CALLED ON NULL INPUT  RETURNS text 
 LANGUAGE java AS ' 
