@@ -65,6 +65,8 @@ services:
     networks:
       frontend:
         ipv4_address: 172.20.0.4
+    ports:
+        - "9042:9042"
     healthcheck:
 # #    test: [ "CMD", "/opt/cassandra/bin/cqlsh", "-u cassandra", "-p cassandra" ,"-e \"describe keyspaces\"" ]
 # #    test: [ "CMD", "/opt/cassandra/bin/cqlsh", "--username", "cassandra", "--password", "cassandra", "--keyspace", "system" ]
@@ -72,6 +74,23 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+      
+  ## see https://stackoverflow.com/questions/40443617/init-script-for-cassandra-with-docker-compose
+  ## must run after horizon initialises hte newts keyspace
+  cassandra-load-functions:
+    container_name: cassandra-load-functions
+    image: ${DOCKER_REGISTRY:-docker.io}/cassandra:${CASSANDRA_VERSION:-3.11}
+    depends_on: 
+      horizon:
+        condition: service_healthy
+    restart: "no"
+    volumes:
+       - ./container-fs/cassandra/scripts/newts-functions.cql:/newts-functions.cql
+    command: /bin/bash -c "sleep 10 && echo loading cassandra functions && cqlsh --debug --username cassandra --password cassandra cassandra-01 9042 -f /newts-functions.cql"
+    networks:
+      frontend:
+        ipv4_address: 172.20.0.5
+
 
   zookeeper:
     image: ${DOCKER_REGISTRY:-docker.io}/confluentinc/cp-zookeeper:${ZOOKEEPER_VERSION:-5.5.0}
