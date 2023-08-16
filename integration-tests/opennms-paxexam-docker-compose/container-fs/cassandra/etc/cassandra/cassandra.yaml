@@ -121,7 +121,10 @@ authorizer: AllowAllAuthorizer
 #
 # - CassandraRoleManager stores role data in the system_auth keyspace. Please
 #   increase system_auth keyspace replication factor if you use this role manager.
-role_manager: CassandraRoleManager
+# role_manager: CassandraRoleManager
+
+# c gallen changed for ericcson audit see see https://github.com/Ericsson/ecaudit/blob/ecaudit_c3.11-2.11.0/doc/example_query_logger.md
+role_manager: com.ericsson.bss.cassandra.ecaudit.auth.AuditRoleManager
 
 # Validity period for roles cache (fetching granted roles can be an expensive
 # operation depending on the role manager, CassandraRoleManager is one example)

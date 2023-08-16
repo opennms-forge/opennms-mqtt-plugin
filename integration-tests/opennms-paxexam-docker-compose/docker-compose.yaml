@@ -16,6 +16,7 @@ volumes:
   data-opennms: {}
   data-opennms-cfg: {}
   data-cassandra-01: {}
+  data-logs-cassandra-01: {}
   data-grafana: {}
 
 services:
@@ -56,12 +57,22 @@ services:
       JMX_HOST: 127.0.0.1
       MAX_HEAP_SIZE: 1G
       HEAP_NEWSIZE: 475M
-      JVM_OPTS: "-Xms475M -Xmx1G -XX:InitialHeapSize=475M"
+      # custom query handler enabled for ecaudit
+      JVM_OPTS: "-Xms475M -Xmx1G -XX:InitialHeapSize=475M -Dcassandra.custom_query_handler_class=com.ericsson.bss.cassandra.ecaudit.handler.AuditQueryHandler -Decaudit.filter_type=NONE"
 
     volumes:
       - data-cassandra-01:/var/lib/cassandra
+      - data-logs-cassandra-01:/var/log/cassandra/
+      
       # overlay configuration file - note container still overlay edits this on startup with properties defined above
       - ./container-fs/cassandra/etc/cassandra/cassandra.yaml:/etc/cassandra/cassandra.yaml
+
+      # for ecaudit see https://github.com/Ericsson/ecaudit/blob/ecaudit_c3.11-2.11.0/doc/install.md
+      # audit log file is at /var/log/cassandra/audit/audit.log
+      - ./container-fs/cassandra/etc/cassandra/audit.yaml:/etc/cassandra/audit.yaml
+      - ./container-fs/cassandra/etc/cassandra/logback.xml:/etc/cassandra/logback.xml
+      - ./container-fs/cassandra/lib/ecaudit_c3.11-2.11.0.jar:/opt/cassandra/lib/ecaudit_c3.11-2.11.0.jar
+      
     networks:
       frontend:
         ipv4_address: 172.20.0.4
