@@ -122,6 +122,17 @@
                            <overWrite>true</overWrite>
                            <outputDirectory>${project.basedir}/container-fs/simulator/deploy</outputDirectory>
                         </artifactItem>
+
+                        <!-- deploy cassandra ecaudit to cassandra -->
+                        <artifactItem>
+                           <groupId>com.ericsson.bss.cassandra.ecaudit</groupId>
+                           <artifactId>ecaudit_c3.11</artifactId>
+                           <version>2.11.0</version>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.basedir}/container-fs/cassandra/lib</outputDirectory>
+                        </artifactItem>
+
                      </artifactItems>
                      <!-- other configurations here -->
                   </configuration>
@@ -176,10 +187,22 @@
                               <exclude>**/.gitkeep</exclude>
                            </excludes>
                         </fileset>
-                        
+
                         <!-- simulator -->
                         <fileset>
                            <directory>${project.basedir}/container-fs/simulator/deploy</directory>
+                           <followSymlinks>false</followSymlinks>
+                           <excludes>
+                              <exclude>**/README.md</exclude>
+                              <exclude>**/.gitignore</exclude>
+                              <exclude>**/.gitkeep</exclude>
+                           </excludes>
+                        </fileset>
+
+                        <!-- cassandra -->
+
+                        <fileset>
+                           <directory>${project.basedir}/container-fs/cassandra/lib</directory>
                            <followSymlinks>false</followSymlinks>
                            <excludes>
                               <exclude>**/README.md</exclude>
