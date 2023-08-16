@@ -200,7 +200,6 @@
                         </fileset>
 
                         <!-- cassandra -->
-
                         <fileset>
                            <directory>${project.basedir}/container-fs/cassandra/lib</directory>
                            <followSymlinks>false</followSymlinks>
