@@ -171,7 +171,8 @@ services:
       REPLICATION_FACTOR: 1
       OPENNMS_TIMESERIES_STRATEGY: newts
       OPENNMS_CASSANDRA_DATACENTER: opennms-lab
-      JAVA_OPTS: "-Xmx4096m -XX:MaxMetaspaceSize=1024m -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=:5005"
+#      JAVA_OPTS: "-Xmx4096m -XX:MaxMetaspaceSize=1024m -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+      JAVA_OPTS: "-Xmx4096m -XX:MaxMetaspaceSize=1024m -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:5005"
     volumes:
       - data-opennms:/opennms-data
       - data-opennms-cfg:/opt/opennms/etc

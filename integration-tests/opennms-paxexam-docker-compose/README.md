@@ -17,6 +17,20 @@ log:tail
 
 ```
 
+```
+docker-compose exec -u root horizon bash
+apt update
+apt install default-jdk
+
+
+jdb -attach 127.0.0.1:5005
+jdb -attach [::1]:5005
+
+on windows jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=5005
+(connecting to docker)
+
+```
+
  http://restsimulator:8080/nokia/data
  
 
