@@ -41,6 +41,7 @@ public class DataPersistorImpl implements DataPersistor {
 
 	public void setPersisterFactory(PersisterFactory persisterFactory) {
 		this.m_persisterFactory = persisterFactory;
+		if(LOG.isDebugEnabled()) LOG.info("dataPersistor persistor factory set to: "+persisterFactory.getClass().getName());
 	}
 
 	public void setNodeByForeignSourceCache(NodeByForeignSourceCache nodeByForeignSourceCache) {

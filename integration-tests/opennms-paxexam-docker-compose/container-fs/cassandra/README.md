@@ -11,6 +11,6 @@ https://docs.datastax.com/en/dse/5.1/cql/cql/cql_using/useCreateUDF.html
 enable_user_defined_functions: true
 
 ## auditing 
-
+ecaudit see https://github.com/Ericsson/ecaudit/blob/ecaudit_c3.11-2.11.0/doc/install.md
 
 tail -f /var/log/cassandra/audit/audit.log

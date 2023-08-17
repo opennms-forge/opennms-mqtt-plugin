@@ -26,8 +26,8 @@ change count of messages sent
 http://restsimulator:8080/nokia/data?count=20
 ```
   
-adding interval in ms between samples (6000 ms = 1 minute)
+adding interval in ms between samples (60000 ms = 1 minute)
 
 ```
-http://restsimulator:8080/nokia/data?count=20&interval=6000
+http://restsimulator:8080/nokia/data?count=20&interval=60000
 ```

@@ -21,7 +21,7 @@ public class CollectionSimServiceTest {
         
         CollectionSimService collectionSimService = new CollectionSimService();
         
-        LogToFileResponse logToFileResponse= collectionSimService.getResponse(null,null);
+        LogToFileResponse logToFileResponse= collectionSimService.getResponse(5,60000);
 
         marshaller.marshal(logToFileResponse, baos);
         System.out.println("nokia data: \n"+baos.toString());

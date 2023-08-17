@@ -1,0 +1,51 @@
+  opennms:show-measurements -a systemCpuUsage --start 1692269640000    --raw-timestamps --interval 60000 "node[nokia:equipment.SystemStatsHolder].interfaceSnmp[mqtt]"
+Resource with ID 'node[nokia:equipment.SystemStatsHolder].interfaceSnmp[mqtt]' has attributes: [systemCpuUsage, periodicTime, timeCaptured]
+Limiting attributes to: [systemCpuUsage]
+
+timestamp,systemCpuUsage
+1692269640000,NaN
+1692269700000,NaN
+1692269760000,NaN
+1692269820000,NaN
+1692269880000,NaN
+1692269940000,NaN
+1692270000000,NaN
+1692270060000,NaN
+1692270120000,NaN
+1692270180000,NaN
+1692270240000,NaN
+1692270300000,NaN
+1692270360000,5461.9718
+1692270420000,NaN
+1692270480000,NaN
+1692270540000,NaN
+1692270600000,NaN
+admin@opennms()>  opennms:show-measurements -a periodicTime --start 1692269640000    --raw-timestamps --interval 60000 "node[nokia:equipment.SystemStatsHol
+dquote> er].interfaceSnmp[mqtt]"
+No resource with ID 'node[nokia:equipment.SystemStatsHold
+er].interfaceSnmp[mqtt]' found.
+admin@opennms()>  opennms:show-measurements -a periodicTime --start 1692269640000    --raw-timestamps --interval 60000 "node[nokia:equipment.SystemStatsHolder].interfaceSnmp[mqtt]"
+Resource with ID 'node[nokia:equipment.SystemStatsHolder].interfaceSnmp[mqtt]' has attributes: [systemCpuUsage, periodicTime, timeCaptured]
+Limiting attributes to: [periodicTime]
+
+timestamp,periodicTime
+1692269640000,NaN
+1692269700000,NaN
+1692269760000,NaN
+1692269820000,NaN
+1692269880000,NaN
+1692269940000,NaN
+1692270000000,NaN
+1692270060000,NaN
+1692270120000,NaN
+1692270180000,NaN
+1692270240000,NaN
+1692270300000,NaN
+1692270360000,60000.0000
+1692270420000,NaN
+1692270480000,NaN
+1692270540000,NaN
+1692270600000,NaN
+1692270660000,NaN
+1692270720000,NaN
+admin@opennms()>                                                                                                                                                                        

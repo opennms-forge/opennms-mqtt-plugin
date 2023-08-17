@@ -19,6 +19,18 @@ log:tail
 
  http://restsimulator:8080/nokia/data
  
+
+ in command shell opennms
+ 
+ ```
+ opennms:show-measurement-resources 
+ 
+ 
+ opennms:show-measurements -a systemCpuUsage --interval 60000 "node[nokia:equipment.SystemStatsHolder].interfaceSnmp[mqtt]"
+ 
+  opennms:show-measurements -a systemCpuUsage --start 1692004860000    --raw-timestamps --interval 60000 "node[nokia:equipment.SystemStatsHolder].interfaceSnmp[mqtt]"
+ 
+ ```
  cassandra-01
  
  ```
@@ -32,21 +44,6 @@ describe table samples;
 
 
  select * from samples where resource = 'snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy' ALLOW FILTERING;
- ```
- 
- 
- 
- 
- in command shell opennms
- 
- ```
- opennms:show-measurement-resources 
- 
- 
- opennms:show-measurements -a systemCpuUsage --interval 6000 "node[nokia:equipment.SystemStatsHolder].interfaceSnmp[mqtt]"
- 
-  opennms:show-measurements -a systemCpuUsage --start 1692004860000    --raw-timestamps --interval 6000 "node[nokia:equipment.SystemStatsHolder].interfaceSnmp[mqtt]"
- 
  ```
  
  ## Cassandra data extraction
@@ -84,5 +81,7 @@ This allows a cql query to access newts data in cassandra
 
 ```
 select  collected_at, resource, metric_name, newts.type(value), newts.valueNumber(value) from newts.samples;
+
+select  collected_at, toUnixTimestamp( collected_at ), resource, metric_name, newts.type(value), newts.valueNumber(value) from newts.samples;
 
 ```
