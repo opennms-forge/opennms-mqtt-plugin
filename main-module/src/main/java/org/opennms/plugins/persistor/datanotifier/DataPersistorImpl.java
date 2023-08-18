@@ -128,6 +128,9 @@ public class DataPersistorImpl implements DataPersistor {
 
 					// Build the interface resource using resourceName
 					InterfaceLevelResource interfaceLevelResource = new InterfaceLevelResource(nodelevelResource, resourceName);
+					
+					//TODO this must be set because it is used to set the timestamp of the collection and it isn't set with builder.withTimestamp. 
+					interfaceLevelResource.setTimestamp(timestamp);
 
 					// Generate the collection set
 					CollectionAgent agent = new MockCollectionAgent(foreignSource, foreignId, nodeId);
