@@ -28,7 +28,12 @@
 
 package org.opennms.plugins.iot.collector;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -49,140 +54,202 @@ import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableCo
 import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableIpInterfaceResource;
 import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableNodeResource;
 import org.opennms.integration.api.v1.runtime.RuntimeInfo;
+import org.opennms.netmgt.collection.api.CollectionStatus;
+import org.opennms.netmgt.collection.support.builder.CollectionSetBuilder;
+import org.opennms.plugins.messagenotifier.MessageNotification;
+import org.opennms.plugins.messagenotifier.osgi.OsgiIotMessageHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class IoTCollector implements ServiceCollector {
 
-    private static final Logger LOG = LoggerFactory.getLogger(IoTCollector.class);
-    
-    private static final String INSTANCE_NAME = "opennms";
-    private static final String LOCATION_KEY = "location";
-    public static final String MAGIC_NUMBER_PARM = "magicNumber";
+	private static final Logger LOG = LoggerFactory.getLogger(IoTCollector.class);
 
-    private final RuntimeInfo runtimeInfo;
+	private static final String INSTANCE_NAME = "opennms";
+	private static final String LOCATION_KEY = "location";
+	public static final String MAGIC_NUMBER_PARM = "magicNumber";
 
-    public IoTCollector(RuntimeInfo runtimeInfo) {
+	private final RuntimeInfo runtimeInfo;
+
+	private OsgiIotMessageHandler osgiIotMessageHandlerservice;
+
+	public IoTCollector(RuntimeInfo runtimeInfo) {
 		LOG.debug("constructor called IotCollector.");
-        this.runtimeInfo = Objects.requireNonNull(runtimeInfo);
-    }
+		this.runtimeInfo = Objects.requireNonNull(runtimeInfo);
+	}
 
-    @Override
-    public void initialize() {
+	public OsgiIotMessageHandler getOsgiIotMessageHandlerservice() {
+		return osgiIotMessageHandlerservice;
+	}
+
+	public void setOsgiIotMessageHandlerservice(OsgiIotMessageHandler osgiIotMessageHandlerservice) {
+		this.osgiIotMessageHandlerservice = osgiIotMessageHandlerservice;
+	}
+
+
+	public byte[] copyURLToByteArray(final String urlStr, final int connectionTimeout, final int readTimeout)
+			throws IOException {
+		final URL url = new URL(urlStr);
+		final URLConnection connection = url.openConnection();
+		connection.setConnectTimeout(connectionTimeout);
+		connection.setReadTimeout(readTimeout);
+		try (InputStream input = connection.getInputStream();
+				ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+			final byte[] buffer = new byte[8192];
+			for (int count; (count = input.read(buffer)) > 0;) {
+				output.write(buffer, 0, count);
+			}
+			return output.toByteArray();
+		}
+	}
+
+	@Override
+	public void initialize() {
 		LOG.debug("initialize: Initializing IotCollector.");
-        // pass
-    }
+		// pass
+	}
 
-    @Override
-    public CompletableFuture<CollectionSet> collect(CollectionRequest agent, Map<String, Object> parameters) {
+	public static final String COLLECTION_URL_KEY = "collectionUrl";
+	public static final String CONNECTION_TIMEOUT = "connectionTimeout";
+	public static final String READ_TIMEOUT = "readTimeout";
+	public static final int DEFAULT_CONNECTION_TIMEOUT = 1000; // 1000ms = 1s
+	public static final int DEFAULT_READ_TIMEOUT = 1000;
+	public static final int DEFAULT_QOS=0;
+	public static final String COLLECTION_TOPIC_KEY="collectionTopic";
+	public static final String COLLECTION_QOS_KEY="collectionQos";
+
+	@Override
+	public CompletableFuture<CollectionSet> collect(CollectionRequest agent, Map<String, Object> parameters) {
 		LOG.debug("collect called IotCollector.");
-        final CompletableFuture<CollectionSet> future = new CompletableFuture<>();
-        double magicNumber = getKeyAsDouble(MAGIC_NUMBER_PARM, parameters, Double.NaN);
-        future.complete(buildCollectionSet(agent.getNodeId(), magicNumber));
-        
-        // actual monitoring is done through the Mqtt plugin using the topics specified
+		final CompletableFuture<CollectionSet> future = new CompletableFuture<>();
 
-        String address = agent.getAddress().getHostAddress();
-        int id = agent.getNodeId();
-        StringBuffer sb = new StringBuffer("agent node address: "+address + " node id="+id + " parameters:\n");
-        for(String key: parameters.keySet()) {
-        	Object o = parameters.get(key);
-        	sb.append("  key: "+key+" value: "+o.toString()+"\n");
-        }
-        LOG.info("collection parameters: "+sb.toString());
-        
-        
-        LOG.info("Sample Collector collection Succeeded");
-        return future;
-    }
+		// actual monitoring is done through the Mqtt plugin using the topics specified
 
-    public static boolean validateCollectionSet(CollectionSet collectionSet, int nodeId, double magicNumber, String location) {
+		String address = agent.getAddress().getHostAddress();
+		int id = agent.getNodeId();
+
+		StringBuffer sb = new StringBuffer("agent node address: " + address + " node id=" + id + " parameters:\n");
+		for (String key : parameters.keySet()) {
+			Object o = parameters.get(key);
+			sb.append("  key: " + key + " value: " + o.toString() + "\n");
+		}
+		LOG.info("collection parameters: " + sb.toString());
+
+		try {
+
+			String urlStr = (String) parameters.get(COLLECTION_URL_KEY);
+			if(urlStr==null) throw new IllegalArgumentException("collection url key "+COLLECTION_URL_KEY+" not set");
+
+			int connectionTimeout = DEFAULT_CONNECTION_TIMEOUT;
+			int readTimeout = DEFAULT_READ_TIMEOUT;
+			int qos = DEFAULT_QOS;
+
+			if (parameters.get(CONNECTION_TIMEOUT) != null) {
+				connectionTimeout = Integer.parseInt((String) parameters.get(CONNECTION_TIMEOUT));
+			}
+
+			if (parameters.get(READ_TIMEOUT) != null) {
+				readTimeout = Integer.parseInt((String) parameters.get(READ_TIMEOUT));
+			}
+			
+			if (parameters.get(COLLECTION_QOS_KEY) != null) {
+				qos = Integer.parseInt((String) parameters.get(COLLECTION_QOS_KEY));
+			}
+			
+			byte[] messagebytes = copyURLToByteArray(urlStr,connectionTimeout, readTimeout);
+
+			String topic = (String) parameters.get(COLLECTION_TOPIC_KEY);
+			if(topic==null) throw new IllegalArgumentException("IoT collection topic  "+COLLECTION_TOPIC_KEY+" not set");
+
+			MessageNotification messageNotification = new MessageNotification(topic, qos, messagebytes);
+			osgiIotMessageHandlerservice.messageArrived(messageNotification);
+			
+			LOG.info("Sample Collector collection Succeeded");
+
+		} catch (Exception ex) {
+			LOG.error("Sample Collector collection Failed ", ex);
+		}
+
+		double magicNumber = getKeyAsDouble(MAGIC_NUMBER_PARM, parameters, Double.NaN);
+		future.complete(buildCollectionSet(agent.getNodeId(), magicNumber));
+
+		return future;
+	}
+
+	public static boolean validateCollectionSet(CollectionSet collectionSet, int nodeId, double magicNumber,
+			String location) {
 		LOG.debug("validateCollectionSet called IotCollector.");
-        // Grab the first resource
-        final CollectionSetResource<IpInterfaceResource> resource = collectionSet.getCollectionSetResources().get(0);
-        if (!Objects.equals(Resource.Type.INTERFACE, resource.getResource().getResourceType())) {
-            return false;
-        }
-        final IpInterfaceResource ipInterfaceResource = resource.getResource();
-        if (!Objects.equals(INSTANCE_NAME, ipInterfaceResource.getInstance())) {
-            return false;
-        }
-        final NodeResource nodeResource = ipInterfaceResource.getNodeResource();
-        if (nodeId != nodeResource.getNodeId()) {
-            return false;
-        }
-        if (Math.abs(magicNumber - resource.getNumericAttributes().get(0).getValue()) > 0.00001d) {
-            return false;
-        }
-        // Verify that the string attribute is present and matches the expected location
-        // this tells us the collector was actually invoked on a Minion
-        return resource.getStringAttributes().stream()
-                .anyMatch(s -> LOCATION_KEY.equals(s.getName()) && location.equals(s.getValue()));
-    }
+		// Grab the first resource
+		final CollectionSetResource<IpInterfaceResource> resource = collectionSet.getCollectionSetResources().get(0);
+		if (!Objects.equals(Resource.Type.INTERFACE, resource.getResource().getResourceType())) {
+			return false;
+		}
+		final IpInterfaceResource ipInterfaceResource = resource.getResource();
+		if (!Objects.equals(INSTANCE_NAME, ipInterfaceResource.getInstance())) {
+			return false;
+		}
+		final NodeResource nodeResource = ipInterfaceResource.getNodeResource();
+		if (nodeId != nodeResource.getNodeId()) {
+			return false;
+		}
+		if (Math.abs(magicNumber - resource.getNumericAttributes().get(0).getValue()) > 0.00001d) {
+			return false;
+		}
+		// Verify that the string attribute is present and matches the expected location
+		// this tells us the collector was actually invoked on a Minion
+		return resource.getStringAttributes().stream()
+				.anyMatch(s -> LOCATION_KEY.equals(s.getName()) && location.equals(s.getValue()));
+	}
 
-    private CollectionSet buildCollectionSet(int nodeId, double magicNumber) {
-        // Build collection set with a IpInterface resource.
-        NodeResource nodeResource = ImmutableNodeResource.newBuilder()
-                .setNodeId(nodeId)
-                .build();
-        IpInterfaceResource ipInterfaceResource = ImmutableIpInterfaceResource.newInstance(nodeResource, INSTANCE_NAME);
-        // Add attribute
-        NumericAttribute numeric = ImmutableNumericAttribute.newBuilder()
-                .setGroup("group")
-                .setName("snmp")
-                .setValue(magicNumber)
-                .setType(NumericAttribute.Type.GAUGE)
-                .build();
-        StringAttribute string = ImmutableStringAttribute.newBuilder()
-                .setName(LOCATION_KEY)
-                .setGroup("group")
-                .setValue(runtimeInfo.getSystemLocation())
-                .build();
-        // Build collection set
-        CollectionSetResource<IpInterfaceResource> collectionSetResource =
-                ImmutableCollectionSetResource.newBuilder(IpInterfaceResource.class)
-                    .setResource(ipInterfaceResource)
-                    .addNumericAttribute(numeric)
-                    .addStringAttribute(string)
-                    .build();
-        return ImmutableCollectionSet.newBuilder()
-                .addCollectionSetResource(collectionSetResource)
-                .setTimestamp(System.currentTimeMillis())
-                .build();
-    }
+	private CollectionSet buildCollectionSet(int nodeId, double magicNumber) {
+		// Build collection set with a IpInterface resource.
+		NodeResource nodeResource = ImmutableNodeResource.newBuilder().setNodeId(nodeId).build();
+		IpInterfaceResource ipInterfaceResource = ImmutableIpInterfaceResource.newInstance(nodeResource, INSTANCE_NAME);
+		// Add attribute
+		NumericAttribute numeric = ImmutableNumericAttribute.newBuilder().setGroup("group").setName("snmp")
+				.setValue(magicNumber).setType(NumericAttribute.Type.GAUGE).build();
+		StringAttribute string = ImmutableStringAttribute.newBuilder().setName(LOCATION_KEY).setGroup("group")
+				.setValue(runtimeInfo.getSystemLocation()).build();
+		// Build collection set
+		CollectionSetResource<IpInterfaceResource> collectionSetResource = ImmutableCollectionSetResource
+				.newBuilder(IpInterfaceResource.class).setResource(ipInterfaceResource).addNumericAttribute(numeric)
+				.addStringAttribute(string).build();
+		return ImmutableCollectionSet.newBuilder().addCollectionSetResource(collectionSetResource)
+				.setTimestamp(System.currentTimeMillis()).build();
+	}
 
-    public static class CollectionRequestImpl implements CollectionRequest {
-        private final int nodeId;
-        private final InetAddress address;
+	public static class CollectionRequestImpl implements CollectionRequest {
+		private final int nodeId;
+		private final InetAddress address;
 
-        public CollectionRequestImpl(int nodeId, InetAddress address) {
-            this.nodeId = nodeId;
-            this.address = address;
-        }
+		public CollectionRequestImpl(int nodeId, InetAddress address) {
+			this.nodeId = nodeId;
+			this.address = address;
+		}
 
-        @Override
-        public InetAddress getAddress() {
-            return address;
-        }
+		@Override
+		public InetAddress getAddress() {
+			return address;
+		}
 
-        @Override
-        public int getNodeId() {
-            return nodeId;
-        }
-    }
+		@Override
+		public int getNodeId() {
+			return nodeId;
+		}
+	}
 
-    private static double getKeyAsDouble(String key, Map<String, Object> map, double defaultValue) {
-        Object val = map.get(key);
-        if (val == null) {
-            return defaultValue;
-        }
-        if (val instanceof Number) {
-            return ((Number)val).doubleValue();
-        }
-        try {
-            return Double.parseDouble(val.toString());
-        } catch (NumberFormatException e) {
-            return defaultValue;
-        }
-    }
+	private static double getKeyAsDouble(String key, Map<String, Object> map, double defaultValue) {
+		Object val = map.get(key);
+		if (val == null) {
+			return defaultValue;
+		}
+		if (val instanceof Number) {
+			return ((Number) val).doubleValue();
+		}
+		try {
+			return Double.parseDouble(val.toString());
+		} catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
 }

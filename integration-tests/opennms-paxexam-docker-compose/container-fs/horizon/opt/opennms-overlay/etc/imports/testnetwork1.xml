@@ -13,4 +13,13 @@
       </interface>
       <category name="cameras"/>
    </node>
+      <node foreign-id="restsimulator" node-label="restsimulator">
+      <interface ip-addr="172.20.0.20" status="1" snmp-primary="P">
+         <monitored-service service-name="ICMP"/>
+         <monitored-service service-name="HTTP-8080"/>
+         <monitored-service service-name="HTTP-8080"/>
+         <monitored-service service-name="xmlfileinternal"/>
+      </interface>
+      <category name="nokia"/>
+   </node>
 </model-import>

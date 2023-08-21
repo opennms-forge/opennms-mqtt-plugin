@@ -149,13 +149,16 @@
 
    <!-- osgi collectd collector -->
    <!-- *********************** -->
-   
+
    <reference id="runtimeInfo" interface="org.opennms.integration.api.v1.runtime.RuntimeInfo" />
 
    <service interface="org.opennms.integration.api.v1.collectors.ServiceCollectorFactory">
       <bean class="org.opennms.plugins.iot.collector.IoTCollectorFactory">
          <argument ref="runtimeInfo" />
+
+         <property name="osgiIotMessageHandlerservice" ref="osgiRxService" />
       </bean>
+
    </service>
 
 

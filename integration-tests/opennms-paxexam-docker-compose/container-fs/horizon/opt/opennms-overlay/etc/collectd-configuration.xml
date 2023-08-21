@@ -11,7 +11,9 @@
 <!--         </service> -->
         
          <service name="xmlfileinternal" interval="300000" user-defined="false" status="on">
-            <parameter key="A" value="AAA" />
+            <parameter key="collectionUrl" value="http://restsimulator:8080/nokia/data?count=5&amp;interval=60000" />
+            <parameter key="collectionTopic" value="nokia-data" />
+            <parameter key="collectionQos" value="0" />
         </service>
     </package>
 

@@ -36,6 +36,7 @@ import java.util.Objects;
 import org.opennms.integration.api.v1.collectors.CollectionRequest;
 import org.opennms.integration.api.v1.collectors.ServiceCollectorFactory;
 import org.opennms.integration.api.v1.runtime.RuntimeInfo;
+import org.opennms.plugins.messagenotifier.osgi.OsgiIotMessageHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,16 +44,29 @@ public class IoTCollectorFactory implements ServiceCollectorFactory<IoTCollector
     private static final Logger LOG = LoggerFactory.getLogger(IoTCollectorFactory.class);
 
     private final RuntimeInfo runtimeInfo;
+    
+	private OsgiIotMessageHandler osgiIotMessageHandlerservice;
 
-    public IoTCollectorFactory(RuntimeInfo runtimeInfo) {
+
+
+	public IoTCollectorFactory(RuntimeInfo runtimeInfo) {
     	LOG.debug("create IoTCollectorFactory");
         this.runtimeInfo = Objects.requireNonNull(runtimeInfo);
     }
+	
+    public void setOsgiIotMessageHandlerservice(OsgiIotMessageHandler osgiIotMessageHandlerservice) {
+		this.osgiIotMessageHandlerservice = osgiIotMessageHandlerservice;
+	}
 
     @Override
     public IoTCollector createCollector() {
     	LOG.debug("createCollector: IotCollector.");
-        return new IoTCollector(runtimeInfo);
+    	
+    	IoTCollector iotCollector = new IoTCollector(runtimeInfo);
+    	
+		iotCollector.setOsgiIotMessageHandlerservice(osgiIotMessageHandlerservice);
+
+        return iotCollector;
     }
 
     @Override
