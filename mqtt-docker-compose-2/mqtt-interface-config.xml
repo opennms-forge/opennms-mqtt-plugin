@@ -23,7 +23,7 @@
 <!-- } -->
 <!-- *********************************************************************** -->
 
-<mqtt-receiver xmlns="http://xmlns.opennms.org/xsd/config/mqtt-datacollection" xmlns:ns2="http://xmlns.opennms.org/xsd/config/xml-datacollection">
+<mqtt-receiver xmlns="http://xmlns.opennms.org/xsd/config/mqtt-datacollection" >
    <!-- optional tuning parameters -->
    <nodeCacheMaxSize>1000</nodeCacheMaxSize>
    <nodeCacheMaxTtl>0</nodeCacheMaxTtl>
@@ -73,28 +73,28 @@
          <!-- payload: { "tempIn": ..., "tempOut": ..., "flowRate": ..., "powerLevel": ..., "latitude:": ..., "longitude": ... } -->
 
          <!-- using the following configuration -->
-         <ns2:xml-groups xmlns="http://xmlns.opennms.org/xsd/config/xml-datacollection">
-            <ns2:xml-group name="Transmitter" resource-type="pi" resource-xpath="/" key-xpath="$topicLevels[2]">
-               <ns2:resource-key>
-                  <ns2:key-xpath>$topicLevels[2]</ns2:key-xpath>
-                  <ns2:key-xpath>$topicLevels[3]</ns2:key-xpath>
-               </ns2:resource-key>
-               <ns2:xml-object name="tempIn" type="GAUGE" xpath="@tempIn" />
-               <ns2:xml-object name="tempOut" type="GAUGE" xpath="@tempOut" />
-               <ns2:xml-object name="flowRate" type="GAUGE" xpath="@flowRate" />
-               <ns2:xml-object name="powerLevel" type="GAUGE" xpath="@powerLevel" />
-               <ns2:xml-object name="latitude" type="GAUGE" xpath="@latitude" />
-               <ns2:xml-object name="longitude" type="GAUGE" xpath="@longitude" />
-            </ns2:xml-group>
-         </ns2:xml-groups>
+         <xml-groups >
+            <xml-group name="Transmitter" resource-type="pi" resource-xpath="/" key-xpath="$topicLevels[2]">
+               <resource-key>
+                  <key-xpath>$topicLevels[2]</key-xpath>
+                  <key-xpath>$topicLevels[3]</key-xpath>
+               </resource-key>
+               <xml-object name="tempIn" type="GAUGE" xpath="@tempIn" />
+               <xml-object name="tempOut" type="GAUGE" xpath="@tempOut" />
+               <xml-object name="flowRate" type="GAUGE" xpath="@flowRate" />
+               <xml-object name="powerLevel" type="GAUGE" xpath="@powerLevel" />
+               <xml-object name="latitude" type="GAUGE" xpath="@latitude" />
+               <xml-object name="longitude" type="GAUGE" xpath="@longitude" />
+            </xml-group>
+         </xml-groups>
 
          <!-- xmlRRD us set up exactly as it is for xml data collection. step (in seconds ) is the interval expected between data received from the same node -->
          <xmlRrd step="300">
-            <ns2:rra>RRA:AVERAGE:0.5:1:2016</ns2:rra>
-            <ns2:rra>RRA:AVERAGE:0.5:12:1488</ns2:rra>
-            <ns2:rra>RRA:AVERAGE:0.5:288:366</ns2:rra>
-            <ns2:rra>RRA:MAX:0.5:288:366</ns2:rra>
-            <ns2:rra>RRA:MIN:0.5:288:366</ns2:rra>
+            <rra>RRA:AVERAGE:0.5:1:2016</rra>
+            <rra>RRA:AVERAGE:0.5:12:1488</rra>
+            <rra>RRA:AVERAGE:0.5:288:366</rra>
+            <rra>RRA:MAX:0.5:288:366</rra>
+            <rra>RRA:MIN:0.5:288:366</rra>
          </xmlRrd>
       </messageDataParser>
 

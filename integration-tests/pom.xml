@@ -17,6 +17,7 @@
       <module>collection-simulator</module>
       <module>opennms-paxexam-docker-compose</module>
       <module>iot-integration-tests</module>
+      <module>xml-collector-tests</module>
    </modules>
 
 </project>

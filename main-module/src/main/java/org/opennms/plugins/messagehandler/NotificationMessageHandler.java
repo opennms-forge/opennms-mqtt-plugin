@@ -40,10 +40,10 @@ import org.opennms.plugins.messagenotifier.MessageNotification;
 import org.opennms.plugins.messagenotifier.NotificationClient;
 import org.opennms.plugins.mqtt.config.MessageDataParserConfig;
 import org.opennms.plugins.mqtt.config.MessageEventParserConfig;
+import org.opennms.plugins.mqtt.config.XmlGroups;
+import org.opennms.plugins.mqtt.config.XmlRrd;
 import org.opennms.plugins.persistor.datanotifier.DataPersistor;
 import org.opennms.plugins.persistor.eventnotifier.EventPersistor;
-import org.opennms.protocols.xml.config.XmlGroups;
-import org.opennms.protocols.xml.config.XmlRrd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

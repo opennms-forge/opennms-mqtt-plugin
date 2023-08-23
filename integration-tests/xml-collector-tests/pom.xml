@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <groupId>org.opennms.plugins.iot</groupId>
+      <artifactId>integration-tests</artifactId>
+      <version>0.0.8-SNAPSHOT</version>
+   </parent>
+
+   <artifactId>xml-collector-tests</artifactId>
+
+   <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+      <java.version>8</java.version>
+
+      <opennms.version>32.0.1</opennms.version>
+
+      <opennms-paxexam.version>0.0.1</opennms-paxexam.version>
+
+      <karafVersion>4.3.6</karafVersion> <!-- same opennms 31 -->
+      <felix.framework.version>6.0.5</felix.framework.version> <!-- same as karaf opennms -->
+
+      <dependency.osgicomp.version>4.3.1</dependency.osgicomp.version>
+
+      <pax.exam.karaf.version>4.3.6</pax.exam.karaf.version>
+      <dependency.atinject.version>1.0</dependency.atinject.version>
+
+
+      <pax.exam.version>4.13.5</pax.exam.version>
+      <pax.url.version>2.1.0</pax.url.version>
+      <logback.version>1.0.4</logback.version>
+      <slf4j.version>1.7.4</slf4j.version>
+      <log4j.version>2.11.1</log4j.version>
+      <pax.logging.version>2.0.14</pax.logging.version> <!-- same as OpenNMS -->
+      <dependency.swissbox.version>1.8.4</dependency.swissbox.version>
+
+      <maven.surefire.plugin.version>2.18</maven.surefire.plugin.version>
+   </properties>
+
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.1</version>
+            <configuration>
+               <source>1.8</source>
+               <target>1.8</target>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <version>1.0.0</version>
+            <executions>
+               <execution>
+                  <goals>
+                     <goal>set-system-properties</goal>
+                  </goals>
+                  <configuration>
+                     <properties>
+                        <property>
+                           <name>sun.rmi.loader.logLevel</name>
+                           <value>ALL</value>
+                        </property>
+                     </properties>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${maven.surefire.plugin.version}</version>
+            <configuration>
+               <includes>
+                  <include>**/xmlparsing/*.java</include>
+               </includes>
+               <excludes>
+                  <!-- prevent tests running in any package with manual folder. These are manual one off development tests which need docker-compose running first -->
+                  <exclude>**/manual/*.java</exclude>
+               </excludes>
+            </configuration>
+         </plugin>
+
+      </plugins>
+   </build>
+
+   <dependencies>
+
+      <!-- opennms dependencies -->
+      <dependency>
+         <groupId>org.opennms.protocols</groupId>
+         <artifactId>org.opennms.protocols.xml</artifactId>
+         <version>${opennms.version}</version>
+      </dependency>
+
+      <!-- mqtt plugin dependencies dependencies -->
+      <dependency>
+         <groupId>org.opennms.plugins</groupId>
+         <artifactId>MqttClient.main-module</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>org.opennms.core.test-api</groupId>
+         <artifactId>org.opennms.core.test-api.collection</artifactId>
+         <version>${opennms.version}</version>
+         <scope>test</scope>
+         <exclusions>
+            <exclusion>
+               <groupId>junit</groupId>
+               <artifactId>junit</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>com.google.guava</groupId>
+               <artifactId>guava</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.opennms.core.test-api</groupId>
+               <artifactId>org.opennms.core.test-api.lib</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.opennms.dependencies</groupId>
+               <artifactId>spring-test-dependencies</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+
+      <!-- paxexam test dependencies -->
+      <dependency>
+         <groupId>org.apache.karaf.features</groupId>
+         <artifactId>org.apache.karaf.features.core</artifactId>
+         <version>${karafVersion}</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.apache.karaf.shell</groupId>
+         <artifactId>org.apache.karaf.shell.core</artifactId>
+         <version>${karafVersion}</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.osgi</groupId>
+         <artifactId>org.osgi.compendium</artifactId>
+         <version>${dependency.osgicomp.version}</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.opennms.integration.paxexam</groupId>
+         <artifactId>opennms-paxexam-rmi-server</artifactId>
+         <version>${opennms-paxexam.version}</version>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.opennms.integration.paxexam</groupId>
+         <artifactId>opennms-paxexam-container-remote</artifactId>
+         <version>${opennms-paxexam.version}</version>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.ops4j.pax.exam</groupId>
+         <artifactId>pax-exam-container-remote</artifactId>
+         <version>${pax.exam.version}</version>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.ops4j.pax.exam</groupId>
+         <artifactId>pax-exam-junit4</artifactId>
+         <version>${pax.exam.version}</version>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.ops4j.pax.exam</groupId>
+         <artifactId>pax-exam-link-mvn</artifactId>
+         <version>${pax.exam.version}</version>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.apache.geronimo.specs</groupId>
+         <artifactId>geronimo-atinject_1.0_spec</artifactId>
+         <version>${dependency.atinject.version}</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.ops4j.pax.logging</groupId>
+         <artifactId>pax-logging-log4j2</artifactId>
+         <version>${pax.logging.version}</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.ops4j.pax.logging</groupId>
+         <artifactId>pax-logging-api</artifactId>
+         <version>${pax.logging.version}</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>slf4j-api</artifactId>
+         <version>${slf4j.version}</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <!-- Logging for tests -->
+      <dependency>
+         <groupId>org.apache.logging.log4j</groupId>
+         <artifactId>log4j-api</artifactId>
+         <version>2.7</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.logging.log4j</groupId>
+         <artifactId>log4j-core</artifactId>
+         <version>2.7</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.logging.log4j</groupId>
+         <artifactId>log4j-slf4j-impl</artifactId>
+         <version>2.7</version>
+         <scope>test</scope>
+      </dependency>
+
+   </dependencies>
+
+   <repositories>
+
+      <!-- to pick up local build artifacts -->
+      <repository>
+         <id>importm2</id>
+         <name>virtual machine importm2</name>
+         <url>http://192.168.80.130:8181/repository/importm2</url>
+         <releases>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+         </releases>
+         <snapshots>
+            <enabled>true</enabled>
+            <!-- <updatePolicy>${updatePolicy}</updatePolicy> -->
+         </snapshots>
+      </repository>
+
+
+
+
+      <repository>
+         <id>central</id>
+         <url>https://repo1.maven.org/maven2</url>
+      </repository>
+      <repository>
+         <id>github</id>
+         <url>https://maven.pkg.github.com/gallenc/opennms-paxexam</url>
+         <snapshots>
+            <!-- we only publish release versions of opennms-paxexam to github packages -->
+            <enabled>false</enabled>
+         </snapshots>
+      </repository>
+   </repositories>
+
+</project>

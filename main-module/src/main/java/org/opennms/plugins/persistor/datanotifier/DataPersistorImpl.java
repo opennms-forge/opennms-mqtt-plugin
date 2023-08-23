@@ -24,8 +24,8 @@ import org.opennms.netmgt.model.ResourceTypeUtils;
 import org.opennms.netmgt.rrd.RrdRepository;
 import org.opennms.plugins.messagehandler.OnmsCollectionAttribute;
 import org.opennms.plugins.messagehandler.OnmsCollectionAttributeMap;
+import org.opennms.plugins.mqtt.config.XmlRrd;
 import org.opennms.plugins.persistor.NodeByForeignSourceCache;
-import org.opennms.protocols.xml.config.XmlRrd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

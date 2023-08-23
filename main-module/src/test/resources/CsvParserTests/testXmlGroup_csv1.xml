@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xml-groups xmlns="http://xmlns.opennms.org/xsd/config/xml-datacollection">
+<xml-groups xmlns="http://xmlns.opennms.org/xsd/config/mqtt-datacollection">
   <xml-group name="solaris-zone-stats" resource-type="solarisZone" resource-xpath="." key-xpath=".[1]" 
   timestamp-xpath=".[3]" timestamp-format="dd/mm/yyyy HH:mm"> <!-- empty string indicates simple timestamp from epoch (Date.toString()) -->
     <xml-object name="name" type="string" xpath=".[1]" />

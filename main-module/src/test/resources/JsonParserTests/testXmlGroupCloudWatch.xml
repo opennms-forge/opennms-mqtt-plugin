@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xml-groups xmlns="http://xmlns.opennms.org/xsd/config/xml-datacollection">
+<xml-groups xmlns="http://xmlns.opennms.org/xsd/config/mqtt-datacollection">
 
   <!-- node level compute resources -->
   <xml-group name="amazon-cloudwatch-rds-compute" resource-type="compute" resource-xpath="/" key-xpath="@instanceID" timestamp-xpath="@timestamp"

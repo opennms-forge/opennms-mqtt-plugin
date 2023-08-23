@@ -32,7 +32,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.opennms.protocols.xml.config.XmlRrd;
+import org.opennms.plugins.mqtt.config.XmlRrd;
 
 public class OnmsCollectionAttributeMap {
 	

@@ -23,7 +23,7 @@
 <!-- } -->
 <!-- *********************************************************************** -->
 
-<mqtt-receiver xmlns="http://xmlns.opennms.org/xsd/config/mqtt-datacollection" xmlns:ns2="http://xmlns.opennms.org/xsd/config/xml-datacollection">
+<mqtt-receiver xmlns="http://xmlns.opennms.org/xsd/config/mqtt-datacollection" >
   <!-- optional tuning parameters -->
   <nodeCacheMaxSize>1000</nodeCacheMaxSize>
   <nodeCacheMaxTtl>0</nodeCacheMaxTtl>
@@ -73,30 +73,30 @@
       <!-- payload:{"metrics":{"gweui":"00-08-00-4A-4F-F6","deveui":"00-80-00-00-00-01-1e-e8","node":"00-80-00-00-00-01-1e-e8","timestamp":"2018-07-18T17:01:15.247467Z","lsnr":"10","light":0,"air_pressure":0,"temperature":32.1875,"x_acc":0,"y_acc":0,"z_acc":0.9375}} -->
 
       <!-- using the following configuration -->
-      <ns2:xml-groups xmlns="http://xmlns.opennms.org/xsd/config/xml-datacollection">
-        <ns2:xml-group name="laurawan" resource-type="laurawan" resource-xpath="/metrics" key-xpath="$topicLevels[7]" timestamp-xpath="@timestamp"
+      <xml-groups>
+        <xml-group name="laurawan" resource-type="laurawan" resource-xpath="/metrics" key-xpath="$topicLevels[7]" timestamp-xpath="@timestamp"
           timestamp-format="yyyy-MM-dd HH:mm:ss.SSSSSS">
-          <ns2:xml-object name="gweui" type="string" xpath="@gweui" />
-          <ns2:xml-object name="deveui" type="string" xpath="@deveui" />
-          <ns2:xml-object name="node" type="string" xpath="@node" />
-          <ns2:xml-object name="timestamp" type="string" xpath="@timestamp" />
-          <ns2:xml-object name="lsnr" type="GAUGE" xpath="@lsnr" />
-          <ns2:xml-object name="light" type="GAUGE" xpath="@light" />
-          <ns2:xml-object name="air_pressure" type="GAUGE" xpath="@air_pressure" />
-          <ns2:xml-object name="temperature" type="GAUGE" xpath="@temperature" />
-          <ns2:xml-object name="x_acc" type="GAUGE" xpath="@x_acc" />
-          <ns2:xml-object name="y_acc" type="GAUGE" xpath="@y_acc" />
-          <ns2:xml-object name="z_acc" type="GAUGE" xpath="@z_acc" />
-        </ns2:xml-group>
-      </ns2:xml-groups>
+          <xml-object name="gweui" type="string" xpath="@gweui" />
+          <xml-object name="deveui" type="string" xpath="@deveui" />
+          <xml-object name="node" type="string" xpath="@node" />
+          <xml-object name="timestamp" type="string" xpath="@timestamp" />
+          <xml-object name="lsnr" type="GAUGE" xpath="@lsnr" />
+          <xml-object name="light" type="GAUGE" xpath="@light" />
+          <xml-object name="air_pressure" type="GAUGE" xpath="@air_pressure" />
+          <xml-object name="temperature" type="GAUGE" xpath="@temperature" />
+          <xml-object name="x_acc" type="GAUGE" xpath="@x_acc" />
+          <xml-object name="y_acc" type="GAUGE" xpath="@y_acc" />
+          <xml-object name="z_acc" type="GAUGE" xpath="@z_acc" />
+        </xml-group>
+      </xml-groups>
 
       <!-- xmlRRD us set up exactly as it is for xml data collection. step (in seconds ) is the interval expected between data received from the same node -->
       <xmlRrd step="300">
-        <ns2:rra>RRA:AVERAGE:0.5:1:2016</ns2:rra>
-        <ns2:rra>RRA:AVERAGE:0.5:12:1488</ns2:rra>
-        <ns2:rra>RRA:AVERAGE:0.5:288:366</ns2:rra>
-        <ns2:rra>RRA:MAX:0.5:288:366</ns2:rra>
-        <ns2:rra>RRA:MIN:0.5:288:366</ns2:rra>
+        <rra>RRA:AVERAGE:0.5:1:2016</rra>
+        <rra>RRA:AVERAGE:0.5:12:1488</rra>
+        <rra>RRA:AVERAGE:0.5:288:366</rra>
+        <rra>RRA:MAX:0.5:288:366</rra>
+        <rra>RRA:MIN:0.5:288:366</rra>
       </xmlRrd>
     </messageDataParser>
 
@@ -123,30 +123,30 @@
 
       <!-- xmlgroups configuration is very similar to XMLData collection configuration for JSON in OpenNMS -->
       <!-- using the following configuration -->
-      <ns2:xml-groups xmlns="http://xmlns.opennms.org/xsd/config/xml-datacollection">
-        <ns2:xml-group name="laurawan" resource-type="laurawan" resource-xpath="/metrics" key-xpath="$topicLevels[7]" timestamp-xpath="@timestamp"
+      <xml-groups >
+        <xml-group name="laurawan" resource-type="laurawan" resource-xpath="/metrics" key-xpath="$topicLevels[7]" timestamp-xpath="@timestamp"
           timestamp-format="yyyy-MM-dd HH:mm:ss.SSSSSS">
-          <ns2:xml-object name="gweui" type="string" xpath="@gweui" />
-          <ns2:xml-object name="deveui" type="string" xpath="@deveui" />
-          <ns2:xml-object name="node" type="string" xpath="@node" />
-          <ns2:xml-object name="timestamp" type="string" xpath="@timestamp" />
-          <ns2:xml-object name="lsnr" type="GAUGE" xpath="@lsnr" />
-          <ns2:xml-object name="light" type="GAUGE" xpath="@light" />
-          <ns2:xml-object name="air_pressure" type="GAUGE" xpath="@air_pressure" />
-          <ns2:xml-object name="temperature" type="GAUGE" xpath="@temperature" />
-          <ns2:xml-object name="x_acc" type="GAUGE" xpath="@x_acc" />
-          <ns2:xml-object name="y_acc" type="GAUGE" xpath="@y_acc" />
-          <ns2:xml-object name="z_acc" type="GAUGE" xpath="@z_acc" />
+          <xml-object name="gweui" type="string" xpath="@gweui" />
+          <xml-object name="deveui" type="string" xpath="@deveui" />
+          <xml-object name="node" type="string" xpath="@node" />
+          <xml-object name="timestamp" type="string" xpath="@timestamp" />
+          <xml-object name="lsnr" type="GAUGE" xpath="@lsnr" />
+          <xml-object name="light" type="GAUGE" xpath="@light" />
+          <xml-object name="air_pressure" type="GAUGE" xpath="@air_pressure" />
+          <xml-object name="temperature" type="GAUGE" xpath="@temperature" />
+          <xml-object name="x_acc" type="GAUGE" xpath="@x_acc" />
+          <xml-object name="y_acc" type="GAUGE" xpath="@y_acc" />
+          <xml-object name="z_acc" type="GAUGE" xpath="@z_acc" />
 
           <!-- if ueiRoot is specified and in addition, the xml-group contains a definition labled "UEI_SUFFIX" -->
           <!-- then the value UEI_SUFFIX parsed from the message context will be appended to the ueiRoot -->
           <!-- to form a message specific uei. Thus if the following line is added -->
-          <!-- <ns2:xml-object name="UEI_SUFFIX" type="string" xpath="@deveui" /> -->
+          <!-- <xml-object name="UEI_SUFFIX" type="string" xpath="@deveui" /> -->
           <!-- the generated event uei will be -->
           <!-- uei.opennms.org/plugin/MqttReceiver/laurawan/{@deveui value} -->
 
-        </ns2:xml-group>
-      </ns2:xml-groups>
+        </xml-group>
+      </xml-groups>
 
     </messageEventParser>
 

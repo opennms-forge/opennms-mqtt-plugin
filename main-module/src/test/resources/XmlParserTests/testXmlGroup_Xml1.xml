@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xml-groups xmlns="http://xmlns.opennms.org/xsd/config/xml-datacollection">
+<xml-groups xmlns="http://xmlns.opennms.org/xsd/config/mqtt-datacollection">
  <xml-group name="kura-typed" resource-type="kura" resource-xpath="/message" key-xpath="metrics/code" timestamp-xpath="sentOn" timestamp-format="">
     <xml-object name="sentOn" type="string" xpath="sentOn" />
 

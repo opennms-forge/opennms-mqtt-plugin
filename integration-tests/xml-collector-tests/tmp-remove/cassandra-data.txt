@@ -1,0 +1,43 @@
+cqlsh> select  collected_at, resource, metric_name, newts.type(value), newts.valueNumber(value) from newts.samples;
+cqlsh> select  collected_at, toUnixTimestamp( collected_at ), resource, metric_name, newts.type(value), newts.valueNumber(value) from newts.samples;
+
+ collected_at                    | system.tounixtimestamp(collected_at) | resource                                    | metric_name | newts.type(value) | newts.valuenumber(value)
+---------------------------------+--------------------------------------+---------------------------------------------+-------------+-------------------+--------------------------
+  2023-08-17 11:18:02.022000+0000 |                       1692271082022 |         response:minion-location:127.0.0.1:minion-rpc |       minion-rpc |             GAUGE |                        8
+ 2023-08-17 11:18:33.024000+0000 |                        1692271113024 |         response:minion-location:127.0.0.1:minion-rpc |       minion-rpc |             GAUGE |                        9
+ 2023-08-17 11:05:23.449000+0000 |                        1692270323449 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     periodicTime |             GAUGE |                    60000
+ 2023-08-17 11:05:23.449000+0000 |                        1692270323449 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |   systemCpuUsage |             GAUGE |                     8000
+ 2023-08-17 11:05:23.449000+0000 |                        1692270323449 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     timeCaptured |           COUNTER |              8.3609e-312
+ 2023-08-17 11:05:23.521000+0000 |                        1692270323521 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     periodicTime |             GAUGE |                    60000
+ 2023-08-17 11:05:23.521000+0000 |                        1692270323521 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |   systemCpuUsage |             GAUGE |                     6000
+ 2023-08-17 11:05:23.521000+0000 |                        1692270323521 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     timeCaptured |           COUNTER |              8.3609e-312
+ 2023-08-17 11:05:23.551000+0000 |                        1692270323551 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     periodicTime |             GAUGE |                    60000
+ 2023-08-17 11:05:23.551000+0000 |                        1692270323551 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |   systemCpuUsage |             GAUGE |                     1000
+ 2023-08-17 11:05:23.551000+0000 |                        1692270323551 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     timeCaptured |           COUNTER |              8.3609e-312
+ 2023-08-17 11:05:23.580000+0000 |                        1692270323580 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     periodicTime |             GAUGE |                    60000
+ 2023-08-17 11:05:23.580000+0000 |                        1692270323580 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |   systemCpuUsage |             GAUGE |                     8000
+ 2023-08-17 11:05:23.580000+0000 |                        1692270323580 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     timeCaptured |           COUNTER |              8.3609e-312
+ 2023-08-17 11:05:23.622000+0000 |                        1692270323622 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     periodicTime |             GAUGE |                    60000
+ 2023-08-17 11:05:23.622000+0000 |                        1692270323622 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |   systemCpuUsage |             GAUGE |                     9000
+ 2023-08-17 11:05:23.622000+0000 |                        1692270323622 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     timeCaptured |           COUNTER |              8.3609e-312
+ 2023-08-17 11:05:23.657000+0000 |                        1692270323657 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     periodicTime |             GAUGE |                    60000
+ 2023-08-17 11:05:23.657000+0000 |                        1692270323657 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |   systemCpuUsage |             GAUGE |                     3000
+ 2023-08-17 11:05:23.657000+0000 |                        1692270323657 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     timeCaptured |           COUNTER |              8.3609e-312
+ 2023-08-17 11:05:23.682000+0000 |                        1692270323682 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     periodicTime |             GAUGE |                    60000
+ 2023-08-17 11:05:23.682000+0000 |                        1692270323682 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |   systemCpuUsage |             GAUGE |                     6000
+ 2023-08-17 11:05:23.682000+0000 |                        1692270323682 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     timeCaptured |           COUNTER |              8.3609e-312
+ 2023-08-17 11:05:23.717000+0000 |                        1692270323717 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     periodicTime |             GAUGE |                    60000
+ 2023-08-17 11:05:23.717000+0000 |                        1692270323717 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |   systemCpuUsage |             GAUGE |                     5000
+ 2023-08-17 11:05:23.717000+0000 |                        1692270323717 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     timeCaptured |           COUNTER |              8.3609e-312
+ 2023-08-17 11:05:23.734000+0000 |                        1692270323734 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     periodicTime |             GAUGE |                    60000
+ 2023-08-17 11:05:23.734000+0000 |                        1692270323734 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |   systemCpuUsage |             GAUGE |                     8000
+ 2023-08-17 11:05:23.734000+0000 |                        1692270323734 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     timeCaptured |           COUNTER |              8.3609e-312
+ 2023-08-17 11:05:23.777000+0000 |                        1692270323777 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     periodicTime |             GAUGE |                    60000
+ 2023-08-17 11:05:23.777000+0000 |                        1692270323777 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |   systemCpuUsage |             GAUGE |                     7000
+ 2023-08-17 11:05:23.777000+0000 |                        1692270323777 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     timeCaptured |           COUNTER |              8.3609e-312
+ 2023-08-17 11:05:23.804000+0000 |                        1692270323804 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     periodicTime |             GAUGE |                    60000
+ 2023-08-17 11:05:23.804000+0000 |                        1692270323804 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |   systemCpuUsage |             GAUGE |                        0
+ 2023-08-17 11:05:23.804000+0000 |                        1692270323804 | snmp:fs:nokia:equipment.SystemStatsHolder:mqtt:sniffy |     timeCaptured |           COUNTER |              8.3609e-312
+ 2023-08-17 11:01:30.973000+0000 |                        1692270090973 |     status:minion-location:127.0.0.1:minion-heartbeat | minion-heartbeat |             GAUGE |                        1
+ 2023-08-17 11:02:01.777000+0000 |                        1692270121777 |     status:minion-location:127.0.0.1:minion-heartbeat | minion-heartbeat |             GAUGE |                        1
+ 2023-08-17 11:02:32.820000+0000 |                        1692270152820 |     status:minion-location:127.0.0.1:minion-heartbeat | minion-heartbeat |             GAUGE |   

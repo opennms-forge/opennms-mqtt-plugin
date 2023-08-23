@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mqtt-receiver xmlns="http://xmlns.opennms.org/xsd/config/mqtt-datacollection" xmlns:ns2="http://xmlns.opennms.org/xsd/config/xml-datacollection">
+<mqtt-receiver xmlns="http://xmlns.opennms.org/xsd/config/mqtt-datacollection">
    <!-- optional tuning parameters -->
    <nodeCacheMaxSize>1000</nodeCacheMaxSize>
    <nodeCacheMaxTtl>0</nodeCacheMaxTtl>
@@ -32,40 +32,40 @@
          <!-- the foreignId retrieved by the key-xpath to give a reference to the node for which the data is persisted. -->
 <!--          <xml-groups> -->
 
-            <!-- <ns2:xml-group name="xmlfile1" resource-type="node" resource-xpath="/logToFileResponse/equipment.SystemCpuStatsLogRecord" -->
+            <!-- <xml-group name="xmlfile1" resource-type="node" resource-xpath="/logToFileResponse/equipment.SystemCpuStatsLogRecord" -->
             <!-- key-xpath="@id" timestamp-xpath="@time" timestamp-format="yyyy-MM-dd HH:mm:ss.SSSSSS"> -->
-            <!-- <ns2:xml-object name="systemCpuUsage" type="GAUGE" xpath="systemCpuUsage"/> -->
-            <!-- <ns2:xml-object name="timeCaptured" type="GAUGE" xpath="timeCaptured"/> -->
-            <!-- <ns2:xml-object name="periodicTime" type="GAUGE" xpath="periodicTime"/> -->
-            <!-- <ns2:xml-object name="monitoredObjectClass" type="STRING" xpath="monitoredObjectClass"/> -->
-            <!-- <ns2:xml-object name="monitoredObjectPointer" type="STRING" xpath="monitoredObjectPointer"/> -->
-            <!-- <ns2:xml-object name="displayedName" type="STRING" xpath="displayedName"/> -->
-            <!-- <ns2:xml-object name="monitoredObjectSiteId" type="STRING" xpath="monitoredObjectSiteId"/> -->
-            <!-- <ns2:xml-object name="monitoredObjectSiteName" type="STRING" xpath="monitoredObjectSiteName"/> -->
-            <!-- <ns2:xml-object name="suspect" type="STRING" xpath="suspect"/> -->
-            <!-- </ns2:xml-group> -->
+            <!-- <xml-object name="systemCpuUsage" type="GAUGE" xpath="systemCpuUsage"/> -->
+            <!-- <xml-object name="timeCaptured" type="GAUGE" xpath="timeCaptured"/> -->
+            <!-- <xml-object name="periodicTime" type="GAUGE" xpath="periodicTime"/> -->
+            <!-- <xml-object name="monitoredObjectClass" type="STRING" xpath="monitoredObjectClass"/> -->
+            <!-- <xml-object name="monitoredObjectPointer" type="STRING" xpath="monitoredObjectPointer"/> -->
+            <!-- <xml-object name="displayedName" type="STRING" xpath="displayedName"/> -->
+            <!-- <xml-object name="monitoredObjectSiteId" type="STRING" xpath="monitoredObjectSiteId"/> -->
+            <!-- <xml-object name="monitoredObjectSiteName" type="STRING" xpath="monitoredObjectSiteName"/> -->
+            <!-- <xml-object name="suspect" type="STRING" xpath="suspect"/> -->
+            <!-- </xml-group> -->
 
-<!--             <ns2:xml-group name="sniffy" resource-type="sniffy" resource-xpath="/" key-xpath="@id" timestamp-xpath="@time" -->
+<!--             <xml-group name="sniffy" resource-type="sniffy" resource-xpath="/" key-xpath="@id" timestamp-xpath="@time" -->
 <!--                timestamp-format="yyyy-MM-dd HH:mm:ss.SSSSSS"> -->
-<!--                <ns2:xml-object name="time" type="string" xpath="@time" /> -->
-<!--                <ns2:xml-object name="id" type="string" xpath="@id" /> -->
-<!--                <ns2:xml-object name="cityName" type="string" xpath="@cityName" /> -->
-<!--                <ns2:xml-object name="stationName" type="string" xpath="@stationName" /> -->
-<!--                <ns2:xml-object name="latitude" type="GAUGE" xpath="@latitude" /> -->
-<!--                <ns2:xml-object name="longitude" type="GAUGE" xpath="@longitude" /> -->
-<!--                <ns2:xml-object name="averaging" type="GAUGE" xpath="@averaging" /> -->
-<!--                <ns2:xml-object name="PM1" type="GAUGE" xpath="@PM1" /> -->
-<!--                <ns2:xml-object name="PM25" type="GAUGE" xpath="@PM25" /> -->
-<!--                <ns2:xml-object name="PM10" type="GAUGE" xpath="@PM10" /> -->
-<!--             </ns2:xml-group> -->
+<!--                <xml-object name="time" type="string" xpath="@time" /> -->
+<!--                <xml-object name="id" type="string" xpath="@id" /> -->
+<!--                <xml-object name="cityName" type="string" xpath="@cityName" /> -->
+<!--                <xml-object name="stationName" type="string" xpath="@stationName" /> -->
+<!--                <xml-object name="latitude" type="GAUGE" xpath="@latitude" /> -->
+<!--                <xml-object name="longitude" type="GAUGE" xpath="@longitude" /> -->
+<!--                <xml-object name="averaging" type="GAUGE" xpath="@averaging" /> -->
+<!--                <xml-object name="PM1" type="GAUGE" xpath="@PM1" /> -->
+<!--                <xml-object name="PM25" type="GAUGE" xpath="@PM25" /> -->
+<!--                <xml-object name="PM10" type="GAUGE" xpath="@PM10" /> -->
+<!--             </xml-group> -->
 <!--          </xml-groups> -->
          <!-- xmlRRD us set up exactly as it is for xml data collection. step (in seconds ) is the interval expected between data received from the same node -->
 <!--          <xmlRrd step="300"> -->
-<!--             <ns2:rra>RRA:AVERAGE:0.5:1:2016</ns2:rra> -->
-<!--             <ns2:rra>RRA:AVERAGE:0.5:12:1488</ns2:rra> -->
-<!--             <ns2:rra>RRA:AVERAGE:0.5:288:366</ns2:rra> -->
-<!--             <ns2:rra>RRA:MAX:0.5:288:366</ns2:rra> -->
-<!--             <ns2:rra>RRA:MIN:0.5:288:366</ns2:rra> -->
+<!--             <rra>RRA:AVERAGE:0.5:1:2016</rra> -->
+<!--             <rra>RRA:AVERAGE:0.5:12:1488</rra> -->
+<!--             <rra>RRA:AVERAGE:0.5:288:366</rra> -->
+<!--             <rra>RRA:MAX:0.5:288:366</rra> -->
+<!--             <rra>RRA:MIN:0.5:288:366</rra> -->
 <!--          </xmlRrd> -->
 <!--       </messageDataParser> -->
 
@@ -82,29 +82,29 @@
          <!-- the foreignId retrieved by the key-xpath to give a reference to the node for which the data is persisted. -->
 
          <xml-groups>
-            <ns2:xml-group name="xmlfile1" resource-type="node" resource-xpath="/logToFileResponse/equipment.SystemCpuStatsLogRecord"
+            <xml-group name="xmlfile1" resource-type="node" resource-xpath="/logToFileResponse/equipment.SystemCpuStatsLogRecord"
                key-xpath="monitoredObjectClass" timestamp-xpath="timeCaptured" timestamp-format="">
-               <ns2:xml-object name="systemCpuUsage" type="GAUGE" xpath="systemCpuUsage" />
-               <ns2:xml-object name="timeCaptured" type="COUNTER" xpath="timeCaptured" />
-               <ns2:xml-object name="periodicTime" type="GAUGE" xpath="periodicTime" />
-               <ns2:xml-object name="monitoredObjectClass" type="STRING" xpath="monitoredObjectClass" />
-               <ns2:xml-object name="monitoredObjectPointer" type="STRING" xpath="monitoredObjectPointer" />
-               <ns2:xml-object name="displayedName" type="STRING" xpath="displayedName" />
-               <ns2:xml-object name="monitoredObjectSiteId" type="STRING" xpath="monitoredObjectSiteId" />
-               <ns2:xml-object name="monitoredObjectSiteName" type="STRING" xpath="monitoredObjectSiteName" />
-               <ns2:xml-object name="suspect" type="STRING" xpath="suspect" />
-            </ns2:xml-group>
+               <xml-object name="systemCpuUsage" type="GAUGE" xpath="systemCpuUsage" />
+               <xml-object name="timeCaptured" type="COUNTER" xpath="timeCaptured" />
+               <xml-object name="periodicTime" type="GAUGE" xpath="periodicTime" />
+               <xml-object name="monitoredObjectClass" type="STRING" xpath="monitoredObjectClass" />
+               <xml-object name="monitoredObjectPointer" type="STRING" xpath="monitoredObjectPointer" />
+               <xml-object name="displayedName" type="STRING" xpath="displayedName" />
+               <xml-object name="monitoredObjectSiteId" type="STRING" xpath="monitoredObjectSiteId" />
+               <xml-object name="monitoredObjectSiteName" type="STRING" xpath="monitoredObjectSiteName" />
+               <xml-object name="suspect" type="STRING" xpath="suspect" />
+            </xml-group>
          </xml-groups>
 
 
          <!-- xmlRRD us set up exactly as it is for xml data collection. step (in seconds ) is the interval expected between data received from the same node -->
          <!-- rrd step matching the time interval in retrieved data -->
          <xmlRrd step="60">
-            <ns2:rra>RRA:AVERAGE:0.5:1:2016</ns2:rra>
-            <ns2:rra>RRA:AVERAGE:0.5:12:1488</ns2:rra>
-            <ns2:rra>RRA:AVERAGE:0.5:288:366</ns2:rra>
-            <ns2:rra>RRA:MAX:0.5:288:366</ns2:rra>
-            <ns2:rra>RRA:MIN:0.5:288:366</ns2:rra>
+            <rra>RRA:AVERAGE:0.5:1:2016</rra>
+            <rra>RRA:AVERAGE:0.5:12:1488</rra>
+            <rra>RRA:AVERAGE:0.5:288:366</rra>
+            <rra>RRA:MAX:0.5:288:366</rra>
+            <rra>RRA:MIN:0.5:288:366</rra>
          </xmlRrd>
       </messageDataParser>
 
@@ -122,18 +122,18 @@
       <!-- <topic>mqtt-events/json</topic> -->
       <!-- </subscriptionTopics> -->
       <!-- <xml-groups> -->
-      <!-- <ns2:xml-group name="sniffy" resource-type="sniffy" resource-xpath="/" key-xpath="@id" timestamp-xpath="@time" timestamp-format="yyyy-MM-dd HH:mm:ss.SSSSSS"> -->
-      <!-- <ns2:xml-object name="time" type="string" xpath="@time" /> -->
-      <!-- <ns2:xml-object name="id" type="string" xpath="@id" /> -->
-      <!-- <ns2:xml-object name="cityName" type="string" xpath="@cityName" /> -->
-      <!-- <ns2:xml-object name="stationName" type="string" xpath="@stationName" /> -->
-      <!-- <ns2:xml-object name="latitude" type="GAUGE" xpath="@latitude" /> -->
-      <!-- <ns2:xml-object name="longitude" type="GAUGE" xpath="@longitude" /> -->
-      <!-- <ns2:xml-object name="averaging" type="GAUGE" xpath="@averaging" /> -->
-      <!-- <ns2:xml-object name="PM1" type="GAUGE" xpath="@PM1" /> -->
-      <!-- <ns2:xml-object name="PM25" type="GAUGE" xpath="@PM25" /> -->
-      <!-- <ns2:xml-object name="PM10" type="GAUGE" xpath="@PM10" /> -->
-      <!-- </ns2:xml-group> -->
+      <!-- <xml-group name="sniffy" resource-type="sniffy" resource-xpath="/" key-xpath="@id" timestamp-xpath="@time" timestamp-format="yyyy-MM-dd HH:mm:ss.SSSSSS"> -->
+      <!-- <xml-object name="time" type="string" xpath="@time" /> -->
+      <!-- <xml-object name="id" type="string" xpath="@id" /> -->
+      <!-- <xml-object name="cityName" type="string" xpath="@cityName" /> -->
+      <!-- <xml-object name="stationName" type="string" xpath="@stationName" /> -->
+      <!-- <xml-object name="latitude" type="GAUGE" xpath="@latitude" /> -->
+      <!-- <xml-object name="longitude" type="GAUGE" xpath="@longitude" /> -->
+      <!-- <xml-object name="averaging" type="GAUGE" xpath="@averaging" /> -->
+      <!-- <xml-object name="PM1" type="GAUGE" xpath="@PM1" /> -->
+      <!-- <xml-object name="PM25" type="GAUGE" xpath="@PM25" /> -->
+      <!-- <xml-object name="PM10" type="GAUGE" xpath="@PM10" /> -->
+      <!-- </xml-group> -->
       <!-- </xml-groups> -->
       <!-- </messageEventParser> -->
 
@@ -145,12 +145,12 @@
       <!-- <topic>mqtt-events/txt</topic> -->
       <!-- </subscriptionTopics> -->
       <!-- <xml-groups> -->
-      <!-- <ns2:xml-group name="textMeasure" resource-type="testMeasure" resource-xpath="." key-xpath=".[1]" timestamp-xpath=".[3]" timestamp-format="dd/mm/yyyy 
+      <!-- <xml-group name="textMeasure" resource-type="testMeasure" resource-xpath="." key-xpath=".[1]" timestamp-xpath=".[3]" timestamp-format="dd/mm/yyyy 
          HH:mm"> empty string indicates simple timestamp from epoch (Date.toString()) -->
-      <!-- <ns2:xml-object name="name" type="string" xpath=".[1]" /> -->
-      <!-- <ns2:xml-object name="timestamp" type="string" xpath=".[3]" /> -->
-      <!-- <ns2:xml-object name="value" type="GAUGE" xpath=".[4]" /> -->
-      <!-- </ns2:xml-group> -->
+      <!-- <xml-object name="name" type="string" xpath=".[1]" /> -->
+      <!-- <xml-object name="timestamp" type="string" xpath=".[3]" /> -->
+      <!-- <xml-object name="value" type="GAUGE" xpath=".[4]" /> -->
+      <!-- </xml-group> -->
       <!-- </xml-groups> -->
       <!-- </messageEventParser> -->
 

@@ -93,11 +93,11 @@
    <dependencies>
 
       <!-- opennms dependencies -->
-      <dependency>
-         <groupId>org.opennms.protocols</groupId>
-         <artifactId>org.opennms.protocols.xml</artifactId>
-         <version>${opennms.version}</version>
-      </dependency>
+<!--       <dependency> -->
+<!--          <groupId>org.opennms.protocols</groupId> -->
+<!--          <artifactId>org.opennms.protocols.xml</artifactId> -->
+<!--          <version>${opennms.version}</version> -->
+<!--       </dependency> -->
 
       <!-- mqtt plugin dependencies dependencies -->
       <dependency>

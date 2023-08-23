@@ -26,9 +26,9 @@ import org.opennms.plugins.messagehandler.CompressionMethods;
 import org.opennms.plugins.messagehandler.MessagePayloadTypeHandler;
 import org.opennms.plugins.messagehandler.OnmsAttributeMessageHandler;
 import org.opennms.plugins.messagehandler.OnmsCollectionAttributeMap;
-import org.opennms.protocols.xml.config.XmlGroup;
-import org.opennms.protocols.xml.config.XmlGroups;
-import org.opennms.protocols.xml.config.XmlRrd;
+import org.opennms.plugins.mqtt.config.XmlGroup;
+import org.opennms.plugins.mqtt.config.XmlGroups;
+import org.opennms.plugins.mqtt.config.XmlRrd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

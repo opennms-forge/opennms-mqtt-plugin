@@ -3,7 +3,7 @@
 <!-- see TEST DATA - SEE Kura format https://github.com/eclipse/kapua/wiki/K-Payload-JSON-Format -->
 <!-- kura typed json encoding -->
 
-<xml-groups xmlns="http://xmlns.opennms.org/xsd/config/xml-datacollection">
+<xml-groups xmlns="http://xmlns.opennms.org/xsd/config/mqtt-datacollection">
   <xml-group name="kura-typed" resource-type="kura" resource-xpath="/" key-xpath="metrics/code/string" timestamp-xpath="sentOn" timestamp-format="">
     <xml-object name="sentOn" type="string" xpath="sentOn" />
 

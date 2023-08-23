@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<xml-groups xmlns="http://xmlns.opennms.org/xsd/config/xml-datacollection">
+<xml-groups xmlns="http://xmlns.opennms.org/xsd/config/mqtt-datacollection">
     <xml-group name="xmlfile1" resource-type="node" resource-xpath="/logToFileResponse/equipment.SystemCpuStatsLogRecord"
     key-xpath="monitoredObjectClass" 
     timestamp-xpath="timeCaptured" timestamp-format="">
