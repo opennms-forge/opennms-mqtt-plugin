@@ -40,7 +40,7 @@ import org.eclipse.paho.client.mqttv3.MqttTopic;
 import org.opennms.plugins.messagenotifier.MessageNotification;
 import org.opennms.plugins.messagenotifier.MessageNotificationClient;
 import org.opennms.plugins.mqtt.config.MQTTTopicSubscriptionXml;
-import org.opennms.plugins.mqtt.config.MessageDataParserConfig;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

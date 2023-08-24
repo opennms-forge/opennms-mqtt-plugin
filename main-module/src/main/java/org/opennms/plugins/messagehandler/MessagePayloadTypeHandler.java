@@ -1,7 +1,7 @@
 package org.opennms.plugins.messagehandler;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
+
 import java.io.InputStream;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import jline.internal.Log;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

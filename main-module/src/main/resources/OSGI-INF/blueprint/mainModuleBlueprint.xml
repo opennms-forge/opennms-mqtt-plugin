@@ -77,6 +77,7 @@
    </bean>
 
    <bean id="controller" class="org.opennms.plugins.mqtt.Controller" init-method="init" destroy-method="destroy">
+      <property name="configDirectory" value="$[karaf.etc]$[file.separator]iot-configurations.d" />
       <property name="configFile" value="$[karaf.etc]$[file.separator]mqtt-interface-config.xml" />
       <property name="nodeByForeignSourceCacheImpl" ref="nodeByForeignSourceCache" />
       <property name="notificationMessageHandler" ref="notificationMessageHandler" />

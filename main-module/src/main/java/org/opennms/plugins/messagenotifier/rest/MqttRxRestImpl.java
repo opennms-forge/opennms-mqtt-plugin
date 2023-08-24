@@ -19,7 +19,6 @@ package org.opennms.plugins.messagenotifier.rest;
 import java.util.List;
 
 import org.opennms.plugins.messagenotifier.MessageNotification;
-import org.opennms.plugins.messagenotifier.rest.MqttRxService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

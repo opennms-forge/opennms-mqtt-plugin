@@ -48,15 +48,15 @@ public class MQTTReceiverConfig {
 
 	private Set<MessageEventParserConfig> messageEventParsers=null;
 
-	private Integer maxMessageQueueLength = 1000; // default message queue length
+	private Integer maxMessageQueueLength = null; // default message queue length 1000
 	
-	private Integer maxMessageQueueThreads=1; // default one thread
+	private Integer maxMessageQueueThreads= null; // default one thread
 
-	private Boolean createMissingNodes=true;
+	private Boolean createMissingNodes= null; // default true
 
-	private Boolean createDummyInterfaces=true;
+	private Boolean createDummyInterfaces=null; // default true
 
-	private Boolean createNodeAssetData=true;
+	private Boolean createNodeAssetData=null; // default true
 
 	private Integer nodeCacheMaxTtl=null; // default  0 (Set to zero to disable TTL)
 

@@ -42,8 +42,6 @@ import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.opennms.plugins.messagehandler.OnmsCollectionAttribute;
-import org.opennms.plugins.messagehandler.OnmsCollectionAttributeMap;
 import org.opennms.plugins.mqtt.config.XmlGroup;
 import org.opennms.plugins.mqtt.config.XmlGroups;
 import org.opennms.plugins.mqtt.config.XmlObject;

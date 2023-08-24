@@ -55,6 +55,7 @@ import org.opennms.plugins.messagehandler.OnmsCollectionAttributeMap;
 import org.opennms.plugins.messagenotifier.MessageNotification;
 import org.opennms.plugins.messagenotifier.MessageNotificationClientQueueImpl;
 import org.opennms.plugins.messagenotifier.NotificationClient;
+import org.opennms.plugins.messagenotifier.osgi.OsgiIotMessageHandlerImpl;
 import org.opennms.plugins.messagenotifier.rest.MqttRxService;
 import org.opennms.plugins.messagenotifier.rest.MqttRxServiceImpl;
 import org.opennms.plugins.mqtt.Controller;
@@ -72,6 +73,8 @@ public class TestController {
 	private static final Logger LOG = LoggerFactory.getLogger(TestController.class);
 
 	public static final String TEST_CONFIG_FILE = "src/test/resources/ControllerTests/testConfig.xml";
+	
+	public static final String TEST_CONFIG_DIRECTORY = "src/test/resources/ControllerTests/iot-configurations.d";
 
 	private MqttRxService mockMqttRxService=null;
 
@@ -84,7 +87,8 @@ public class TestController {
 		LOG.debug("start testLoadConfig()");
 		Controller controller = new Controller();
 		controller.setConfigFile(TEST_CONFIG_FILE);
-		MQTTReceiverConfig mqttReceiverConfig = controller.loadConfigFile();
+		controller.setConfigDirectory(TEST_CONFIG_DIRECTORY);
+		MQTTReceiverConfig mqttReceiverConfig = controller.loadConfigFiles();
 		assertNotNull(mqttReceiverConfig);
 
 		// print out unmarshalled jaxbconfig
@@ -124,7 +128,7 @@ public class TestController {
 	public void testLoadClients() {
 		LOG.debug("start testLoadClients()");
 
-		Controller controller = loadClients(TEST_CONFIG_FILE);
+		Controller controller = loadClients(TEST_CONFIG_FILE, TEST_CONFIG_DIRECTORY);
 
 		controller.destroy();
 	}
@@ -134,7 +138,7 @@ public class TestController {
 		LOG.debug("start testSendMessagesUncompressed()");
 
 		LOG.debug("testSendMessages() loading controller configuration:");
-		Controller controller = loadClients(TEST_CONFIG_FILE);
+		Controller controller = loadClients(TEST_CONFIG_FILE, TEST_CONFIG_DIRECTORY);
 
 		LOG.debug("testSendMessages() starting controller:");
 		controller.start();
@@ -196,7 +200,7 @@ public class TestController {
 		LOG.debug("start testSendMessagesCompressed()");
 
 		LOG.debug("testSendMessages() loading controller configuration:");
-		Controller controller = loadClients(TEST_CONFIG_FILE);
+		Controller controller = loadClients(TEST_CONFIG_FILE, TEST_CONFIG_DIRECTORY);
 
 		LOG.debug("testSendMessages() starting controller:");
 		controller.start();
@@ -271,7 +275,7 @@ public class TestController {
 		LOG.debug("start testSendMessagesMultipleMatchingTopics()");
 
 		LOG.debug("testSendMessages() loading controller configuration:");
-		Controller controller = loadClients(TEST_CONFIG_FILE);
+		Controller controller = loadClients(TEST_CONFIG_FILE, TEST_CONFIG_DIRECTORY);
 
 		LOG.debug("testSendMessages() starting controller:");
 		controller.start();
@@ -361,10 +365,11 @@ public class TestController {
 	// helper methods
 	// **************
 
-	private Controller loadClients(String configFile){
+	private Controller loadClients(String configFile, String configDirectory){
 
 		Controller controller = new Controller();
 		controller.setConfigFile(configFile);
+		controller.setConfigDirectory(configDirectory);
 
 		NodeByForeignSourceCacheImpl mockNodeByForeignSourceCacheImpl= new NodeByForeignSourceCacheImpl();
 		mockNodeByForeignSourceCacheImpl.setEventIpcManager(mockEventIpcManager);
@@ -374,7 +379,12 @@ public class TestController {
 		mockMqttRxService = new MqttRxServiceImpl();
 		mockMqttRxService.setClientType("opennms-rest-client");
 		mockMqttRxService.setClientInstanceId("opennms-rest-client");
-		List<MqttRxService> messageReceiverServices = Arrays.asList( mockMqttRxService );
+		
+		MqttRxService mockOsgiRxService = new OsgiIotMessageHandlerImpl();
+		mockOsgiRxService.setClientType("osgi-iot-client");
+		mockOsgiRxService.setClientInstanceId("osgi-iot-client");
+		
+		List<MqttRxService> messageReceiverServices = Arrays.asList( mockMqttRxService, mockOsgiRxService );
 		controller.setMessageReceiverServices(messageReceiverServices);
 
 		MessageNotificationClientQueueImpl mockMessageNotificationClientQueueImpl=new MessageNotificationClientQueueImpl();

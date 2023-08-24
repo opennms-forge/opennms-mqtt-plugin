@@ -18,9 +18,6 @@ package org.opennms.plugins.messagenotifier.rest;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.opennms.plugins.messagenotifier.rest.MqttRxService;
-
-
 
 /** 
  * Used to statically pass service references to Jersey ReST classes.

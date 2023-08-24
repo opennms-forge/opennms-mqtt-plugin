@@ -54,8 +54,6 @@ import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableCo
 import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableIpInterfaceResource;
 import org.opennms.integration.api.v1.collectors.resource.immutables.ImmutableNodeResource;
 import org.opennms.integration.api.v1.runtime.RuntimeInfo;
-import org.opennms.netmgt.collection.api.CollectionStatus;
-import org.opennms.netmgt.collection.support.builder.CollectionSetBuilder;
 import org.opennms.plugins.messagenotifier.MessageNotification;
 import org.opennms.plugins.messagenotifier.osgi.OsgiIotMessageHandler;
 import org.slf4j.Logger;
