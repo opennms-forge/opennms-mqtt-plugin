@@ -1,0 +1,120 @@
+{
+    "timespan": "2023-06-25T22:35:00Z/2023-06-26T22:40:00Z",
+    "interval": "PT6H",
+    "value": [
+        {
+            "id": "subscriptions/12345678-abcd-98765432-abcdef012345/providers/Microsoft.Insights/metrics/Percentage CPU",
+            "type": "Microsoft.Insights/metrics",
+            "name": {
+                "value": "Percentage CPU",
+                "localizedValue": "Percentage CPU"
+            },
+            "displayDescription": "The percentage of allocated compute units that are currently in use by the Virtual Machine(s)",
+            "unit": "Percent",
+            "timeseries": [
+                {
+                    "metadatavalues": [
+                        {
+                            "name": {
+                                "value": "Microsoft.ResourceId",
+                                "localizedValue": "Microsoft.ResourceId"
+                            },
+                            "value": "/subscriptions/12345678-abcd-98765432-abcdef012345/resourceGroups/EASTUS-TESTING/providers/Microsoft.Compute/virtualMachines/TestVM1"
+                        }
+                    ],
+                    "data": [
+                        {
+                            "timeStamp": "2023-06-25T22:35:00Z",
+                            "average": 3.2618888888888886
+                        },
+                        {
+                            "timeStamp": "2023-06-26T04:35:00Z",
+                            "average": 4.696944444444445
+                        },
+                        {
+                            "timeStamp": "2023-06-26T10:35:00Z",
+                            "average": 6.19701388888889
+                        },
+                        {
+                            "timeStamp": "2023-06-26T16:35:00Z",
+                            "average": 2.630347222222222
+                        },
+                        {
+                            "timeStamp": "2023-06-26T22:35:00Z",
+                            "average": 21.288999999999998
+                        }
+                    ]
+                },
+                {
+                    "metadatavalues": [
+                        {
+                            "name": {
+                                "value": "Microsoft.ResourceId",
+                                "localizedValue": "Microsoft.ResourceId"
+                            },
+                            "value": "/subscriptions/12345678-abcd-98765432-abcdef012345/resourceGroups/EASTUS-TESTING/providers/Microsoft.Compute/virtualMachines/TestVM2"
+                        }
+                    ],
+                    "data": [
+                        {
+                            "timeStamp": "2023-06-25T22:35:00Z",
+                            "average": 7.567069444444444
+                        },
+                        {
+                            "timeStamp": "2023-06-26T04:35:00Z",
+                            "average": 5.111835883171071
+                        },
+                        {
+                            "timeStamp": "2023-06-26T10:35:00Z",
+                            "average": 10.078277777777778
+                        },
+                        {
+                            "timeStamp": "2023-06-26T16:35:00Z",
+                            "average": 8.399097222222222
+                        },
+                        {
+                            "timeStamp": "2023-06-26T22:35:00Z",
+                            "average": 2.647
+                        }
+                    ]
+                },
+                {
+                    "metadatavalues": [
+                        {
+                            "name": {
+                                "value": "Microsoft.ResourceId",
+                                "localizedValue": "Microsoft.ResourceId"
+                            },
+                            "value": "/subscriptions/12345678-abcd-98765432-abcdef012345/resourceGroups/Common-TESTING/providers/Microsoft.Compute/virtualMachines/CommonVM1"
+                        }
+                    ],
+                    "data": [
+                        {
+                            "timeStamp": "2023-06-25T22:35:00Z",
+                            "average": 6.892319444444444
+                        },
+                        {
+                            "timeStamp": "2023-06-26T04:35:00Z",
+                            "average": 3.5054305555555554
+                        },
+                        {
+                            "timeStamp": "2023-06-26T10:35:00Z",
+                            "average": 8.398817802503476
+                        },
+                        {
+                            "timeStamp": "2023-06-26T16:35:00Z",
+                            "average": 6.841666666666667
+                        },
+                        {
+                            "timeStamp": "2023-06-26T22:35:00Z",
+                            "average": 3.3850000000000002
+                        }
+                    ]
+                }
+            ],
+            "errorCode": "Success"
+        }
+    ],
+    "namespace": "microsoft.compute/virtualmachines",
+    "resourceregion": "eastus"
+}
