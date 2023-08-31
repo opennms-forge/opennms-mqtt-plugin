@@ -1,0 +1,34 @@
+{
+  "MetricDataResults": [
+    {
+      "Id": "errorRate",
+      "Label": "Error Rate",
+      "StatusCode": "Complete",
+      "Timestamps": [
+        1518868032,
+        1518867732,
+        1518867432
+      ],
+      "Values": [
+        0.1,
+        0.5,
+        0.3
+      ]
+    },
+    {
+      "Id": "errorRatePercent",
+      "Label": "% Error Rate",
+      "StatusCode": "Complete",
+      "Timestamps": [
+        1518868032,
+        1518867732,
+        1518867432
+      ],
+      "Values": [
+        10,
+        50,
+        30
+      ]
+    }
+  ]
+}

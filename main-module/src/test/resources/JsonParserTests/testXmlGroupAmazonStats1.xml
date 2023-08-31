@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xml-groups xmlns="http://xmlns.opennms.org/xsd/config/mqtt-datacollection">
+
+  <!-- node level resources -->
+
+  <!-- topic parsed by xpath schools-aqn/devices/sch7abp/up -->
+  <!-- ......... $topicLevels[1]....... /[2].. /[3].... /[4] etc... -->
+
+
+
+<!--   <xml-group name="azure-compute" resource-type="vm" resource-xpath="/value/timeseries/metadatavalues/value" key-xpath="gtw_id"  -->
+<!--     timestamp-xpath="value/timeseries/data/timestamp" -->
+<!--     timestamp-format="yyyy-MM-dd'T'HH:mm:ss'Z'"> -->
+
+<!--   <xml-group name="azure-compute" resource-type="vm" resource-xpath="/" key-xpath="substring-after('/value/timeseries/metadatavalues/@value','virtualMachines')" > -->
+<!--   <xml-group name="azure-compute" resource-type="vm" resource-xpath="/" key-xpath="java.lang.String.new(/value/timeseries/metadatavalues/value)" > -->
+
+  <xml-group name="azure-compute" resource-type="vm" resource-xpath="/value/timeseries/metadatavalues/value" key-xpath="substring-after(../value ,'virtualMachines/')" 
+      timestamp-xpath="../../data/timeStamp"
+      timestamp-format="yyyy-MM-dd'T'HH:mm:ss'Z'">
+
+    <xml-object name="CPU_Average" type="GAUGE" xpath="../../data[$_timeIndex]/average" />
+
+
+  </xml-group>
+
+</xml-groups>
+
+<!-- Example AWS Statistics -->
+<!-- see https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricData.html -->
+<!-- { -->
+<!--   "MetricDataResults": [ -->
+<!--     { -->
+<!--       "Id": "errorRate", -->
+<!--       "Label": "Error Rate", -->
+<!--       "StatusCode": "Complete", -->
+<!--       "Timestamps": [ -->
+<!--         1518868032, -->
+<!--         1518867732, -->
+<!--         1518867432 -->
+<!--       ], -->
+<!--       "Values": [ -->
+<!--         0.1, -->
+<!--         0.5, -->
+<!--         0.3 -->
+<!--       ] -->
+<!--     }, -->
+<!--     { -->
+<!--       "Id": "errorRatePercent", -->
+<!--       "Label": "% Error Rate", -->
+<!--       "StatusCode": "Complete", -->
+<!--       "Timestamps": [ -->
+<!--         1518868032, -->
+<!--         1518867732, -->
+<!--         1518867432 -->
+<!--       ], -->
+<!--       "Values": [ -->
+<!--         10, -->
+<!--         50, -->
+<!--         30 -->
+<!--       ] -->
+<!--     } -->
+<!--   ] -->
+<!-- } -->
