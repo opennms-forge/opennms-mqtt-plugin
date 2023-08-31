@@ -55,45 +55,48 @@ import org.w3c.dom.Document;
 public class OnmsAttributeMessageHandler {
 	private static final Logger LOG = LoggerFactory.getLogger(OnmsAttributeMessageHandler.class);
 
-	private XmlGroups source=null;
-	
-	private XmlRrd xmlRrd=null;
-	
-	private String foreignSource=null;
-	private int qos=0;
-	
-	private String topic=null;
-	
+	private XmlGroups source = null;
+
+	private XmlRrd xmlRrd = null;
+
+	private String foreignSource = null;
+	private int qos = 0;
+
+	private String topic = null;
+
 	private List<String> topicLevels = new ArrayList<String>();
 
 	/*
-	 * if foreignSourceIdentifier contains $topicLevels[n] then we use the nth element in the topic as the foreignSource
-	 * note that to match jxpath, n begins at 1 not zero
-	 * else we simply use the string
+	 * if foreignSourceIdentifier contains $topicLevels[n] then we use the nth
+	 * element in the topic as the foreignSource note that to match jxpath, n begins
+	 * at 1 not zero else we simply use the string
 	 */
-	public OnmsAttributeMessageHandler(XmlGroups source, XmlRrd xmlRrd, String topic, String foreignSourceIdentifier, int qos){
-		if(source==null)throw new IllegalStateException("XmlGroups source must not be null");
+	public OnmsAttributeMessageHandler(XmlGroups source, XmlRrd xmlRrd, String topic, String foreignSourceIdentifier,
+			int qos) {
+		if (source == null)
+			throw new IllegalStateException("XmlGroups source must not be null");
 		this.source = source;
-		this.xmlRrd=xmlRrd;
-		this.topic=topic;
-		if(topic !=null) {
+		this.xmlRrd = xmlRrd;
+		this.topic = topic;
+		if (topic != null) {
 			// split by topic level separator /
 			topicLevels = Arrays.asList(topic.split("/"));
 		}
-		
-		this.foreignSource=foreignSourceIdentifier;
-		
-		if(foreignSourceIdentifier!=null && foreignSourceIdentifier.startsWith("$topicLevels[")){
-			try{
-				//find n in $topicLevels[n] note to match jxpath, n begins at 1 not zero
-				String topicId= foreignSourceIdentifier.replace("$topicLevels[", "").replace("]","");
-				int n=Integer.parseInt(topicId) -1 ;
+
+		this.foreignSource = foreignSourceIdentifier;
+
+		if (foreignSourceIdentifier != null && foreignSourceIdentifier.startsWith("$topicLevels[")) {
+			try {
+				// find n in $topicLevels[n] note to match jxpath, n begins at 1 not zero
+				String topicId = foreignSourceIdentifier.replace("$topicLevels[", "").replace("]", "");
+				int n = Integer.parseInt(topicId) - 1;
 				this.foreignSource = topicLevels.get(n);
-			} catch (Exception ex){
-				LOG.error("cannot parse topicLevel definition for foreignSource definition:"+foreignSourceIdentifier+" against topic:"+topic, ex);
+			} catch (Exception ex) {
+				LOG.error("cannot parse topicLevel definition for foreignSource definition:" + foreignSourceIdentifier
+						+ " against topic:" + topic, ex);
 			}
 		}
-		this.qos=qos;
+		this.qos = qos;
 	}
 
 //TODO REMOVE
@@ -121,60 +124,64 @@ public class OnmsAttributeMessageHandler {
 //			throw new RuntimeException("problem parsing attributemap from json message:"+jsonStr, ex);
 //		}
 //	}
-	
-	public List<OnmsCollectionAttributeMap> payloadObjectToAttributeMap(Object payloadObject){
-		if(payloadObject instanceof JSONObject){
+
+	public List<OnmsCollectionAttributeMap> payloadObjectToAttributeMap(Object payloadObject) {
+		if (payloadObject instanceof JSONObject) {
 			return jsonToAttributeMap((JSONObject) payloadObject);
-		} else if(payloadObject instanceof Document){
+		} else if (payloadObject instanceof Document) {
 			return xmlToAttributeMap((Document) payloadObject);
-		} else if(payloadObject instanceof List ){
+		} else if (payloadObject instanceof List) {
 			return listObjectToAttributeMap((List<?>) payloadObject);
-			
-		} else throw new UnsupportedOperationException("not yet implimented - parsing this object" +payloadObject.getClass().getName());
+
+		} else
+			throw new UnsupportedOperationException(
+					"not yet implimented - parsing this object" + payloadObject.getClass().getName());
 	}
 
-	public List<OnmsCollectionAttributeMap> jsonToAttributeMap(JSONObject json){
+	public List<OnmsCollectionAttributeMap> jsonToAttributeMap(JSONObject json) {
 		List<OnmsCollectionAttributeMap> attributeMapList = new ArrayList<OnmsCollectionAttributeMap>();
 		try {
 			fillAttributeMap(attributeMapList, source, json);
 		} catch (Exception ex) {
-			throw new RuntimeException("problem parsing attributeMap from json message:"+json.toJSONString(), ex);
+			throw new RuntimeException("problem parsing attributeMap from json message:" + json.toJSONString(), ex);
 		}
 		return attributeMapList;
 	}
-	
-	public List<OnmsCollectionAttributeMap> xmlToAttributeMap(Document document){
+
+	public List<OnmsCollectionAttributeMap> xmlToAttributeMap(Document document) {
 		List<OnmsCollectionAttributeMap> attributeMapList = new ArrayList<OnmsCollectionAttributeMap>();
 		try {
 			fillAttributeMap(attributeMapList, source, document);
 		} catch (Exception ex) {
-			throw new RuntimeException("problem parsing attributeMap from xml message:"+document.toString(), ex);
+			throw new RuntimeException("problem parsing attributeMap from xml message:" + document.toString(), ex);
 		}
 		return attributeMapList;
 	}
-	
-	public List<OnmsCollectionAttributeMap> listObjectToAttributeMap(List<?> strList){
+
+	public List<OnmsCollectionAttributeMap> listObjectToAttributeMap(List<?> strList) {
 		List<OnmsCollectionAttributeMap> attributeMapList = new ArrayList<OnmsCollectionAttributeMap>();
 		try {
 			fillAttributeMap(attributeMapList, source, strList);
 		} catch (Exception ex) {
-			throw new RuntimeException("problem parsing attributeMap from list object:"+strList.toString(), ex);
+			throw new RuntimeException("problem parsing attributeMap from list object:" + strList.toString(), ex);
 		}
 		return attributeMapList;
 	}
 
-
-	public void fillAttributeMap(List<OnmsCollectionAttributeMap> attributeMapList, XmlGroups source, Object inputObject) throws ParseException {
+	public void fillAttributeMap(List<OnmsCollectionAttributeMap> attributeMapList, XmlGroups source,
+			Object inputObject) throws ParseException {
 		JXPathContext context = JXPathContext.newContext(inputObject);
-		
+
 		// add additional variables to context to be referenced within the context
 		// XPath can reference variables using the "$varname" syntax
-		// this injects the topicLevels list which can be referenced as $topicLevels[0] etc
+		// this injects the topicLevels list which can be referenced as $topicLevels[0]
+		// etc
 		context.getVariables().declareVariable("topicLevels", topicLevels);
-		LOG.debug("fillAttributeMap: setting $topicLevels in jxpath context as "+topicLevels);
+		LOG.debug("fillAttributeMap: setting $topicLevels in jxpath context as " + topicLevels);
 
 		for (XmlGroup group : source.getXmlGroups()) {
-			LOG.debug("fillAttributeMap: getting resources for XML group '{}' using XPATH '{}'", group.getName(), group.getResourceXpath());
+			LOG.debug("fillAttributeMap: getting resources for XML group '{}' using XPATH '{}'", group.getName(),
+					group.getResourceXpath());
 
 			@SuppressWarnings("unchecked")
 			Iterator<Pointer> itr = context.iteratePointers(group.getResourceXpath());
@@ -182,78 +189,88 @@ public class OnmsAttributeMessageHandler {
 			while (itr.hasNext()) {
 				JXPathContext relativeContext = context.getRelativeContext(itr.next());
 
-				Date timestamp = getTimeStamp(relativeContext, group);
-				LOG.debug("fillAttributeMap: timestamp {} ({})", timestamp.getTime(), timestamp);
+				List<Date> timestamps = getTimeStamps(relativeContext, group);
+				Integer timeIndex = 0;
+				for (Date timestamp : timestamps) {
+					timeIndex++;
+					
+					relativeContext.getVariables().declareVariable("_timeIndex", timeIndex);
 
-				String resourceName = getResourceName(relativeContext, group);
-				String foreignId= getForeignId(relativeContext, group);
-				LOG.debug("fillAttributeMap: processing node foreignId '{}' json/xml resourceName '{}' of type '{}'", foreignId, resourceName, group.getResourceType());
-				//final Resource collectionResource = getCollectionResource(agent, resourceName, group.getResourceType(), timestamp);
-				//LOG.debug("fillCollectionSet: processing resource {}", collectionResource);
-				OnmsCollectionAttributeMap onmsCollectionAttributeMap= new OnmsCollectionAttributeMap();
-				onmsCollectionAttributeMap.setXmlRrd(xmlRrd);
-				
-				//add topic and qos from notification
-				onmsCollectionAttributeMap.setQos(qos);
-				onmsCollectionAttributeMap.setForeignSource(foreignSource);
-				onmsCollectionAttributeMap.setTopic(topic);
-				
-				onmsCollectionAttributeMap.setForeignId(foreignId);
-				onmsCollectionAttributeMap.setResourceName(resourceName);
-				onmsCollectionAttributeMap.setTimestamp(timestamp);
-				for (XmlObject xmlObj : group.getXmlObjects()) {
-					LOG.debug("fillAttributeMap: XmlObject xmlObj.getXpath():"+ xmlObj.getXpath());
-					try {
-						Object valueObj = relativeContext.getValue(xmlObj.getXpath());
-						if (valueObj == null) {
-							LOG.debug("fillAttributeMap: valueObj = null for xpath "+xmlObj.getXpath());
-						} else {
-							String name=xmlObj.getName();
-							OnmsCollectionAttribute attr = new OnmsCollectionAttribute();
-							String type=xmlObj.getDataType().toString();
-							attr.setOnmsType(type);
-							String value=valueObj.toString();
-							attr.setValue(value);
-							onmsCollectionAttributeMap.getAttributeMap().put(name, attr);
-							LOG.debug("fillAttributeMap: "
-									+ " name:"+ name
-									+ " type:"+ type
-									+ " value:"+ value
-									);
+					LOG.debug("fillAttributeMap: timestamp {} ({}) _timeIndex= {}", timestamp.getTime(), timestamp, timeIndex);
 
-							//builder.withAttribute(collectionResource, group.getName(), object.getName(), obj.toString(), object.getDataType());
+					String resourceName = getResourceName(relativeContext, group);
+					String foreignId = getForeignId(relativeContext, group);
+					LOG.debug(
+							"fillAttributeMap: processing node foreignId '{}' json/xml resourceName '{}' of type '{}'",
+							foreignId, resourceName, group.getResourceType());
+					// final Resource collectionResource = getCollectionResource(agent,
+					// resourceName, group.getResourceType(), timestamp);
+					// LOG.debug("fillCollectionSet: processing resource {}", collectionResource);
+					OnmsCollectionAttributeMap onmsCollectionAttributeMap = new OnmsCollectionAttributeMap();
+					onmsCollectionAttributeMap.setXmlRrd(xmlRrd);
+
+					// add topic and qos from notification
+					onmsCollectionAttributeMap.setQos(qos);
+					onmsCollectionAttributeMap.setForeignSource(foreignSource);
+					onmsCollectionAttributeMap.setTopic(topic);
+
+					onmsCollectionAttributeMap.setForeignId(foreignId);
+					onmsCollectionAttributeMap.setResourceName(resourceName);
+					onmsCollectionAttributeMap.setTimestamp(timestamp);
+					for (XmlObject xmlObj : group.getXmlObjects()) {
+						LOG.debug("fillAttributeMap: XmlObject xmlObj.getXpath():" + xmlObj.getXpath());
+						try {
+							Object valueObj = relativeContext.getValue(xmlObj.getXpath());
+							if (valueObj == null) {
+								LOG.debug("fillAttributeMap: valueObj = null for xpath " + xmlObj.getXpath());
+							} else {
+								String name = xmlObj.getName();
+								OnmsCollectionAttribute attr = new OnmsCollectionAttribute();
+								String type = xmlObj.getDataType().toString();
+								attr.setOnmsType(type);
+								String value = valueObj.toString();
+								attr.setValue(value);
+								onmsCollectionAttributeMap.getAttributeMap().put(name, attr);
+								LOG.debug("fillAttributeMap: " + " name:" + name + " type:" + type + " value:" + value);
+
+								// builder.withAttribute(collectionResource, group.getName(), object.getName(),
+								// obj.toString(), object.getDataType());
+							}
+						} catch (Exception ex) {
+							LOG.warn("fillAttributeMap Unable to get value for {}: {}", xmlObj.getXpath(),
+									ex.getMessage());
 						}
-					} catch (Exception ex) {
-						LOG.warn("fillAttributeMap Unable to get value for {}: {}", xmlObj.getXpath(), ex.getMessage());
 					}
+					attributeMapList.add(onmsCollectionAttributeMap);
+					// processXmlResource(builder, collectionResource, resourceName,
+					// group.getName());
 				}
-				attributeMapList.add(onmsCollectionAttributeMap);
-				//processXmlResource(builder, collectionResource, resourceName, group.getName());
 			}
 		}
 	}
 
 	/**
-	 * Gets the resource name.
-	 * resource name is provided by MultipleResourceKey or is set to node
+	 * Gets the resource name. resource name is provided by MultipleResourceKey or
+	 * is set to node
 	 *
 	 * @param context the JXpath context
-	 * @param group the group
+	 * @param group   the group
 	 * @return the resource name
 	 */
 	private String getResourceName(JXPathContext context, XmlGroup group) {
 		// Processing multiple-key resource name.
 		// If XpathList doesn't exist or not found, an mqtt resource will be assumed.
-		String resourceName="mqtt";
+		String resourceName = "mqtt";
 		if (group.hasMultipleResourceKey()) {
 			List<String> keys = new ArrayList<String>();
 			for (String key : group.getXmlResourceKey().getKeyXpathList()) {
 				LOG.debug("getResourceName: getting key for resource's name using {}", key);
 				Object val = context.getValue(key);
-				String keyName = (val==null) ? null : val.toString(); // handles json Long and json string representation of long and other values
+				 // handles json Long and json string representation of long and other values
+				String keyName = (val == null) ? null : val.toString();
 				keys.add(keyName);
 			}
-			resourceName =  StringUtils.join(keys, "_");
+			resourceName = StringUtils.join(keys, "_");
 			LOG.debug("getResourceName: resource's constructed from KeyXpathList: '{}'", resourceName);
 			return resourceName;
 		} else {
@@ -264,6 +281,7 @@ public class OnmsAttributeMessageHandler {
 
 	/**
 	 * Node foreignId is provided by keyXpath
+	 * 
 	 * @param context
 	 * @param group
 	 * @return
@@ -271,52 +289,77 @@ public class OnmsAttributeMessageHandler {
 	private String getForeignId(JXPathContext context, XmlGroup group) {
 		// Processing single-key resource name.
 		LOG.debug("getForeignId: getting key for node foreignId using {}", group.getKeyXpath());
-		return (String)context.getValue(group.getKeyXpath());
+		return (String) context.getValue(group.getKeyXpath());
 	}
-
 
 	/**
 	 * Gets the time stamp.
 	 * 
 	 * @param context the JXPath context
-	 * @param group the group
+	 * @param group   the group
 	 * @return the time stamp
 	 */
-	protected Date getTimeStamp(JXPathContext context, XmlGroup group) {
-		
+	protected List<Date> getTimeStamps(JXPathContext context, XmlGroup group) {
+
 		// use current date if cannot parse from another source
-		Date timestamp = new Date(); 
-		
+		Date timestamp = new Date();
+		List<Date> timeStamps = new ArrayList<Date>();
+
 		if (group.getTimestampXpath() == null) {
 			// if no timestampXpath defined use current date
-			LOG.debug("getTimeStamp: getTimestampXpath() = null. Using current Date :"+timestamp.getTime()+" ("+timestamp+")");
-			return timestamp ; 
+			LOG.debug("getTimeStamp: getTimestampXpath() = null. Using current Date :" + timestamp.getTime() + " ("
+					+ timestamp + ")");
+			timeStamps.add(timestamp);
+			return timeStamps;
 		}
-		
+
 		String pattern = group.getTimestampFormat() == null ? "yyyy-MM-dd HH:mm:ss" : group.getTimestampFormat();
 
-		LOG.debug("getTimeStamp: retrieving custom timestamp to be used when updating RRDs using XPATH '{}' and pattern '{}'", group.getTimestampXpath(), pattern);
+		LOG.debug(
+				"getTimeStamp: retrieving custom timestamps to be used when updating RRDs using XPATH '{}' and pattern '{}'",
+				group.getTimestampXpath(), pattern);
 
-		Object val = context.getValue(group.getTimestampXpath());
-		String value = (val==null) ? null : val.toString(); // handles json Long and json string representation of long and other values
+		@SuppressWarnings("unchecked")
+		Iterator<Pointer> itr = context.iteratePointers(group.getTimestampXpath());
 		
-		// if pattern is empty treat as ms long value
-		if("".equals(pattern)){
-			try {
-				long datems = Long.parseLong(value);
-				timestamp = new Date(datems);
-			} catch (Exception e) {
-				LOG.warn("getTimeStamp: (Empty Pattern). Can't convert custom timestamp {} as long to new Date(long)", value);
-			}
-		}else try {
-			DateTimeFormatter dtf = DateTimeFormat.forPattern(pattern);
-			DateTime dateTime = dtf.parseDateTime(value);
-			timestamp = dateTime.toDate();
-		} catch (Exception e) {
-			LOG.warn("getTimeStamp: can't convert custom timestamp {} using pattern {}", value, pattern);
+		if(!itr.hasNext()) {
+			LOG.debug("getTimeStamp: no pointers found for TimestampXpath:"+group.getTimestampXpath());
 		}
-		LOG.debug("getTimeStamp: returning timestamp time="+timestamp.getTime());
-		return timestamp;
+		
+		while (itr.hasNext()) {
+
+			Pointer ptr = itr.next();
+			JXPathContext subContext = context.getRelativeContext(ptr);
+
+			Object val = subContext.getValue(".");
+			LOG.debug("getTimeStamp: iterator value object:"+val.toString());
+			
+			// handles json Long and json string representation of long and other values
+			String value = (val == null) ? null : val.toString(); 
+
+			// if pattern is empty treat as ms long value
+			if ("".equals(pattern)) {
+				try {
+					long datems = Long.parseLong(value);
+					timestamp = new Date(datems);
+				} catch (Exception e) {
+					LOG.warn(
+							"getTimeStamp: (Empty Pattern). Can't convert custom timestamp {} as long to new Date(long)",
+							value);
+				}
+			} else
+				try {
+					DateTimeFormatter dtf = DateTimeFormat.forPattern(pattern);
+					DateTime dateTime = dtf.parseDateTime(value);
+					timestamp = dateTime.toDate();
+				} catch (Exception e) {
+					LOG.warn("getTimeStamp: can't convert custom timestamp {} using pattern {}", value, pattern);
+				}
+			LOG.debug("getTimeStamp: returning timestamp time=" + timestamp.getTime());
+			timeStamps.add(timestamp);
+		}
+
+		return timeStamps;
 	}
 
 }

@@ -15,13 +15,11 @@
 <!--   <xml-group name="azure-compute" resource-type="vm" resource-xpath="/" key-xpath="substring-after('/value/timeseries/metadatavalues/@value','virtualMachines')" > -->
 <!--   <xml-group name="azure-compute" resource-type="vm" resource-xpath="/" key-xpath="java.lang.String.new(/value/timeseries/metadatavalues/value)" > -->
 
-  <xml-group name="azure-compute" resource-type="vm" resource-xpath="/value/timeseries/metadatavalues/value" key-xpath="substring-after(../value ,'virtualMachines/')" >
+  <xml-group name="azure-compute" resource-type="vm" resource-xpath="/value/timeseries/metadatavalues/value" key-xpath="substring-after(../value ,'virtualMachines/')" 
+      timestamp-xpath="../../data/timeStamp"
+      timestamp-format="yyyy-MM-dd'T'HH:mm:ss'Z'">
 
-
-
-
-    <!-- <xml-object name="time" type="string" xpath="../time" /> -->
-    <xml-object name="frequency" type="string" xpath="../frequency" />
+    <xml-object name="CPU_Average" type="GAUGE" xpath="../../data[$_timeIndex]/average" />
 
 
   </xml-group>

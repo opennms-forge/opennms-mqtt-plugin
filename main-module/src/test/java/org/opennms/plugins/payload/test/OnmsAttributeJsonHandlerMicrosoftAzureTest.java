@@ -33,8 +33,8 @@ import org.opennms.plugins.mqtt.config.XmlRrd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OnmsAttributeJsonHandlerTestMicrosoftAzure {
-	private static final Logger LOG = LoggerFactory.getLogger(OnmsAttributeJsonHandlerTestMicrosoftAzure.class);
+public class OnmsAttributeJsonHandlerMicrosoftAzureTest {
+	private static final Logger LOG = LoggerFactory.getLogger(OnmsAttributeJsonHandlerMicrosoftAzureTest.class);
 
 	// complex parsing - based upon opennms xml collector example
 	// https://wiki.opennms.org/wiki/XML_Collector
@@ -58,7 +58,7 @@ public class OnmsAttributeJsonHandlerTestMicrosoftAzure {
 
 	@Test
 	public void test1() {
-		LOG.debug("start OnmsAttributeJsonHandlerTestMicrosoftAzure test1");
+		LOG.debug("start OnmsAttributeJsonHandlerMicrosoftAzureTest test1");
 
 		String xmlGroupFile = TEST_MICROSOFT_XMLGROUP_1;
 		String jsonFile = TEST_MICROSOFT_JSON_1;
@@ -66,21 +66,16 @@ public class OnmsAttributeJsonHandlerTestMicrosoftAzure {
 
 		List<OnmsCollectionAttributeMap> attributeMapList = testMethod(xmlGroupFile, jsonFile, topic);
 
-//		assertTrue(attributeMapList.size() == 2);
+		assertTrue(attributeMapList.size() == 15);
 
-//		// message 1
-//		assertTrue("mqtt".equals(attributeMapList.get(0).getResourceName()));
-//		assertTrue("global".equals(attributeMapList.get(0).getForeignId()));
-//		assertTrue(new Long(1299258888).equals(new Long(attributeMapList.get(0).getTimestamp().getTime()))); 
-//		assertEquals("245",attributeMapList.get(0).getAttributeMap().get("nproc").getValue() );
-//		
-//		// message 2
-//		assertTrue("mqtt".equals(attributeMapList.get(0).getResourceName()));
-//		assertTrue("zone1".equals(attributeMapList.get(1).getForeignId()));
-//		assertTrue(new Long(1299259999).equals(new Long(attributeMapList.get(1).getTimestamp().getTime()))); 
-//		assertEquals("24",attributeMapList.get(1).getAttributeMap().get("nproc").getValue() );
+		// timestamp 1
+		assertTrue("mqtt".equals(attributeMapList.get(0).getResourceName()));
+		assertTrue("TestVM1".equals(attributeMapList.get(0).getForeignId()));
+		assertTrue(new Long(1687728900000L).equals(new Long(attributeMapList.get(0).getTimestamp().getTime()))); 
+		assertEquals("3.2618888888888886",attributeMapList.get(0).getAttributeMap().get("CPU_Average").getValue() );
 
-		LOG.debug("end OnmsAttributeJsonHandlerTestMicrosoftAzure test1");
+
+		LOG.debug("end OnmsAttributeJsonHandlerMicrosoftAzureTest test1");
 	}
 
 	/*
@@ -128,7 +123,7 @@ public class OnmsAttributeJsonHandlerTestMicrosoftAzure {
 		List<OnmsCollectionAttributeMap> attributeMapList = onmsAttributeMessageHandler
 				.payloadObjectToAttributeMap(payloadObj);
 
-		LOG.debug("attributeMap: \n    attributeMap.size: " + attributeMapList.size() + "\n    attributeMap.toString: "
+		LOG.debug("attributeMap: \n    attributeMap.size: " + attributeMapList.size() + "\n    attributeMap.toString:\n    "
 				+ attributeMapList.toString().replaceAll("],", "],\n    "));
 
 		return attributeMapList;
