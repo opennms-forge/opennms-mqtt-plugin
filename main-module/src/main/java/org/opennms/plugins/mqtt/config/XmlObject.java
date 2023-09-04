@@ -55,11 +55,15 @@ public class XmlObject implements Serializable, Comparable<XmlObject>, Cloneable
     /** The Constant serialVersionUID. */
     private static final long serialVersionUID = -774378322863486535L;
 
-    /** The object name (or alias). */
-    @XmlAttribute(name="name", required=true)
+    /** The object name (or alias). Either name or name-xpath must be set but not both*/
+    @XmlAttribute(name="name", required=false)
     private String m_name;
+    
+    /** The object name xpath This provides an xpath to the name for the object. Either name or name-xpath must be set but not both */
+    @XmlAttribute(name="name-xpath", required=false)
+    private String m_nameXpath;
 
-    /** The data type. */
+	/** The data type. */
     @XmlAttribute(name="type", required=true)
     private AttributeType m_dataType;
 
@@ -93,6 +97,7 @@ public class XmlObject implements Serializable, Comparable<XmlObject>, Cloneable
         m_name = copy.m_name;
         m_dataType = copy.m_dataType;
         m_xpath = copy.m_xpath;
+        m_nameXpath = copy.m_nameXpath;
         copy.xmlMappings.stream().forEach(o -> xmlMappings.add(o.clone()));
     }
 
@@ -149,6 +154,24 @@ public class XmlObject implements Serializable, Comparable<XmlObject>, Cloneable
     public void setXpath(String xpath) {
         m_xpath = xpath;
     }
+    
+    /**
+     * Gets the name XPath.
+     *
+     * @return the XPath
+     */
+    public String getNameXpath() {
+		return m_nameXpath;
+	}
+
+    /**
+     * Sets the name XPath.
+     *
+     * @param xpath the new XPath
+     */
+	public void setNameXpath(String nameXpath) {
+		this.m_nameXpath = nameXpath;
+	}
 
     /* (non-Javadoc)
      * @see java.lang.Comparable#compareTo(java.lang.Object)
@@ -157,6 +180,7 @@ public class XmlObject implements Serializable, Comparable<XmlObject>, Cloneable
     public int compareTo(XmlObject obj) {
         return new CompareToBuilder()
         .append(getName(), obj.getName())
+        .append(getNameXpath(), obj.getNameXpath())
         .append(getDataType(), obj.getDataType())
         .append(getXpath(), obj.getXpath())
         .append(getXmlMappings().toArray(OF_XML_MAPPINGS), obj.getXmlMappings().toArray(OF_XML_MAPPINGS))
@@ -172,6 +196,7 @@ public class XmlObject implements Serializable, Comparable<XmlObject>, Cloneable
             XmlObject other = (XmlObject) obj;
             return new EqualsBuilder()
             .append(getName(), other.getName())
+            .append(getNameXpath(), other.getNameXpath())
             .append(getDataType(), other.getDataType())
             .append(getXpath(), other.getXpath())
             .append(getXmlMappings().toArray(OF_XML_MAPPINGS), other.getXmlMappings().toArray(OF_XML_MAPPINGS))

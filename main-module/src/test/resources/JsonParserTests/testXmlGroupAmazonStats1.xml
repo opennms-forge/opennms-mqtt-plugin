@@ -22,7 +22,8 @@
         <key-xpath>$topicLevels[1]</key-xpath>
         <key-xpath>Id</key-xpath>
     </resource-key>
-    <xml-object name="value" type="GAUGE" xpath="Values[$_timeIndex]" />
+    <!--  <xml-object name="value" type="GAUGE" xpath="Values[$_timeIndex]" /> -->
+    <xml-object  name-xpath="Id" type="GAUGE" xpath="Values[$_timeIndex]" />
   </xml-group>
 
 </xml-groups>

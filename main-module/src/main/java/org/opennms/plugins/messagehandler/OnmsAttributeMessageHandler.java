@@ -193,10 +193,11 @@ public class OnmsAttributeMessageHandler {
 				Integer timeIndex = 0;
 				for (Date timestamp : timestamps) {
 					timeIndex++;
-					
+
 					relativeContext.getVariables().declareVariable("_timeIndex", timeIndex);
 
-					LOG.debug("fillAttributeMap: timestamp {} ({}) _timeIndex= {}", timestamp.getTime(), timestamp, timeIndex);
+					LOG.debug("fillAttributeMap: timestamp {} ({}) _timeIndex= {}", timestamp.getTime(), timestamp,
+							timeIndex);
 
 					String resourceName = getResourceName(relativeContext, group);
 					String foreignId = getForeignId(relativeContext, group);
@@ -218,13 +219,27 @@ public class OnmsAttributeMessageHandler {
 					onmsCollectionAttributeMap.setResourceName(resourceName);
 					onmsCollectionAttributeMap.setTimestamp(timestamp);
 					for (XmlObject xmlObj : group.getXmlObjects()) {
-						LOG.debug("fillAttributeMap: XmlObject xmlObj.getXpath():" + xmlObj.getXpath());
+						LOG.debug("fillAttributeMap: XmlObject xmlObj.getName() " + xmlObj.getName()
+								+ " xmlObj.getNameXpath() " + xmlObj.getNameXpath() + "xmlObj.getXpath():"
+								+ xmlObj.getXpath());
 						try {
 							Object valueObj = relativeContext.getValue(xmlObj.getXpath());
 							if (valueObj == null) {
 								LOG.debug("fillAttributeMap: valueObj = null for xpath " + xmlObj.getXpath());
 							} else {
 								String name = xmlObj.getName();
+
+								if (xmlObj.getNameXpath() != null) {
+									if (name == null) {
+										name = (String) relativeContext.getValue(xmlObj.getNameXpath());
+									} else {
+										LOG.warn("XmlObject xmlObj.getName()" + xmlObj.getName()
+												+ " and xmlObj.getNameXpath() " + xmlObj.getNameXpath()
+												+ " SHOULD NOT BOTH BE SET. Using name = xmlObj.getName()="
+												+ xmlObj.getName());
+									}
+								}
+
 								OnmsCollectionAttribute attr = new OnmsCollectionAttribute();
 								String type = xmlObj.getDataType().toString();
 								attr.setOnmsType(type);
@@ -266,7 +281,7 @@ public class OnmsAttributeMessageHandler {
 			for (String key : group.getXmlResourceKey().getKeyXpathList()) {
 				LOG.debug("getResourceName: getting key for resource's name using {}", key);
 				Object val = context.getValue(key);
-				 // handles json Long and json string representation of long and other values
+				// handles json Long and json string representation of long and other values
 				String keyName = (val == null) ? null : val.toString();
 				keys.add(keyName);
 			}
@@ -321,21 +336,21 @@ public class OnmsAttributeMessageHandler {
 
 		@SuppressWarnings("unchecked")
 		Iterator<Pointer> itr = context.iteratePointers(group.getTimestampXpath());
-		
-		if(!itr.hasNext()) {
-			LOG.debug("getTimeStamp: no pointers found for TimestampXpath:"+group.getTimestampXpath());
+
+		if (!itr.hasNext()) {
+			LOG.debug("getTimeStamp: no pointers found for TimestampXpath:" + group.getTimestampXpath());
 		}
-		
+
 		while (itr.hasNext()) {
 
 			Pointer ptr = itr.next();
 			JXPathContext subContext = context.getRelativeContext(ptr);
 
 			Object val = subContext.getValue(".");
-			LOG.debug("getTimeStamp: iterator value object:"+val.toString());
-			
+			LOG.debug("getTimeStamp: iterator value object:" + val.toString());
+
 			// handles json Long and json string representation of long and other values
-			String value = (val == null) ? null : val.toString(); 
+			String value = (val == null) ? null : val.toString();
 
 			// if pattern is empty treat as ms long value
 			if ("".equals(pattern)) {
