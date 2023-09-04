@@ -31,6 +31,7 @@ package org.opennms.plugins.iot.collector;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
@@ -82,23 +83,6 @@ public class IoTCollector implements ServiceCollector {
 
 	public void setOsgiIotMessageHandlerservice(OsgiIotMessageHandler osgiIotMessageHandlerservice) {
 		this.osgiIotMessageHandlerservice = osgiIotMessageHandlerservice;
-	}
-
-
-	public byte[] copyURLToByteArray(final String urlStr, final int connectionTimeout, final int readTimeout)
-			throws IOException {
-		final URL url = new URL(urlStr);
-		final URLConnection connection = url.openConnection();
-		connection.setConnectTimeout(connectionTimeout);
-		connection.setReadTimeout(readTimeout);
-		try (InputStream input = connection.getInputStream();
-				ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-			final byte[] buffer = new byte[8192];
-			for (int count; (count = input.read(buffer)) > 0;) {
-				output.write(buffer, 0, count);
-			}
-			return output.toByteArray();
-		}
 	}
 
 	@Override
@@ -154,8 +138,36 @@ public class IoTCollector implements ServiceCollector {
 				qos = Integer.parseInt((String) parameters.get(COLLECTION_QOS_KEY));
 			}
 			
-			byte[] messagebytes = copyURLToByteArray(urlStr,connectionTimeout, readTimeout);
-
+			byte[] messagebytes = null;
+			URL url = new URL(urlStr);
+			URLConnection connection = url.openConnection();
+			connection.setConnectTimeout(connectionTimeout);
+			connection.setReadTimeout(readTimeout);
+//TODO CREATE POST GET AND PROPERTIES	
+//			connection.setRequestMethod("POST");
+//			connection.setRequestProperty("Content-Type", "application/json");
+//			connection.setRequestProperty("Accept", "application/json");
+//			connection.setDoOutput(true);
+//			String jsonInputString = "{}";
+			
+//			Host: management.azure.com
+//			Content-Type: application/json
+//			Authorization: Bearer <access token>
+//
+//			try(OutputStream os = connection.getOutputStream()) {
+//			    byte[] input = jsonInputString.getBytes("utf-8");
+//			    os.write(input, 0, input.length);			
+//			}
+			
+			try (InputStream input = connection.getInputStream();
+					ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+				final byte[] buffer = new byte[8192];
+				for (int count; (count = input.read(buffer)) > 0;) {
+					output.write(buffer, 0, count);
+				}
+				messagebytes = output.toByteArray();
+			}
+			
 			String topic = (String) parameters.get(COLLECTION_TOPIC_KEY);
 			if(topic==null) throw new IllegalArgumentException("IoT collection topic  "+COLLECTION_TOPIC_KEY+" not set");
 
