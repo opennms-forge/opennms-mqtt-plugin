@@ -12,6 +12,8 @@
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+      <maven.compiler.target>1.8</maven.compiler.target>
+      <maven.compiler.source>1.8</maven.compiler.source>
 
       <!-- Note must set project.artifactId explicitly as karaf-pluginmanager-archetypeexpression is re-evaluated in each sub module !! -->
       <!-- <productId>org.opennms.plugins/karaf-pluginmanager-archetype/1.1.0-SNAPSHOT</productId> -->

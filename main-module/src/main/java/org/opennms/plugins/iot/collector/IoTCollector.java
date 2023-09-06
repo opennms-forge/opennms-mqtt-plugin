@@ -28,13 +28,23 @@
 
 package org.opennms.plugins.iot.collector;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
+import java.net.HttpURLConnection;
+import java.util.Base64;
+
+import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.SSLContext;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -90,15 +100,27 @@ public class IoTCollector implements ServiceCollector {
 		LOG.debug("initialize: Initializing IotCollector.");
 		// pass
 	}
-
-	public static final String COLLECTION_URL_KEY = "collectionUrl";
-	public static final String CONNECTION_TIMEOUT = "connectionTimeout";
-	public static final String READ_TIMEOUT = "readTimeout";
+	
 	public static final int DEFAULT_CONNECTION_TIMEOUT = 1000; // 1000ms = 1s
 	public static final int DEFAULT_READ_TIMEOUT = 1000;
-	public static final int DEFAULT_QOS=0;
-	public static final String COLLECTION_TOPIC_KEY="collectionTopic";
-	public static final String COLLECTION_QOS_KEY="collectionQos";
+	public static final int DEFAULT_QOS = 0;
+
+	public static final String COLLECTION_URL_KEY = "collectionUrl";
+	public static final String CONNECTION_TIMEOUT_KEY = "connectionTimeout";
+	public static final String READ_TIMEOUT_KEY = "readTimeout";
+
+	public static final String COLLECTION_TOPIC_KEY = "collectionTopic";
+	public static final String COLLECTION_QOS_KEY = "collectionQos";
+	
+	public static final String HTTP_REQUEST_METHOD_KEY = "requestMethod";
+	public static final String IGNORE_HOST_CERTIFICATE_KEY = "ignoreHostCertificate";
+	public static final String HTTP_ACCEPT_KEY = "acceptType";
+	public static final String HTTP_CONTENT_TYPE_KEY = "contentType";
+	public static final String HTTP_REQUEST_BODY_KEY = "requestBody";
+	
+	public static final String HTTP_BEARER_AUTHORISATION_KEY = "bearerAuthorisation";
+	public static final String HTTP_USERNAME_KEY = "username";
+	public static final String HTTP_PASSWORD_KEY = "password";
 
 	@Override
 	public CompletableFuture<CollectionSet> collect(CollectionRequest agent, Map<String, Object> parameters) {
@@ -120,60 +142,125 @@ public class IoTCollector implements ServiceCollector {
 		try {
 
 			String urlStr = (String) parameters.get(COLLECTION_URL_KEY);
-			if(urlStr==null) throw new IllegalArgumentException("collection url key "+COLLECTION_URL_KEY+" not set");
+			if (urlStr == null)
+				throw new IllegalArgumentException("collection url key " + COLLECTION_URL_KEY + " not set");
 
 			int connectionTimeout = DEFAULT_CONNECTION_TIMEOUT;
 			int readTimeout = DEFAULT_READ_TIMEOUT;
 			int qos = DEFAULT_QOS;
-
-			if (parameters.get(CONNECTION_TIMEOUT) != null) {
-				connectionTimeout = Integer.parseInt((String) parameters.get(CONNECTION_TIMEOUT));
-			}
-
-			if (parameters.get(READ_TIMEOUT) != null) {
-				readTimeout = Integer.parseInt((String) parameters.get(READ_TIMEOUT));
+			
+			String requestMethod=(String) parameters.get(HTTP_REQUEST_METHOD_KEY);
+			String requestBodyString = (String)parameters.get(HTTP_REQUEST_BODY_KEY);
+			String contentType=(String)parameters.get(HTTP_CONTENT_TYPE_KEY);
+			String acceptType=(String) parameters.get(HTTP_ACCEPT_KEY);
+			
+			String bearerAuthorisation = (String) parameters.get(HTTP_BEARER_AUTHORISATION_KEY);
+			String username = (String) parameters.get(HTTP_USERNAME_KEY);
+			String password = (String) parameters.get(HTTP_PASSWORD_KEY);
+			
+			
+			boolean ignoreHostCertificate = false;
+			if (parameters.get(IGNORE_HOST_CERTIFICATE_KEY) != null) {
+				ignoreHostCertificate = Boolean.valueOf((String) parameters.get(IGNORE_HOST_CERTIFICATE_KEY));
 			}
 			
+			if (parameters.get(CONNECTION_TIMEOUT_KEY) != null) {
+				connectionTimeout = Integer.parseInt((String) parameters.get(CONNECTION_TIMEOUT_KEY));
+			}
+
+			if (parameters.get(READ_TIMEOUT_KEY) != null) {
+				readTimeout = Integer.parseInt((String) parameters.get(READ_TIMEOUT_KEY));
+			}
+
 			if (parameters.get(COLLECTION_QOS_KEY) != null) {
 				qos = Integer.parseInt((String) parameters.get(COLLECTION_QOS_KEY));
 			}
+
 			
 			byte[] messagebytes = null;
 			URL url = new URL(urlStr);
-			URLConnection connection = url.openConnection();
+			URLConnection connection = null;
+
+			// check protocols
+			if ("ftp".equals(url.getProtocol())) {
+				// experimental ftp connection - may only work with sun jdk
+				connection = url.openConnection();
+				
+			} else if ("https".equals(url.getProtocol()) || "http".equals(url.getProtocol())) {
+				HttpURLConnection httpcon = null;
+
+				if ("https".equals(url.getProtocol())) {
+
+					HttpsURLConnection httpscon = (HttpsURLConnection) url.openConnection();
+					
+					if(ignoreHostCertificate) {
+					// Install the all-trusting trust manager
+					SSLContext sc = SSLContext.getInstance("SSL");
+					sc.init(null, trustAllCerts, new java.security.SecureRandom());
+					httpscon.setSSLSocketFactory(sc.getSocketFactory());
+					}
+
+					httpcon = httpscon;
+
+				} else {
+					httpcon = (HttpURLConnection) url.openConnection();
+				}
+
+				httpcon.setDoInput(true);
+				httpcon.setDoOutput(true);
+				httpcon.setUseCaches(false);
+				
+				httpcon.setRequestMethod(requestMethod);
+
+				httpcon.setRequestProperty("Content-Type", contentType ); 
+				httpcon.setRequestProperty("Accept", acceptType);
+				
+				if(bearerAuthorisation!=null){
+					httpcon.setRequestProperty("Authorization", "Bearer "+ bearerAuthorisation);
+				} else if(username !=null) {
+					String auth = username + ":" + password;
+					byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.UTF_8));
+					httpcon.setRequestProperty("Authorization", "Basic "+ new String(encodedAuth));
+				}
+				
+//				Host: management.azure.com
+//				Content-Type: application/json
+//				Authorization: Bearer <access token>
+				//
+				connection = httpcon;
+
+			} else {
+				throw new IllegalArgumentException("unsupported protocol " + url.getProtocol() + " in url " + urlStr);
+			}
+
 			connection.setConnectTimeout(connectionTimeout);
 			connection.setReadTimeout(readTimeout);
-//TODO CREATE POST GET AND PROPERTIES	
-//			connection.setRequestMethod("POST");
-//			connection.setRequestProperty("Content-Type", "application/json");
-//			connection.setRequestProperty("Accept", "application/json");
-//			connection.setDoOutput(true);
-//			String jsonInputString = "{}";
-			
-//			Host: management.azure.com
-//			Content-Type: application/json
-//			Authorization: Bearer <access token>
-//
-//			try(OutputStream os = connection.getOutputStream()) {
-//			    byte[] input = jsonInputString.getBytes("utf-8");
-//			    os.write(input, 0, input.length);			
-//			}
-			
-			try (InputStream input = connection.getInputStream();
-					ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+
+			try (InputStream inputstream = connection.getInputStream();
+					ByteArrayOutputStream bytestream = new ByteArrayOutputStream();
+					OutputStream outputstream = connection.getOutputStream()
+
+			) {
+
+				// send request
+				byte[] requestbytes = requestBodyString.getBytes("utf-8");
+				outputstream.write(requestbytes, 0, requestbytes.length);
+
+				// receive response
 				final byte[] buffer = new byte[8192];
-				for (int count; (count = input.read(buffer)) > 0;) {
-					output.write(buffer, 0, count);
+				for (int count; (count = inputstream.read(buffer)) > 0;) {
+					bytestream.write(buffer, 0, count);
 				}
-				messagebytes = output.toByteArray();
+				messagebytes = bytestream.toByteArray();
 			}
-			
+
 			String topic = (String) parameters.get(COLLECTION_TOPIC_KEY);
-			if(topic==null) throw new IllegalArgumentException("IoT collection topic  "+COLLECTION_TOPIC_KEY+" not set");
+			if (topic == null)
+				throw new IllegalArgumentException("IoT collection topic  " + COLLECTION_TOPIC_KEY + " not set");
 
 			MessageNotification messageNotification = new MessageNotification(topic, qos, messagebytes);
 			osgiIotMessageHandlerservice.messageArrived(messageNotification);
-			
+
 			LOG.info("Sample Collector collection Succeeded");
 
 		} catch (Exception ex) {
@@ -262,4 +349,20 @@ public class IoTCollector implements ServiceCollector {
 			return defaultValue;
 		}
 	}
+
+	// see
+	// https://stackoverflow.com/questions/1201048/allowing-java-to-use-an-untrusted-certificate-for-ssl-https-connection
+	// Create a trust manager that does not validate certificate chains
+	TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+		public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+			return null;
+		}
+
+		public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {
+		}
+
+		public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {
+		}
+	} };
+
 }
