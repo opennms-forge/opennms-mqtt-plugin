@@ -211,7 +211,9 @@ public class IoTCollector implements ServiceCollector {
 				}
 
 				httpcon.setDoInput(true);
-				httpcon.setDoOutput(true);
+				
+				if (requestBodyString != null && ! requestBodyString.isEmpty()) httpcon.setDoOutput(true);
+				
 				httpcon.setUseCaches(false);
 
 				httpcon.setRequestMethod(requestMethod);
@@ -220,6 +222,7 @@ public class IoTCollector implements ServiceCollector {
 				httpcon.setRequestProperty("Accept", acceptType);
 
 				if (bearerAuthorisation != null) {
+					// this is type of bearer for azure data
 					// Host: management.azure.com
 					// Content-Type: application/json
 					// Authorization: Bearer <access token>
@@ -239,25 +242,33 @@ public class IoTCollector implements ServiceCollector {
 
 			connection.setConnectTimeout(connectionTimeout);
 			connection.setReadTimeout(readTimeout);
+			
+			OutputStream outputstream=null;
+			InputStream inputstream=null;
+			ByteArrayOutputStream bytestream = new ByteArrayOutputStream();
 
-			try (InputStream inputstream = connection.getInputStream();
-					ByteArrayOutputStream bytestream = new ByteArrayOutputStream();
-					OutputStream outputstream = connection.getOutputStream()
+			try {
 
-			) {
-
-				// send request
-				if (requestBodyString != null) {
+				// send request body if any
+				if (requestBodyString != null && ! requestBodyString.isEmpty()) {
+					outputstream = connection.getOutputStream();
 					byte[] requestbytes = requestBodyString.getBytes("utf-8");
 					outputstream.write(requestbytes, 0, requestbytes.length);
 				}
 
+				inputstream = connection.getInputStream();
 				// receive response
 				final byte[] buffer = new byte[8192];
 				for (int count; (count = inputstream.read(buffer)) > 0;) {
 					bytestream.write(buffer, 0, count);
 				}
 				messagebytes = bytestream.toByteArray();
+			} catch (Exception ex) {
+				throw new RuntimeException("connection failed",ex);
+			} finally {
+				if(outputstream!=null) outputstream.close();
+				if(inputstream!=null) inputstream.close();
+				bytestream.close();
 			}
 
 			String topic = (String) parameters.get(COLLECTION_TOPIC_KEY);

@@ -13,7 +13,8 @@
          <service name="xmlfileinternal" interval="300000" user-defined="false" status="on">
             <parameter key="collectionUrl" value="http://restsimulator:8080/nokia/data?count=5&amp;interval=60000" />
             <parameter key="requestMethod" value="GET" />
-            <parameter key="acceptType" value="application/json" />
+            <parameter key="acceptType" value="application/xml" />
+            <parameter key="collectionTopic" value="nokia-data" />
             <parameter key="collectionQos" value="0" />
         </service>
     </package>
