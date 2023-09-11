@@ -185,10 +185,13 @@ public class IoTCollector implements ServiceCollector {
 
 			// check protocols
 
+			// file:///usr/share/opennms/...
 			if ("file".equals(url.getProtocol())) {
 				connection = url.openConnection();
 			} else if ("ftp".equals(url.getProtocol())) {
-				// experimental ftp connection - may only work with sun jdk
+				// https://www.codejava.net/java-se/ftp/use-urlconnection-to-download-file-from-ftp-server
+				// The technique is based on RFC 1738 specification which defines URL format for FTP access as follows:
+                // ftp://user:password@host:port/path
 				connection = url.openConnection();
 			} else if ("https".equals(url.getProtocol()) || "http".equals(url.getProtocol())) {
 				HttpURLConnection httpcon = null;
