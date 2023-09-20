@@ -38,8 +38,11 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.net.HttpURLConnection;
 import java.util.Base64;
+import java.util.Date;
 
 import javax.net.ssl.X509TrustManager;
 import javax.net.ssl.HttpsURLConnection;
@@ -49,6 +52,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
+import org.opennms.core.utils.jexl.OnmsJexlEngine;
 import org.opennms.integration.api.v1.collectors.CollectionRequest;
 import org.opennms.integration.api.v1.collectors.CollectionSet;
 import org.opennms.integration.api.v1.collectors.ServiceCollector;
@@ -69,6 +73,13 @@ import org.opennms.plugins.messagenotifier.MessageNotification;
 import org.opennms.plugins.messagenotifier.osgi.OsgiIotMessageHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.apache.commons.jexl2.JexlContext;
+import org.apache.commons.jexl2.JexlException;
+import org.apache.commons.jexl2.MapContext;
+import org.apache.commons.jexl2.ReadonlyContext;
+import org.apache.commons.jexl2.UnifiedJEXL;
+import org.apache.commons.jexl2.Expression;
 
 public class IoTCollector implements ServiceCollector {
 
@@ -121,6 +132,8 @@ public class IoTCollector implements ServiceCollector {
 	public static final String HTTP_BEARER_AUTHORISATION_KEY = "bearerAuthorisation";
 	public static final String HTTP_USERNAME_KEY = "username";
 	public static final String HTTP_PASSWORD_KEY = "password";
+	
+	public static final String DATEFORMAT_KEY = "dateFormat";
 
 	@Override
 	public CompletableFuture<CollectionSet> collect(CollectionRequest agent, Map<String, Object> parameters) {
@@ -190,8 +203,9 @@ public class IoTCollector implements ServiceCollector {
 				connection = url.openConnection();
 			} else if ("ftp".equals(url.getProtocol())) {
 				// https://www.codejava.net/java-se/ftp/use-urlconnection-to-download-file-from-ftp-server
-				// The technique is based on RFC 1738 specification which defines URL format for FTP access as follows:
-                // ftp://user:password@host:port/path
+				// The technique is based on RFC 1738 specification which defines URL format for
+				// FTP access as follows:
+				// ftp://user:password@host:port/path
 				connection = url.openConnection();
 			} else if ("https".equals(url.getProtocol()) || "http".equals(url.getProtocol())) {
 				HttpURLConnection httpcon = null;
@@ -214,9 +228,10 @@ public class IoTCollector implements ServiceCollector {
 				}
 
 				httpcon.setDoInput(true);
-				
-				if (requestBodyString != null && ! requestBodyString.isEmpty()) httpcon.setDoOutput(true);
-				
+
+				if (requestBodyString != null && !requestBodyString.isEmpty())
+					httpcon.setDoOutput(true);
+
 				httpcon.setUseCaches(false);
 
 				httpcon.setRequestMethod(requestMethod);
@@ -245,15 +260,15 @@ public class IoTCollector implements ServiceCollector {
 
 			connection.setConnectTimeout(connectionTimeout);
 			connection.setReadTimeout(readTimeout);
-			
-			OutputStream outputstream=null;
-			InputStream inputstream=null;
+
+			OutputStream outputstream = null;
+			InputStream inputstream = null;
 			ByteArrayOutputStream bytestream = new ByteArrayOutputStream();
 
 			try {
 
 				// send request body if any
-				if (requestBodyString != null && ! requestBodyString.isEmpty()) {
+				if (requestBodyString != null && !requestBodyString.isEmpty()) {
 					outputstream = connection.getOutputStream();
 					byte[] requestbytes = requestBodyString.getBytes("utf-8");
 					outputstream.write(requestbytes, 0, requestbytes.length);
@@ -267,10 +282,12 @@ public class IoTCollector implements ServiceCollector {
 				}
 				messagebytes = bytestream.toByteArray();
 			} catch (Exception ex) {
-				throw new RuntimeException("connection failed",ex);
+				throw new RuntimeException("connection failed", ex);
 			} finally {
-				if(outputstream!=null) outputstream.close();
-				if(inputstream!=null) inputstream.close();
+				if (outputstream != null)
+					outputstream.close();
+				if (inputstream != null)
+					inputstream.close();
 				bytestream.close();
 			}
 
@@ -384,5 +401,81 @@ public class IoTCollector implements ServiceCollector {
 		public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {
 		}
 	} };
+
+	public static String jxelFunctionSubstitution(String sourceString, Map<String, Object> m_parameters) {
+		String parsedString = "";
+		String JXELKEY = "_jxel[";
+				
+		String str = sourceString;
+
+		while (!str.isEmpty()) {
+			int index = str.indexOf(JXELKEY);
+			if (index == -1) {
+				parsedString = parsedString + str;
+				str = "";
+			} else {
+				parsedString=parsedString+str.substring(0, index);
+				str = str.substring(index + JXELKEY.length());
+				index = str.indexOf(']');
+				if (index == -1)
+					throw new IllegalArgumentException(
+							JXELKEY + " function without closing ] in sourceString=" + sourceString);
+				String jxlString = str.substring(0, index);
+			    parsedString = parsedString + jxelStringSubstitution(jxlString, m_parameters);
+				str = str.substring(index+1);
+			}
+		}
+
+		return parsedString;
+	}
+
+
+	// TODO JEXEL OPENNMS OnmsJexlEngine
+	public static String jxelStringSubstitution(String sourceString, Map<String, Object> m_parameters) {
+		String substituteStr = "";
+		
+		String dateFormatStr = (String) ((m_parameters.get(DATEFORMAT_KEY) == null) ? ""
+				: m_parameters.get(DATEFORMAT_KEY));
+		
+		if (! dateFormatStr.isEmpty()) try {
+		     FormatDate fd = new FormatDate(dateFormatStr);
+		     m_parameters.put("_fd", fd);
+		} catch (Exception ex) {
+			LOG.error("jxelStringSubstitution(): cannot parse "+ dateFormatStr,ex);
+		}
+
+		
+		try {
+			OnmsJexlEngine jexlEngine = new OnmsJexlEngine();
+			jexlEngine.white(DateFormat.class.getName());
+			jexlEngine.white(Date.class.getName());
+			jexlEngine.white(InetAddress.class.getName());
+			jexlEngine.white(Integer.class.getName());
+			jexlEngine.white(Long.class.getName());
+			jexlEngine.white(String.class.getName());
+			jexlEngine.white(FormatDate.class.getName());
+			
+//			parser.setLenient(true);
+//			  Map<String, Object> functions = new HashMap<>();
+//			  functions.put("claims", new ClaimUtils());
+//			  functions.put("LOG", LOG);
+//			  parser.setFunctions(functions);
+
+			
+			Expression e = jexlEngine.createExpression(sourceString);
+
+			JexlContext context = new MapContext();
+			m_parameters.entrySet().forEach((entry) -> {
+				context.set(entry.getKey(), entry.getValue());
+			});
+
+			substituteStr = (String) e.evaluate(new ReadonlyContext(context));
+		} catch (JexlException e) {
+			LOG.error("jxelStringSubstitution(): Incorrect Jexl Expression: " + sourceString, e);
+		} 
+
+		LOG.debug("jxelStringSubstitution(): {}", substituteStr);
+		return substituteStr;
+	}
 
 }
