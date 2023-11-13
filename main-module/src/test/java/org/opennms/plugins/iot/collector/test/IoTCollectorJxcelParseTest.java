@@ -28,26 +28,40 @@ public class IoTCollectorJxcelParseTest {
 		d.getTime();
 		
 		parameters.put("dateFormat", "yyyy-MM-dd'T'HH:mm:ss'Z'");
-//		try {
-//			Object x = "".getClass().forName("java.util.Date").getConstructor().newInstance();
-//			
-//			System.out.println(x);
-//		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
 		
 		String str1="aaa_jxel[zzzz]bbbb   _jxel[tttt]yyy  _jxel[zzzz]  "
-				+ " now= _jxel[_fd.format(now)]   "
-				+ " now minus = _jxel[_fd.format(new('java.util.Date', now.getTime()-300000))]"
-				+ " current time =_jxel[_fd.format(_fd.currentTime())]"
-		        + " currentTime minus = _jxel[_fd.format(_fd.pastTime(300000))]";
-		//String str1="aaa_jxel[zzzz]bbbb   _jxel[tttt]yyy  _jxel[zzzz]   _jxel[now.toString()]";
-		
+				+ " now= _jxel[_dateFunctions.format(now)]   "
+				+ " now minus = _jxel[_dateFunctions.format(new('java.util.Date', now.getTime()-300000))]"
+				+ " current time =_jxel[_dateFunctions.format(_dateFunctions.currentTime())]"
+		        + " currentTime minus = _jxel[_dateFunctions.format(_dateFunctions.pastTime(300000))]";
 		
 		String result = IoTCollector.jxelFunctionSubstitution(str1, parameters);
 		LOG.debug("\n expression:"+str1+"\n result:"+result+ "\n parameters:"+parameters);
 	}
 
+	
+	@Test
+	public void test2() {
+		Map<String,Object> parameters = new HashMap<String,Object>();
+		
+		parameters.put("dateFormat", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		parameters.put("subscriptionId", "12345678-abcd-98765432-abcdef012345");
+		
+		String testStr="https://management.azure.com/subscriptions/12345678-abcd-98765432-abcdef012345/providers/microsoft.Insights/metrics?timespan=2023-06-25T22:20:00.000Z/2023-06-26T22:25:00.000Z&interval=PT5M&metricnames=Percentage CPU&aggregation=average&api-version=2021-05-01&region=eastus&metricNamespace=microsoft.compute/virtualmachines&$filter=Microsoft.ResourceId eq '*'";
+
+		String str1= "https://management.azure.com/subscriptions/"
+				+ "_jxel[subscriptionId]"
+				+ "/providers/microsoft.Insights/metrics"
+				+ "?timespan=_jxel[_dateFunctions.format(_dateFunctions.pastTime(300000))]/_jxel[_dateFunctions.format(_dateFunctions.currentTime())]"
+				+ "&interval=PT5M"
+				+ "&metricnames=Percentage CPU"
+				+ "&aggregation=average&api-version=2021-05-01"
+				+ "&region=eastus"
+				+ "&metricNamespace=microsoft.compute/virtualmachines&$filter=Microsoft.ResourceId eq '*'";
+		
+		String result = IoTCollector.jxelFunctionSubstitution(str1, parameters);
+
+		LOG.debug("\n test string:"+testStr+"\n      result:"+result+"\n expression:"+str1+ "\n parameters:"+parameters);
+		//assertTrue(testStr.equals(result));
+	}
 }

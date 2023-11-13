@@ -78,8 +78,8 @@ import org.apache.commons.jexl2.JexlContext;
 import org.apache.commons.jexl2.JexlException;
 import org.apache.commons.jexl2.MapContext;
 import org.apache.commons.jexl2.ReadonlyContext;
-import org.apache.commons.jexl2.UnifiedJEXL;
 import org.apache.commons.jexl2.Expression;
+import org.apache.commons.jexl2.Script;
 
 public class IoTCollector implements ServiceCollector {
 
@@ -438,8 +438,8 @@ public class IoTCollector implements ServiceCollector {
 				: m_parameters.get(DATEFORMAT_KEY));
 		
 		if (! dateFormatStr.isEmpty()) try {
-		     FormatDate fd = new FormatDate(dateFormatStr);
-		     m_parameters.put("_fd", fd);
+		     DateFunctions dateFunctions = new DateFunctions(dateFormatStr);
+		     m_parameters.put("_dateFunctions", dateFunctions);
 		} catch (Exception ex) {
 			LOG.error("jxelStringSubstitution(): cannot parse "+ dateFormatStr,ex);
 		}
@@ -453,7 +453,7 @@ public class IoTCollector implements ServiceCollector {
 			jexlEngine.white(Integer.class.getName());
 			jexlEngine.white(Long.class.getName());
 			jexlEngine.white(String.class.getName());
-			jexlEngine.white(FormatDate.class.getName());
+			jexlEngine.white(DateFunctions.class.getName());
 			
 //			parser.setLenient(true);
 //			  Map<String, Object> functions = new HashMap<>();
@@ -462,14 +462,17 @@ public class IoTCollector implements ServiceCollector {
 //			  parser.setFunctions(functions);
 
 			
-			Expression e = jexlEngine.createExpression(sourceString);
+		//	Expression e = jexlEngine.createExpression(sourceString);
+			Script s = jexlEngine.createScript(sourceString);
 
 			JexlContext context = new MapContext();
 			m_parameters.entrySet().forEach((entry) -> {
 				context.set(entry.getKey(), entry.getValue());
 			});
 
-			substituteStr = (String) e.evaluate(new ReadonlyContext(context));
+		//	substituteStr = (String) e.evaluate(new ReadonlyContext(context));
+			
+			substituteStr = (String) s.execute(new ReadonlyContext(context));
 		} catch (JexlException e) {
 			LOG.error("jxelStringSubstitution(): Incorrect Jexl Expression: " + sourceString, e);
 		} 

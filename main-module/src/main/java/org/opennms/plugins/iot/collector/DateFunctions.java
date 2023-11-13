@@ -6,11 +6,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 // removes ambiguity from date formatter format and parse
-public class FormatDate {
+public class DateFunctions {
 	
 	DateFormat df;
 	
-    public FormatDate(String dateFormatStr) {
+    public DateFunctions(String dateFormatStr) {
     	super();
     	 df = new SimpleDateFormat(dateFormatStr);
 	}
