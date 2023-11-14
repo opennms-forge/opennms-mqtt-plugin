@@ -20,7 +20,7 @@
       <productName>MqttClient</productName>
       <productFeatureRepository>mvn:${project.groupId}/${productName}/${project.version}/xml/features</productFeatureRepository>
 
-      <org.opennms.version>32.0.1</org.opennms.version>
+      <org.opennms.version>32.0.5</org.opennms.version>
 
       <slf4jVersion>1.7.21</slf4jVersion>
       <log4j2Version>2.8.2</log4j2Version>
