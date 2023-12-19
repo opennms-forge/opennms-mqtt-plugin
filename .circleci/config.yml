@@ -4,11 +4,11 @@ version: 2.1
 executors:
   build-executor:
     docker:
-      - image: opennms/build-env:jdk8_1.2
+      - image: cimg/openjdk:11.0
 
   ghr-executor:
     docker:
-      - image: opennms/ghr:0.12.0-b1
+      - image: opennms/ghr:0.13.0
 
 commands:
   cached-checkout:
@@ -16,12 +16,14 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+            - source-v2-{{ .Branch }}-{{ .Revision }}
+            - source-v2-{{ .Branch }}-
+            - source-v2-
       - checkout
+      - run:
+          command: git submodule update --init
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: source-v2-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
 
@@ -34,8 +36,8 @@ commands:
             find . -type f -name "pom.xml" -exec sha256sum "{}" \; | sort -nr >> maven-dependency-cache.key
       - restore_cache:
           keys:
-            - maven-dependencies-v2-{{ checksum "maven-dependency-cache.key" }}
-            - maven-dependencies-v2-
+            - maven-dependencies-v3-{{ checksum "maven-dependency-cache.key" }}
+            - maven-dependencies-v3-
       - run:
           name: Remove OpenNMS and MQTT Plugin artifacts from cache
           command: |
@@ -45,7 +47,7 @@ commands:
     description: "Maven: Save cache"
     steps:
       - save_cache:
-          key: maven-dependencies-v2-{{ checksum "maven-dependency-cache.key" }}
+          key: maven-dependencies-v3-{{ checksum "maven-dependency-cache.key" }}
           paths:
             - ~/.m2
 

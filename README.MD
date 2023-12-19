@@ -44,17 +44,34 @@ The architecture of the feature is shown in the following diagram.
 (Please note that the present version does not use the new OpenNMS streaming API and so is backwards compatible with Meridian 2017. 
 It interacts with OpenNMS in much the same way as the design intent of the streaming API.)
 
-A docker-compose project with all the correct dependencies is also provided in the sub project mqtt-docker-compose. 
-If you first build this project, you can then run the docker-compose project.
+First, clone and initialize the repo:
+
+```
+# clone the repo
+git clone https://github.com/opennms-forge/opennms-mqtt-plugin.git
+cd opennms-mqtt-plugin
+
+# fetch the opennms code associated with the plugin
+git submodule update --init
+```
 
 You need to target the build against the correct major version of OpenNMS.
 To do this, edit the parent pom.xml and change the property
 
-''''
-    <org.opennms.version>24.1.1</org.opennms.version>
-''''
+```
+    <org.opennms.version>32.0.5</org.opennms.version>
+```
     
 To match the version you are targeting. 
+NOTE: if you change this, you will also need to make sure the `opennms/` submodule is updated to match.
+
+```
+cd opennms
+git fetch --all
+git reset --hard <opennms-tag-or-branch-or-commit>
+cd ..
+git add opennms
+```
 
 to build used 
 ```
