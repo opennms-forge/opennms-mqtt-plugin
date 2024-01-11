@@ -4,6 +4,15 @@ This OpenNMS plugin adds the ability for OpenNMS to received streaming measureme
 
 There is a video describing this project from the OpenNMS User Conference here https://www.youtube.com/watch?v=r8GXg_DSUM4
 
+Note:
+this branch also includes a git submodule of opennms depencencies checked out from git and built locally.
+To build run 
+
+```
+git submodule update --init  
+mvn clean install
+```
+
 This version (0.0.8) is designed for OpenNMS versions 30 or greater. 
 0.0.7 tested with OpenNMS 27
 0.0.6 tested with OpenNMS 25.1.1
