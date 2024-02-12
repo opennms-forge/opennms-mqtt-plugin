@@ -4,7 +4,7 @@ This OpenNMS plugin adds the ability for OpenNMS to received streaming measureme
 
 There is a video describing this project from the OpenNMS User Conference here https://www.youtube.com/watch?v=r8GXg_DSUM4
 
-This version (0.0.8) is designed for OpenNMS versions 30 or greater. 
+This version (0.0.9) is designed for OpenNMS versions 32 or greater. 
 0.0.7 tested with OpenNMS 27
 0.0.6 tested with OpenNMS 25.1.1
 (Use version 0.0.4 with versions before 25)
@@ -44,22 +44,47 @@ The architecture of the feature is shown in the following diagram.
 (Please note that the present version does not use the new OpenNMS streaming API and so is backwards compatible with Meridian 2017. 
 It interacts with OpenNMS in much the same way as the design intent of the streaming API.)
 
-A docker-compose project with all the correct dependencies is also provided in the sub project mqtt-docker-compose. 
-If you first build this project, you can then run the docker-compose project.
+First, clone and initialize the repo:
+
+```
+# clone the repo
+git clone https://github.com/opennms-forge/opennms-mqtt-plugin.git
+cd opennms-mqtt-plugin
+
+# fetch the opennms code associated with the plugin
+git submodule update --init
+```
 
 You need to target the build against the correct major version of OpenNMS.
 To do this, edit the parent pom.xml and change the property
 
-''''
-    <org.opennms.version>24.1.1</org.opennms.version>
-''''
+```
+    <org.opennms.version>32.0.5</org.opennms.version>
+```
     
 To match the version you are targeting. 
 
-to build used 
+NOTE: if you change this version, you will also need to make sure the linked `opennms/` submodule is updated to the matching tag.
+
+```
+cd opennms
+git fetch --all
+git reset --hard <opennms-tag-or-branch-or-commit>
+cd ..
+git add opennms
+```
+
+to build use 
 ```
 mvn build install
 ```
+
+Once you have built the OpenNMS depencencies - or if you have already place them in your .m2 repository through a seperate OpenNMS build, you can build this module while skipping the opennms compile step using
+
+```
+mvn clean install -DskipOpennmsBuild 
+```
+
 
 Io install in OpenNMS, 
 
