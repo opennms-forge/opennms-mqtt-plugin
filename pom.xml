@@ -23,7 +23,15 @@
       <productFeatureRepository>mvn:${project.groupId}/${productName}/${project.version}/xml/features</productFeatureRepository>
 
       <opennmsApiVersion>1.6.0</opennmsApiVersion>
-      <org.opennms.version>32.0.1</org.opennms.version>
+      <org.opennms.version>32.0.5</org.opennms.version>
+      <opennms.projects>
+          org.opennms.core:org.opennms.core.api,
+          org.opennms.core.ipc.sink:org.opennms.core.ipc.sink.common,
+          org.opennms.osgi:opennms-osgi-core,
+          org.opennms:opennms-dao,
+          org.opennms:opennms-model,
+          org.opennms.protocols:org.opennms.protocols.xml
+      </opennms.projects>
 
       <slf4jVersion>1.7.21</slf4jVersion>
       <log4j2Version>2.8.2</log4j2Version>
@@ -56,6 +64,56 @@
    </modules>
 
    <build>
+
+      <!-- before we do anything else, build the bits of OpenNMS we need for deep-introspection -->
+      <plugins>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.1.0</version>
+            <inherited>false</inherited>
+            <executions>
+               <execution>
+                  <id>build-opennms-components</id>
+                  <phase>generate-resources</phase>
+                  <goals>
+                     <goal>exec</goal>
+                  </goals>
+                  <configuration>
+                     <skip>${skipOpennmsBuild}</skip>
+                     <executable>${maven.home}/bin/mvn</executable>
+                     <arguments>
+                        <argument>-DskipTests=true</argument>
+                        <argument>-Dbuild.skip.tarball=true</argument>
+                        <argument>--also-make</argument>
+                        <argument>--projects</argument>
+                        <argument>${opennms.projects}</argument>
+                        <argument>install</argument>
+                     </arguments>
+                     <workingDirectory>opennms</workingDirectory>
+                  </configuration>
+               </execution>
+               <execution>
+                  <id>clean-opennms-components</id>
+                  <phase>clean</phase>
+                  <goals>
+                     <goal>exec</goal>
+                  </goals>
+                  <configuration>
+                     <skip>${skipOpennmsBuild}</skip>
+                     <executable>${maven.home}/bin/mvn</executable>
+                     <arguments>
+                        <argument>--also-make</argument>
+                        <argument>--projects</argument>
+                        <argument>${opennms.projects}</argument>
+                        <argument>clean</argument>
+                     </arguments>
+                     <workingDirectory>opennms</workingDirectory>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
 
       <pluginManagement>
          <plugins>
@@ -510,57 +568,14 @@
       </pluginRepository>
    </pluginRepositories>
 
-   <repositories>
-      <!-- uncomment to pick up local OpenNMS build artifacts from local repo -->
+    <repositories>
       <repository>
-         <id>importm2</id>
-         <name>virtual machine importm2</name>
-         <url>http://192.168.80.130:8181/repository/importm2</url>
-         <releases>
-            <enabled>true</enabled>
-            <updatePolicy>never</updatePolicy>
-         </releases>
-         <snapshots>
-            <enabled>true</enabled>
-            <updatePolicy>${updatePolicy}</updatePolicy>
-         </snapshots>
-      </repository>
-
-      <repository>
-         <id>vaadin-snapshots</id>
-         <releases>
-            <enabled>false</enabled>
-         </releases>
-         <snapshots>
-            <enabled>true</enabled>
-         </snapshots>
-         <url>https://maven.opennms.org/content/groups/vaadin-snapshot/</url>
-      </repository>
-      <repository>
-         <id>vaadin-addons</id>
-         <url>https://maven.opennms.org/content/groups/vaadin.com-addons/</url>
-      </repository>
-      <repository>
-         <snapshots>
-            <enabled>false</enabled>
-         </snapshots>
-         <releases>
-            <enabled>true</enabled>
-         </releases>
          <id>opennms-repo</id>
-         <name>OpenNMS Repository</name>
-         <url>https://maven.opennms.org/content/groups/opennms.org-release</url>
-      </repository>
-      <repository>
-         <id>opennms-snapshots</id>
-         <name>OpenNMS Snapshot Maven Repository</name>
+         <name>OpenNMS Mega-Repository</name>
+         <url>https://maven.opennms.org/repository/everything/</url>
          <snapshots>
-            <enabled>true</enabled>
-         </snapshots>
-         <releases>
             <enabled>false</enabled>
-         </releases>
-         <url>https://maven.opennms.org/content/groups/opennms.org-snapshot</url>
+         </snapshots>
       </repository>
    </repositories>
 
