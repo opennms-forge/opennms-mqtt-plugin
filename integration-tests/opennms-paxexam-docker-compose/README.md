@@ -7,7 +7,7 @@ ssh admin@localhost -p 8101  -o StrictHostKeyChecking=no
 kar:uninstall MqttClient.kar-package
 kar:list
 
-kar:install mvn:org.opennms.plugins/MqttClient.kar-package/0.0.8-SNAPSHOT/kar
+kar:install mvn:org.opennms.plugins/MqttClient.kar-package/2.0.0-SNAPSHOT/kar
 
 
 opennms:list-collectors
