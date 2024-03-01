@@ -14,13 +14,15 @@
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-      <java.version>8</java.version>
+      <maven.compiler.target>11</maven.compiler.target>
+      <maven.compiler.source>11</maven.compiler.source>
+      <java.version>11</java.version>
 
       <opennms.version>32.0.5</opennms.version>
 
       <opennms-paxexam.version>0.0.1</opennms-paxexam.version>
 
-      <karafVersion>4.3.6</karafVersion> <!-- same opennms 31 -->
+      <karafVersion>4.3.10</karafVersion> <!-- 4.3.6 same opennms 31 -->
       <felix.framework.version>6.0.5</felix.framework.version> <!-- same as karaf opennms -->
 
       <dependency.osgicomp.version>4.3.1</dependency.osgicomp.version>

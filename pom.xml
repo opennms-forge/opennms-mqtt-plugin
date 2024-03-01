@@ -12,8 +12,9 @@
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-      <maven.compiler.target>1.8</maven.compiler.target>
-      <maven.compiler.source>1.8</maven.compiler.source>
+      <maven.compiler.target>11</maven.compiler.target>
+      <maven.compiler.source>11</maven.compiler.source>
+      <java.version>11</java.version>
 
       <!-- Note must set project.artifactId explicitly as karaf-pluginmanager-archetypeexpression is re-evaluated in each sub module !! -->
       <!-- <productId>org.opennms.plugins/karaf-pluginmanager-archetype/1.1.0-SNAPSHOT</productId> -->
@@ -35,7 +36,7 @@
 
       <slf4jVersion>1.7.21</slf4jVersion>
       <log4j2Version>2.8.2</log4j2Version>
-      <karafVersion>4.0.8</karafVersion>
+      <karafVersion>4.3.10</karafVersion>
       <json-simpleVersion>1.1.1</json-simpleVersion>
       <junitVersion>4.12</junitVersion>
       <osgiVersion>4.2.0</osgiVersion>
