@@ -28,12 +28,15 @@
 
 package org.opennms.plugins.persistor.eventnotifier;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.opennms.netmgt.events.api.EventProxy;
 import org.opennms.netmgt.events.api.EventProxyException;
+import org.opennms.netmgt.model.OnmsIpInterface;
 import org.opennms.netmgt.model.events.EventBuilder;
 import org.opennms.netmgt.xml.event.Event;
 import org.opennms.plugins.messagehandler.OnmsCollectionAttribute;
@@ -131,6 +134,16 @@ public class EventPersistorImpl implements EventPersistor {
 				for(String paramKey:attributeMap.keySet()){
 					OnmsCollectionAttribute value = attributeMap.get(paramKey);
 					eb.addParam(paramKey,value.getValue());
+				}
+				
+				// add dummy interface to event so that event data collector can persist data events
+				// may make this based on node ip address for pre-defined nodes
+				try {
+					// use illegal ip address 254.0.0.1
+					InetAddress ipAddress= InetAddress.getByName("254.0.0.1");
+					eb.setInterface(ipAddress);
+				} catch (UnknownHostException e) {
+					throw new RuntimeException("problem creating IP address",e); // should never happen
 				}
 
 				sendEvent(eb.getEvent());

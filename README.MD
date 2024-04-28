@@ -9,6 +9,8 @@ This version (0.0.9) is designed for OpenNMS versions 32 or greater.
 0.0.6 tested with OpenNMS 25.1.1
 (Use version 0.0.4 with versions before 25)
 
+This version is designed to work with the event data collector feature.
+
 The plugin supports MQTT messages and also asynchronous messages sent into OpenNMS from a ReST API.
 OpenNMS can register with an MQTT broker to receive MQTT messages.
 Several brokers can be subscribed to at the same time and multiple topic subscriptions can be defined on each broker. 
@@ -79,7 +81,7 @@ to build use
 mvn build install
 ```
 
-Once you have built the OpenNMS depencencies - or if you have already place them in your .m2 repository through a seperate OpenNMS build, you can build this module while skipping the opennms compile step using
+Once you have built the OpenNMS depencencies - or if you have already place them in your .m2 repository through a separate OpenNMS build, you can build this module while skipping the opennms compile step using
 
 ```
 mvn clean install -DskipOpennmsBuild 
