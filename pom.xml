@@ -20,7 +20,7 @@
       <productName>MqttClient</productName>
       <productFeatureRepository>mvn:${project.groupId}/${productName}/${project.version}/xml/features</productFeatureRepository>
 
-      <org.opennms.version>32.0.5</org.opennms.version>
+      <org.opennms.version>33.1.8</org.opennms.version>
       <opennms.projects>
           org.opennms.core:org.opennms.core.api,
           org.opennms.core.ipc.sink:org.opennms.core.ipc.sink.common,

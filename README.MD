@@ -4,7 +4,8 @@ This OpenNMS plugin adds the ability for OpenNMS to received streaming measureme
 
 There is a video describing this project from the OpenNMS User Conference here https://www.youtube.com/watch?v=r8GXg_DSUM4
 
-This version (0.0.9) is designed for OpenNMS versions 32 or greater. 
+This version (0.0.10) is designed for OpenNMS versions 33.x (tested with 33.1.8)
+0.0.9 tested with OpenNMS 32.x 
 0.0.7 tested with OpenNMS 27
 0.0.6 tested with OpenNMS 25.1.1
 (Use version 0.0.4 with versions before 25)
@@ -53,8 +54,8 @@ First, clone and initialize the repo:
 git clone https://github.com/opennms-forge/opennms-mqtt-plugin.git
 cd opennms-mqtt-plugin
 
-# fetch the opennms code associated with the plugin
-git submodule update --init
+# fetch the opennms code associated with the plugin (--progress shows you what is happening with a slow download)
+git submodule update --init  --progress
 ```
 
 You need to target the build against the correct major version of OpenNMS.
