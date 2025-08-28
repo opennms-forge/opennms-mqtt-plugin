@@ -66,7 +66,7 @@ You need to target the build against the correct major version of OpenNMS.
 To do this, edit the parent pom.xml and change the property
 
 ```
-    <org.opennms.version>32.0.5</org.opennms.version>
+    <org.opennms.version>33.0.1</org.opennms.version>
 ```
     
 To match the version you are targeting. 
