@@ -4,7 +4,9 @@ This OpenNMS plugin adds the ability for OpenNMS to received streaming measureme
 
 There is a video describing this project from the OpenNMS User Conference here https://www.youtube.com/watch?v=r8GXg_DSUM4
 
-This version (0.0.10) is designed for OpenNMS versions 33.x (tested with 33.1.8)
+This version (0.0.11) is designed for OpenNMS versions 33.x (tested with 33.1.8)
+
+0.0.10 tested with OpenNMS 33.x 
 
 0.0.9 tested with OpenNMS 32.x 
 
